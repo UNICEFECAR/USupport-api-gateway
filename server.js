@@ -18,7 +18,7 @@ app.use(helmet());
 
 /*------------- API Gateway Service Endpoints -------------*/
 
-// Example router
+app.use("/api/v1/email", v1.EmailRouter);
 app.use("/api/v1/video", v1.VideoRouter);
 
 /*------------- Error middleware -------------*/
