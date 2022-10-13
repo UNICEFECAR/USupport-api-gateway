@@ -1,6 +1,7 @@
 import express from "express";
 import helmet from "helmet";
 import dotenv from "dotenv";
+import cors from "cors";
 
 import v1 from "#routes/index";
 import middleware from "#middlewares/index";
@@ -15,10 +16,11 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
+app.use(cors());
 
 /*------------- API Gateway Service Endpoints -------------*/
 
-// Example router
+app.use("/api/v1/email", v1.EmailRouter);
 app.use("/api/v1/video", v1.VideoRouter);
 
 /*------------- Error middleware -------------*/
