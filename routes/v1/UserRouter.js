@@ -94,6 +94,12 @@ router.route("/upload-file").post(async (req, res) => {
    */
 
   const response = await fetch(`${USER_URL}/user/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
     body: req,
   }).catch(console.log);
 
