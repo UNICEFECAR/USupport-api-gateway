@@ -23,6 +23,7 @@ app.use(cors());
 app.use("/api/v1/user", v1.UserRouter);
 app.use("/api/v1/email", v1.EmailRouter);
 app.use("/api/v1/video", v1.VideoRouter);
+app.use("/api/v1/user", v1.UserRouter);
 
 /*------------- Error middleware -------------*/
 

@@ -24,9 +24,9 @@ router.route("/admin").post(async (req, res) => {
     ...(req.body && { body: JSON.stringify(req.body) }),
   }).catch(console.log);
 
-  const result = await response.json();
+  const result = await response?.json();
 
-  return res.status(response.status).send(result);
+  return res.status(response?.status).send(result);
 });
 
 export { router };
