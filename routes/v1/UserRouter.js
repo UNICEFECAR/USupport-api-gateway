@@ -24,9 +24,9 @@ router.route("/upload-file").post(async (req, res) => {
     body: req,
   }).catch(console.log);
 
-  const result = await response.json();
+  const result = await response?.json();
 
-  return res.status(response.status).send(result);
+  return res.status(response?.status).send(result);
 });
 
 export { router };
