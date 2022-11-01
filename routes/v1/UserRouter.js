@@ -3,7 +3,7 @@ import fetch from "node-fetch";
 
 const router = express.Router();
 
-const USER_LOCAL_HOST = "http://localhost:3001";
+const USER_LOCAL_HOST = "http://localhost:3010";
 
 const USER_URL = process.env.USER_URL;
 
@@ -19,7 +19,7 @@ router.route("/").get(async (req, res) => {
     headers: {
       ...req.headers,
       host: USER_LOCAL_HOST,
-      "Content-Type": "application/json",
+      "Content-type": "application/json",
     },
   }).catch(console.log);
 
@@ -39,7 +39,7 @@ router.route("/provider/signup").post(async (req, res) => {
     headers: {
       ...req.headers,
       host: USER_LOCAL_HOST,
-      "Content-Type": "application/json",
+      "Content-type": "application/json",
     },
     ...(req.body && { body: JSON.stringify(payload) }),
   }).catch(console.log);
@@ -58,7 +58,7 @@ router.route("/signup").post(async (req, res) => {
     headers: {
       ...req.headers,
       host: USER_LOCAL_HOST,
-      "Content-Type": "application/json",
+      "Content-type": "application/json",
     },
     ...(req.body && { body: JSON.stringify(req.body) }),
   }).catch(console.log);
@@ -77,7 +77,7 @@ router.route("/login").post(async (req, res) => {
     headers: {
       ...req.headers,
       host: USER_LOCAL_HOST,
-      "Content-Type": "application/json",
+      "Content-type": "application/json",
     },
     ...(req.body && { body: JSON.stringify(req.body) }),
   }).catch(console.log);
