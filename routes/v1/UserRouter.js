@@ -30,7 +30,7 @@ router.route("/").get(authenticate, async (req, res) => {
 
 router.route("/provider/signup").post(async (req, res) => {
   /**
-   * #route   POST /api/v1/user/signup
+   * #route   POST /api/v1/user/provider/signup
    * #desc    Create provider user account (Protected with admin permissions)
    */
   const payload = { userType: "provider", ...req.body };
@@ -105,12 +105,12 @@ router.route("/user-access-token").get(async (req, res) => {
   return res.status(response.status).send(result);
 });
 
-router.route("/auth/refresh-token").post(async (req, res) => {
+router.route("/refresh-token").post(async (req, res) => {
   /**
-   * #route   POST /api/v1/user/auth/refresh-token
+   * #route   POST /api/v1/user/refresh-token
    * #desc    Refresh JWT access token
    */
-  const response = await fetch(`${USER_URL}/user/v1${req.url}`, {
+  const response = await fetch(`${USER_URL}/user/v1/auth${req.url}`, {
     method: req.method,
     headers: {
       ...req.headers,
