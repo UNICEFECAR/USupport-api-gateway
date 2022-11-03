@@ -124,4 +124,24 @@ router.route("/auth/refresh-token").post(async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/upload-file").post(authenticate, async (req, res) => {
+  /**
+   * #route   POST /api/v1/user/upload-file/
+   * #desc    Upload file to AWS S3 bucket
+   */
+
+  const response = await fetch(`${USER_URL}/user/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    body: req,
+  }).catch(console.log);
+
+  const result = await response?.json();
+  return res.status(response?.status).send(result);
+});
+
 export { router };
