@@ -21,6 +21,47 @@ router.route("/").get(authenticate, async (req, res) => {
       ...req.headers,
       host: USER_LOCAL_HOST,
       "Content-type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
+router.route("/languages").get(async (req, res) => {
+  /**
+   * #route   GET /api/v1/user/languages
+   * #desc    Get all active languages
+   */
+
+  const response = await fetch(`${USER_URL}/user/v1${req.url}`, {
+    method: "GET",
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-Type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
+router.route("/countries").get(async (req, res) => {
+  /**
+   * #route   GET /api/v1/user/countries
+   * #desc    Get all countries
+   */
+
+  const response = await fetch(`${USER_URL}/user/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-Type": "application/json",
+      "Cache-control": "no-cache",
     },
   }).catch(console.log);
 
