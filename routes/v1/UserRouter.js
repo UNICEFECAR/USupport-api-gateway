@@ -165,6 +165,25 @@ router.route("/refresh-token").post(async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/password").patch(authenticate, async (req, res) => {
+  /**
+   * #route   PATCH /api/v1/user/password
+   * #desc    Change user's password
+   */
+  const response = await fetch(`${USER_URL}/user/v1/user${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
 router.route("/upload-file").post(authenticate, async (req, res) => {
   /**
    * #route   POST /api/v1/user/upload-file/
@@ -184,5 +203,43 @@ router.route("/upload-file").post(authenticate, async (req, res) => {
   const result = await response?.json();
   return res.status(response?.status).send(result);
 });
+
+router
+  .route("/rescue/forgot-password")
+  .get(async (req, res) => {
+    /**
+     * #route   GET /api/v1/user/rescue/forgot-password
+     * #desc    Initiate Forgot Password Process (Send email with token)
+     */
+    const response = await fetch(`${USER_URL}/user/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: USER_LOCAL_HOST,
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  })
+  .post(async (req, res) => {
+    /**
+     * #route   POST /api/v1/user/rescue/forgot-password
+     * #desc    Change user's password with forgot password secret token
+     */
+
+    const response = await fetch(`${USER_URL}/user/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: USER_LOCAL_HOST,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  });
 
 export { router };
