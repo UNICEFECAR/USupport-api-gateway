@@ -146,12 +146,12 @@ router.route("/user-access-token").get(async (req, res) => {
   return res.status(response.status).send(result);
 });
 
-router.route("/refresh-token").post(async (req, res) => {
+router.route("/auth/refresh-token").post(async (req, res) => {
   /**
-   * #route   POST /api/v1/user/refresh-token
+   * #route   POST /api/v1/user/auth/refresh-token
    * #desc    Refresh JWT access token
    */
-  const response = await fetch(`${USER_URL}/user/v1/auth${req.url}`, {
+  const response = await fetch(`${USER_URL}/user/v1${req.url}`, {
     method: req.method,
     headers: {
       ...req.headers,
