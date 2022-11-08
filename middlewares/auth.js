@@ -10,6 +10,7 @@ export const authenticate = async (req, res, next) => {
   // Get current user
   const result = await fetch(`${USER_URL}/user/v1/user`, {
     headers: {
+      "x-country-alpha-2": req.header("x-country-alpha-2"),
       ...(authHeader && { Authorization: authHeader }),
       host: USER_LOCAL_HOST,
     },
