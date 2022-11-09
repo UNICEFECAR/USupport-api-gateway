@@ -8,7 +8,6 @@ const EMAIL_LOCAL_HOST = "http://localhost:3008";
 const EMAIL_URL = process.env.EMAIL_URL;
 
 router.route("/admin").post(async (req, res) => {
-  // TODO: Add authentication middleware
   /**
    * #route   POST /api/v1/email/admin/
    * #desc    Send email
