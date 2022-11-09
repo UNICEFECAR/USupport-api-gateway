@@ -12,7 +12,7 @@ const CLIENT_URL = process.env.CLIENT_URL;
 router.route("/").get(authenticate, async (req, res) => {
   /**
    * #route   GET /api/v1/client
-   * #desc    Get current client
+   * #desc    Get current client data
    */
 
   const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
