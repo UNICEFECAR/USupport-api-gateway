@@ -21,6 +21,7 @@ app.use(cors());
 /*------------- API Gateway Service Endpoints -------------*/
 
 app.use("/api/v1/user", v1.UserRouter);
+app.use("/api/v1/client", v1.ClientRouter);
 app.use("/api/v1/email", v1.EmailRouter);
 app.use("/api/v1/video", v1.VideoRouter);
 
