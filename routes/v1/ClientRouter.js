@@ -52,7 +52,7 @@ router
   })
   .delete(authenticate, async (req, res) => {
     /**
-     * #route   PUT /api/v1/client
+     * #route   DELETE /api/v1/client
      * #desc    Delete current client data
      */
     const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
@@ -70,25 +70,46 @@ router
     return res.status(response.status).send(result);
   });
 
-router.route("/image").put(authenticate, async (req, res) => {
-  /**
-   * #route   PUT /api/v1/client/image
-   * #desc    Update the client image
-   */
-  const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
-    method: req.method,
-    headers: {
-      ...req.headers,
-      host: CLIENT_LOCAL_HOST,
-      "Content-type": "application/json",
-    },
-    ...(req.body && { body: JSON.stringify(req.body) }),
-  }).catch(console.log);
+router
+  .route("/image")
+  .put(authenticate, async (req, res) => {
+    /**
+     * #route   PUT /api/v1/client/image
+     * #desc    Update the client image
+     */
+    const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: CLIENT_LOCAL_HOST,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
 
-  const result = await response.json();
+    const result = await response.json();
 
-  return res.status(response.status).send(result);
-});
+    return res.status(response.status).send(result);
+  })
+  .delete(authenticate, async (req, res) => {
+    /**
+     * #route   DELETE /api/v1/client/image
+     * #desc    Delete the client image
+     */
+    const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: CLIENT_LOCAL_HOST,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
 
 router
   .route("/data-processing-agreement")
