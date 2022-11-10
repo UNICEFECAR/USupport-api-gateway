@@ -70,4 +70,46 @@ router
     return res.status(response.status).send(result);
   });
 
+router.route("/image").put(authenticate, async (req, res) => {
+  /**
+   * #route   PUT /api/v1/client/image
+   * #desc    Update the client image
+   */
+  const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: CLIENT_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
+router
+  .route("/data-processing-agreement")
+  .put(authenticate, async (req, res) => {
+    /**
+     * #route   PUT /api/v1/client/data-processing-agreement
+     * #desc    Update the client data-processing-agreement
+     */
+    const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: CLIENT_LOCAL_HOST,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
+
 export { router };
