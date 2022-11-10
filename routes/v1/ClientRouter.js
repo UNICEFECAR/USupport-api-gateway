@@ -49,6 +49,25 @@ router
     const result = await response.json();
 
     return res.status(response.status).send(result);
+  })
+  .delete(authenticate, async (req, res) => {
+    /**
+     * #route   PUT /api/v1/client
+     * #desc    Delete current client data
+     */
+    const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: CLIENT_LOCAL_HOST,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
   });
 
 export { router };
