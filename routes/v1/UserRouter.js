@@ -261,4 +261,43 @@ router.route("/upload-file").post(authenticate, async (req, res) => {
   return res.status(response?.status).send(result);
 });
 
+router
+  .route("/notification-preferences")
+  .get(async (req, res) => {
+    /**
+     * #route   GET /api/v1/user/notification-preferences
+     * #desc    Get user's notification preferences
+     */
+    const response = await fetch(`${USER_URL}/user/v1/user${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: USER_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  })
+  .put(async (req, res) => {
+    /**
+     * #route   PUT /api/v1/user/notification-preferences
+     * #desc    Update user's notification preferences
+     */
+    const response = await fetch(`${USER_URL}/user/v1/user${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: USER_LOCAL_HOST,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  });
+
 export { router };
