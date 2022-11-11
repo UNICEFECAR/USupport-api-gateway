@@ -128,6 +128,25 @@ router.route("/login").post(async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/tmp-login").post(async (req, res) => {
+  /**
+   * #route   POST /api/v1/user/tmp-login
+   * #desc    Temporrary login a user
+   */
+  const response = await fetch(`${USER_URL}/user/v1/auth${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
 router.route("/user-access-token").get(async (req, res) => {
   /**
    * #route   GET /api/v1/user/user-access-token
