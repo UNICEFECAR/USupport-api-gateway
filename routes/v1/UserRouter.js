@@ -89,6 +89,26 @@ router.route("/countries").get(async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/work-with").get(async (req, res) => {
+  /**
+   * #route   GET /api/v1/user/work-with
+   * #desc    Get all work with areas
+   */
+
+  const response = await fetch(`${USER_URL}/user/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-Type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
 router.route("/provider/signup").post(async (req, res) => {
   /**
    * #route   POST /api/v1/user/provider/signup
