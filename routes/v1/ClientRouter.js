@@ -22,6 +22,7 @@ router
       headers: {
         ...req.headers,
         host: CLIENT_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
         "Content-type": "application/json",
         "Cache-control": "no-cache",
       },
@@ -41,6 +42,7 @@ router
       headers: {
         ...req.headers,
         host: CLIENT_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
         "Content-type": "application/json",
       },
       ...(req.body && { body: JSON.stringify(req.body) }),
@@ -60,6 +62,7 @@ router
       headers: {
         ...req.headers,
         host: CLIENT_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
         "Content-type": "application/json",
       },
       ...(req.body && { body: JSON.stringify(req.body) }),
@@ -82,6 +85,7 @@ router
       headers: {
         ...req.headers,
         host: CLIENT_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
         "Content-type": "application/json",
       },
       ...(req.body && { body: JSON.stringify(req.body) }),
@@ -101,6 +105,7 @@ router
       headers: {
         ...req.headers,
         host: CLIENT_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
         "Content-type": "application/json",
       },
       ...(req.body && { body: JSON.stringify(req.body) }),
@@ -123,6 +128,7 @@ router
       headers: {
         ...req.headers,
         host: CLIENT_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
         "Content-type": "application/json",
       },
       ...(req.body && { body: JSON.stringify(req.body) }),
