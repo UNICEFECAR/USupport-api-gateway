@@ -49,10 +49,50 @@ router.route("/languages").get(async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/languages/all").get(async (req, res) => {
+  /**
+   * #route   GET /api/v1/user/languages/all
+   * #desc    Get all languages
+   */
+
+  const response = await fetch(`${USER_URL}/user/v1${req.url}`, {
+    method: "GET",
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-Type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
 router.route("/countries").get(async (req, res) => {
   /**
    * #route   GET /api/v1/user/countries
    * #desc    Get all countries
+   */
+
+  const response = await fetch(`${USER_URL}/user/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-Type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
+router.route("/work-with").get(async (req, res) => {
+  /**
+   * #route   GET /api/v1/user/work-with
+   * #desc    Get all work with areas
    */
 
   const response = await fetch(`${USER_URL}/user/v1${req.url}`, {
@@ -128,6 +168,25 @@ router.route("/login").post(async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/tmp-login").post(async (req, res) => {
+  /**
+   * #route   POST /api/v1/user/tmp-login
+   * #desc    Temporrary login a user
+   */
+  const response = await fetch(`${USER_URL}/user/v1/auth${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
 router.route("/user-access-token").get(async (req, res) => {
   /**
    * #route   GET /api/v1/user/user-access-token
@@ -165,6 +224,63 @@ router.route("/refresh-token").post(async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/password").patch(authenticate, async (req, res) => {
+  /**
+   * #route   PATCH /api/v1/user/password
+   * #desc    Change user's password
+   */
+  const response = await fetch(`${USER_URL}/user/v1/user${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
+router
+  .route("/rescue/forgot-password")
+  .get(async (req, res) => {
+    /**
+     * #route   GET /api/v1/user/rescue/forgot-password
+     * #desc    Initiate Forgot Password Process (Send email with token)
+     */
+    const response = await fetch(`${USER_URL}/user/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: USER_LOCAL_HOST,
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  })
+  .post(async (req, res) => {
+    /**
+     * #route   POST /api/v1/user/rescue/forgot-password
+     * #desc    Change user's password with forgot password secret token
+     */
+
+    const response = await fetch(`${USER_URL}/user/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: USER_LOCAL_HOST,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  });
+
 router.route("/upload-file").post(authenticate, async (req, res) => {
   /**
    * #route   POST /api/v1/user/upload-file/
@@ -184,5 +300,44 @@ router.route("/upload-file").post(authenticate, async (req, res) => {
   const result = await response?.json();
   return res.status(response?.status).send(result);
 });
+
+router
+  .route("/notification-preferences")
+  .get(async (req, res) => {
+    /**
+     * #route   GET /api/v1/user/notification-preferences
+     * #desc    Get user's notification preferences
+     */
+    const response = await fetch(`${USER_URL}/user/v1/user${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: USER_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  })
+  .put(async (req, res) => {
+    /**
+     * #route   PUT /api/v1/user/notification-preferences
+     * #desc    Update user's notification preferences
+     */
+    const response = await fetch(`${USER_URL}/user/v1/user${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: USER_LOCAL_HOST,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  });
 
 export { router };
