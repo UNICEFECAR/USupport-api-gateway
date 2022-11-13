@@ -49,6 +49,26 @@ router.route("/languages").get(async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/languages/all").get(async (req, res) => {
+  /**
+   * #route   GET /api/v1/user/languages/all
+   * #desc    Get all languages
+   */
+
+  const response = await fetch(`${USER_URL}/user/v1${req.url}`, {
+    method: "GET",
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-Type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
 router.route("/countries").get(async (req, res) => {
   /**
    * #route   GET /api/v1/user/countries
