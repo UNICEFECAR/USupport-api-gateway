@@ -110,8 +110,7 @@ router
 
     return res.status(response.status).send(result);
   })
-  .put(authenticateAdmin, async (req, res) => {
-    // TODO: Add country level authentication
+  .put(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
     /**
      * #route   PUT /api/v1/admin/country/faqs
      * #desc    Add given faqs to a country
@@ -131,8 +130,7 @@ router
 
     return res.status(response.status).send(result);
   })
-  .post(authenticateAdmin, async (req, res) => {
-    // TODO: Add global level authentication
+  .post(authenticateAdmin, authorizeAdmin("global"), async (req, res) => {
     /**
      * #route   POST /api/v1/admin/country/faqs
      * #desc    Initialise faqs for a new country
@@ -152,8 +150,7 @@ router
 
     return res.status(response.status).send(result);
   })
-  .delete(authenticateAdmin, async (req, res) => {
-    // TODO: Add country level authentication
+  .delete(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
     /**
      * #route   DELETE /api/v1/admin/country/faqs
      * #desc    Delete given faqs for a country
@@ -196,8 +193,7 @@ router
 
     return res.status(response.status).send(result);
   })
-  .put(authenticateAdmin, async (req, res) => {
-    // TODO: Add country level authentication
+  .put(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
     /**
      * #route   PUT /api/v1/admin/country/sos-centers
      * #desc    Add given sos centers to a country
@@ -217,8 +213,7 @@ router
 
     return res.status(response.status).send(result);
   })
-  .post(authenticateAdmin, async (req, res) => {
-    // TODO: Add global level authentication
+  .post(authenticateAdmin, authorizeAdmin("global"), async (req, res) => {
     /**
      * #route   POST /api/v1/admin/country/sos-centers
      * #desc    Initialise sos centers for a new country
@@ -238,8 +233,7 @@ router
 
     return res.status(response.status).send(result);
   })
-  .delete(authenticateAdmin, async (req, res) => {
-    // TODO: Add country level authentication
+  .delete(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
     /**
      * #route   DELETE /api/v1/admin/country/sos-centers
      * #desc    Delete given sos centers for a country
@@ -282,8 +276,7 @@ router
 
     return res.status(response.status).send(result);
   })
-  .put(authenticateAdmin, async (req, res) => {
-    // TODO: Add country level authentication
+  .put(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
     /**
      * #route   PUT /api/v1/admin/country/articles
      * #desc    Add given articles to a country
@@ -303,8 +296,7 @@ router
 
     return res.status(response.status).send(result);
   })
-  .post(authenticateAdmin, async (req, res) => {
-    // TODO: Add global level authentication
+  .post(authenticateAdmin, authorizeAdmin("global"), async (req, res) => {
     /**
      * #route   POST /api/v1/admin/country/articles
      * #desc    Initialise articles for a new country
@@ -324,8 +316,7 @@ router
 
     return res.status(response.status).send(result);
   })
-  .delete(authenticateAdmin, async (req, res) => {
-    // TODO: Add country level authentication
+  .delete(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
     /**
      * #route   DELETE /api/v1/admin/country/articles
      * #desc    Delete given articles for a country
