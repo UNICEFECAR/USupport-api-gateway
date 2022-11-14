@@ -7,6 +7,83 @@ const ADMIN_LOCAL_HOST = "http://localhost:3007";
 
 const ADMIN_URL = process.env.ADMIN_URL;
 
+router.route("/").get(async (req, res) => {
+  /**
+   * #route   GET /api/v1/admin
+   * #desc    Get Current admin
+   */
+
+  const response = await fetch(`${ADMIN_URL}/admin/v1/admin${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: ADMIN_LOCAL_HOST,
+      "Content-type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
+router.route("/signup").post(async (req, res) => {
+  /**
+   * #route   POST /api/v1/admin/signup
+   * #desc    Create new admin user account
+   */
+  const response = await fetch(`${ADMIN_URL}/admin/v1/auth${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: ADMIN_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
+router.route("/login").post(async (req, res) => {
+  /**
+   * #route   POST /api/v1/admin/login
+   * #desc    Login admin
+   */
+  const response = await fetch(`${ADMIN_URL}/admin/v1/auth${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: ADMIN_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
+router.route("/refresh-token").post(async (req, res) => {
+  /**
+   * #route   POST /api/v1/admin/refresh-token
+   * #desc    Refresh admin JWT access token
+   */
+  const response = await fetch(`${ADMIN_URL}/admin/v1/auth${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: ADMIN_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
 router
   .route("/country/faqs")
   .get(async (req, res) => {
