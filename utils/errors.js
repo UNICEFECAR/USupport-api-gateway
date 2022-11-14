@@ -7,3 +7,11 @@ export const notAuthorized = (language) => {
   error.status = 401;
   return error;
 };
+
+export const noPermissions = (language) => {
+  const error = new Error();
+  error.message = t("no_permissions_error", language);
+  error.name = "NO PERMISSIONS";
+  error.status = 401;
+  return error;
+};

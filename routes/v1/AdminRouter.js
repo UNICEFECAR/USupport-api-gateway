@@ -1,13 +1,15 @@
 import express from "express";
 import fetch from "node-fetch";
 
+import { authenticateAdmin, authorizeAdmin } from "#middlewares/auth";
+
 const router = express.Router();
 
 const ADMIN_LOCAL_HOST = "http://localhost:3007";
 
 const ADMIN_URL = process.env.ADMIN_URL;
 
-router.route("/").get(async (req, res) => {
+router.route("/").get(authenticateAdmin, async (req, res) => {
   /**
    * #route   GET /api/v1/admin
    * #desc    Get Current admin
@@ -27,24 +29,26 @@ router.route("/").get(async (req, res) => {
   return res.status(response.status).send(result);
 });
 
-router.route("/signup").post(async (req, res) => {
-  /**
-   * #route   POST /api/v1/admin/signup
-   * #desc    Create new admin user account
-   */
-  const response = await fetch(`${ADMIN_URL}/admin/v1/auth${req.url}`, {
-    method: req.method,
-    headers: {
-      ...req.headers,
-      host: ADMIN_LOCAL_HOST,
-      "Content-type": "application/json",
-    },
-    ...(req.body && { body: JSON.stringify(req.body) }),
-  }).catch(console.log);
+router
+  .route("/signup")
+  .post(authenticateAdmin, authorizeAdmin("global"), async (req, res) => {
+    /**
+     * #route   POST /api/v1/admin/signup
+     * #desc    Create new admin user account (Only global admin can create an admin account)
+     */
+    const response = await fetch(`${ADMIN_URL}/admin/v1/auth${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
 
-  const result = await response.json();
-  return res.status(response.status).send(result);
-});
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  });
 
 router.route("/login").post(async (req, res) => {
   /**
@@ -106,7 +110,7 @@ router
 
     return res.status(response.status).send(result);
   })
-  .put(async (req, res) => {
+  .put(authenticateAdmin, async (req, res) => {
     // TODO: Add country level authentication
     /**
      * #route   PUT /api/v1/admin/country/faqs
@@ -127,7 +131,7 @@ router
 
     return res.status(response.status).send(result);
   })
-  .post(async (req, res) => {
+  .post(authenticateAdmin, async (req, res) => {
     // TODO: Add global level authentication
     /**
      * #route   POST /api/v1/admin/country/faqs
@@ -148,7 +152,7 @@ router
 
     return res.status(response.status).send(result);
   })
-  .delete(async (req, res) => {
+  .delete(authenticateAdmin, async (req, res) => {
     // TODO: Add country level authentication
     /**
      * #route   DELETE /api/v1/admin/country/faqs
@@ -192,7 +196,7 @@ router
 
     return res.status(response.status).send(result);
   })
-  .put(async (req, res) => {
+  .put(authenticateAdmin, async (req, res) => {
     // TODO: Add country level authentication
     /**
      * #route   PUT /api/v1/admin/country/sos-centers
@@ -213,7 +217,7 @@ router
 
     return res.status(response.status).send(result);
   })
-  .post(async (req, res) => {
+  .post(authenticateAdmin, async (req, res) => {
     // TODO: Add global level authentication
     /**
      * #route   POST /api/v1/admin/country/sos-centers
@@ -234,7 +238,7 @@ router
 
     return res.status(response.status).send(result);
   })
-  .delete(async (req, res) => {
+  .delete(authenticateAdmin, async (req, res) => {
     // TODO: Add country level authentication
     /**
      * #route   DELETE /api/v1/admin/country/sos-centers
@@ -278,7 +282,7 @@ router
 
     return res.status(response.status).send(result);
   })
-  .put(async (req, res) => {
+  .put(authenticateAdmin, async (req, res) => {
     // TODO: Add country level authentication
     /**
      * #route   PUT /api/v1/admin/country/articles
@@ -299,7 +303,7 @@ router
 
     return res.status(response.status).send(result);
   })
-  .post(async (req, res) => {
+  .post(authenticateAdmin, async (req, res) => {
     // TODO: Add global level authentication
     /**
      * #route   POST /api/v1/admin/country/articles
@@ -320,7 +324,7 @@ router
 
     return res.status(response.status).send(result);
   })
-  .delete(async (req, res) => {
+  .delete(authenticateAdmin, async (req, res) => {
     // TODO: Add country level authentication
     /**
      * #route   DELETE /api/v1/admin/country/articles
