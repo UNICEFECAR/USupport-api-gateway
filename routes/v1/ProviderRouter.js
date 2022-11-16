@@ -243,4 +243,25 @@ router
     return res.status(response.status).send(result);
   });
 
+router.route("/availability/template").put(authenticate, async (req, res) => {
+  /**
+   * #route   PUT /api/v1/provider/availability/template
+   * #desc    Update the provider availability for a template
+   */
+  const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: PROVIDER_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 export { router };
