@@ -82,6 +82,54 @@ router
     return res.status(response.status).send(result);
   });
 
+router.route("/by-id").get(async (req, res) => {
+  /**
+   * #route   GET /api/v1/provider/by-id
+   * #desc    Get provider data by id
+   */
+
+  const response = await fetch(
+    `${PROVIDER_URL}/provider/v1/provider${req.url}`,
+    {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: PROVIDER_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }
+  ).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
+router.route("/all").get(async (req, res) => {
+  /**
+   * #route   GET /api/v1/provider/all
+   * #desc    Get all providers for a given country
+   */
+
+  const response = await fetch(
+    `${PROVIDER_URL}/provider/v1/provider${req.url}`,
+    {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: PROVIDER_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }
+  ).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 router
   .route("/image")
   .put(authenticate, async (req, res) => {
