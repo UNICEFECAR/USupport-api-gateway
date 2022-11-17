@@ -88,6 +88,63 @@ router.route("/refresh-token").post(async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/password").patch(authenticateAdmin, async (req, res) => {
+  /**
+   * #route   PATCH /api/v1/admin/password
+   * #desc    Change admin's password
+   */
+  const response = await fetch(`${ADMIN_URL}/admin/v1/admin${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: ADMIN_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
+router
+  .route("/rescue/forgot-password")
+  .get(async (req, res) => {
+    /**
+     * #route   GET /api/v1/admin/rescue/forgot-password
+     * #desc    Initiate Forgot Password Process (Send email with token)
+     */
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  })
+  .post(async (req, res) => {
+    /**
+     * #route   POST /api/v1/admin/rescue/forgot-password
+     * #desc    Change admin's password with forgot password secret token
+     */
+
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  });
+
 router
   .route("/country/faqs")
   .get(async (req, res) => {
