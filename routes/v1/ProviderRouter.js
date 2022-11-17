@@ -264,4 +264,25 @@ router.route("/availability/template").put(authenticate, async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/availability/single-day").get(authenticate, async (req, res) => {
+  /**
+   * #route   GET /api/v1/provider/availability/single-day
+   * #desc    Get current provider availability for a single day, excluding any slots that are already booked
+   */
+
+  const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: PROVIDER_LOCAL_HOST,
+      "Content-type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 export { router };
