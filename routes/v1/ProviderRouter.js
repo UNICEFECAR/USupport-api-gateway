@@ -285,4 +285,46 @@ router.route("/availability/single-day").get(authenticate, async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/consultation/block").post(authenticate, async (req, res) => {
+  /**
+   * #route   POST /api/v1/provider/consultation/block
+   * #desc    Block a consultation
+   */
+  const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: PROVIDER_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
+router.route("/consultation/schedule").put(authenticate, async (req, res) => {
+  /**
+   * #route   PUT /api/v1/provider/consultation/schedule
+   * #desc    Schedule a consultation
+   */
+  const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: PROVIDER_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 export { router };
