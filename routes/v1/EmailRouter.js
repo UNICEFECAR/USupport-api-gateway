@@ -28,4 +28,46 @@ router.route("/admin").post(async (req, res) => {
   return res.status(response?.status).send(result);
 });
 
+router.route("/system/forgot-password").post(async (req, res) => {
+  /**
+   * #route   POST /api/v1/email/system/forgot-password
+   * #desc    Send email for forgot password
+   */
+
+  const response = await fetch(`${EMAIL_URL}/email/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: EMAIL_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response?.json();
+
+  return res.status(response?.status).send(result);
+});
+
+router.route("/system/welcome").post(async (req, res) => {
+  /**
+   * #route   POST /api/v1/email/system/welcome
+   * #desc    Send welcome email
+   */
+
+  const response = await fetch(`${EMAIL_URL}/email/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: EMAIL_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response?.json();
+
+  return res.status(response?.status).send(result);
+});
+
 export { router };
