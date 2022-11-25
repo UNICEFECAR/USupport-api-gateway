@@ -9,27 +9,50 @@ const ADMIN_LOCAL_HOST = "http://localhost:3007";
 
 const ADMIN_URL = process.env.ADMIN_URL;
 
-router.route("/").get(authenticateAdmin, async (req, res) => {
-  /**
-   * #swagger.tags = ['Admin']
-   * #swagger.method = 'GET'
-   * #swagger.path = '/api/v1/admin'
-   * #swagger.description = 'Get Current admin'
-   */
+router
+  .route("/")
+  .get(authenticateAdmin, async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/api/v1/admin'
+     * #swagger.description = 'Get Current admin'
+     */
 
-  const response = await fetch(`${ADMIN_URL}/admin/v1/admin${req.url}`, {
-    method: req.method,
-    headers: {
-      ...req.headers,
-      host: ADMIN_LOCAL_HOST,
-      "Content-type": "application/json",
-      "Cache-control": "no-cache",
-    },
-  }).catch(console.log);
+    const response = await fetch(`${ADMIN_URL}/admin/v1/admin${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
 
-  const result = await response.json();
-  return res.status(response.status).send(result);
-});
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  })
+  .put(authenticateAdmin, async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'PUT'
+     * #swagger.path = '/api/v1/admin'
+     * #swagger.description = 'Update current admin data'
+     */
+    const response = await fetch(`${ADMIN_URL}/admin/v1/admin${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
 
 router
   .route("/signup")
