@@ -97,6 +97,50 @@ router.route("/countries").get(async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/countries/by-alpha-2-code").get(async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/api/v1/user/countries/by-alpha-2-code'
+   * #swagger.description = 'Get a specific country by its alpha-2 code'
+   */
+
+  const response = await fetch(`${USER_URL}/user/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-Type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
+router.route("/countries/min-max-client-age").put(async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'PUT'
+   * #swagger.path = '/api/v1/user/countries/min-max-client-age'
+   * #swagger.description = 'Update the country min and max client age'
+   */
+
+  const response = await fetch(`${USER_URL}/user/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-Type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
 router.route("/work-with").get(async (req, res) => {
   /**
    * #swagger.tags = ['User']
