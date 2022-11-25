@@ -13,8 +13,10 @@ router
   .route("/")
   .get(authenticate, async (req, res) => {
     /**
-     * #route   GET /api/v1/client
-     * #desc    Get current client data
+     * #swagger.tags = ['Client']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/api/v1/client'
+     * #swagger.description = 'Get current client data'
      */
 
     const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
@@ -34,8 +36,10 @@ router
   })
   .put(authenticate, async (req, res) => {
     /**
-     * #route   PUT /api/v1/client
-     * #desc    Update current client data
+     * #swagger.tags = ['Client']
+     * #swagger.method = 'PUT'
+     * #swagger.path = '/api/v1/client'
+     * #swagger.description = 'Update current client data'
      */
     const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
       method: req.method,
@@ -54,8 +58,10 @@ router
   })
   .delete(authenticate, async (req, res) => {
     /**
-     * #route   DELETE /api/v1/client
-     * #desc    Delete current client data
+     * #swagger.tags = ['Client']
+     * #swagger.method = 'DELETE'
+     * #swagger.path = '/api/v1/client'
+     * #swagger.description = 'Delete current client data'
      */
     const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
       method: req.method,
@@ -77,8 +83,10 @@ router
   .route("/image")
   .put(authenticate, async (req, res) => {
     /**
-     * #route   PUT /api/v1/client/image
-     * #desc    Update the client image
+     * #swagger.tags = ['Client']
+     * #swagger.method = 'PUT'
+     * #swagger.path = '/api/v1/client/image'
+     * #swagger.description = 'Update the client image'
      */
     const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
       method: req.method,
@@ -97,8 +105,10 @@ router
   })
   .delete(authenticate, async (req, res) => {
     /**
-     * #route   DELETE /api/v1/client/image
-     * #desc    Delete the client image
+     * #swagger.tags = ['Client']
+     * #swagger.method = 'DELETE'
+     * #swagger.path = '/api/v1/client/image'
+     * #swagger.description = 'Delete the client image'
      */
     const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
       method: req.method,
@@ -120,8 +130,10 @@ router
   .route("/data-processing-agreement")
   .put(authenticate, async (req, res) => {
     /**
-     * #route   PUT /api/v1/client/data-processing-agreement
-     * #desc    Update the client data-processing-agreement
+     * #swagger.tags = ['Client']
+     * #swagger.method = 'PUT'
+     * #swagger.path = '/api/v1/client/data-processing-agreement'
+     * #swagger.description = 'Update the client data-processing-agreement'
      */
     const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
       method: req.method,

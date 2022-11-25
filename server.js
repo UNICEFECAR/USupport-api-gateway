@@ -6,6 +6,13 @@ import cors from "cors";
 import v1 from "#routes/index";
 import middleware from "#middlewares/index";
 
+import swaggerUi from "swagger-ui-express";
+
+import { readFileSync } from "fs";
+const swaggerFile = JSON.parse(
+  readFileSync(new URL("./swaggerOutput.json", import.meta.url))
+);
+
 dotenv.config();
 
 const app = express();
@@ -17,6 +24,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
 app.use(cors());
+
+/*------------- Swagger Documentation -------------*/
+app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 /*------------- API Gateway Service Endpoints -------------*/
 

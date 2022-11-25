@@ -6,15 +6,19 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",
-    "prod": "node server.js"
+    "prod": "node server.js",
+    "swagger": "node swagger.js"
   },
   "license": "GPL-3.0",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.0.2",
     "express": "^4.18.1",
+    "fs": "^0.0.1-security",
     "helmet": "^6.0.0",
     "node-fetch": "^3.2.10",
+    "swagger-autogen": "^2.22.0",
+    "swagger-ui-express": "^4.6.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {

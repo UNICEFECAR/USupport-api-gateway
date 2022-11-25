@@ -11,8 +11,10 @@ const ADMIN_URL = process.env.ADMIN_URL;
 
 router.route("/").get(authenticateAdmin, async (req, res) => {
   /**
-   * #route   GET /api/v1/admin
-   * #desc    Get Current admin
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/api/v1/admin'
+   * #swagger.description = 'Get Current admin'
    */
 
   const response = await fetch(`${ADMIN_URL}/admin/v1/admin${req.url}`, {
@@ -33,8 +35,10 @@ router
   .route("/signup")
   .post(authenticateAdmin, authorizeAdmin("global"), async (req, res) => {
     /**
-     * #route   POST /api/v1/admin/signup
-     * #desc    Create new admin user account (Only global admin can create an admin account)
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'POST'
+     * #swagger.path = '/api/v1/admin/signup'
+     * #swagger.description = Create new admin user account (Only global admin can create an admin account)
      */
     const response = await fetch(`${ADMIN_URL}/admin/v1/auth${req.url}`, {
       method: req.method,
@@ -52,8 +56,10 @@ router
 
 router.route("/login").post(async (req, res) => {
   /**
-   * #route   POST /api/v1/admin/login
-   * #desc    Login admin
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/api/v1/admin/login'
+   * #swagger.description = 'Login admin'
    */
   const response = await fetch(`${ADMIN_URL}/admin/v1/auth${req.url}`, {
     method: req.method,
@@ -71,8 +77,10 @@ router.route("/login").post(async (req, res) => {
 
 router.route("/refresh-token").post(async (req, res) => {
   /**
-   * #route   POST /api/v1/admin/refresh-token
-   * #desc    Refresh admin JWT access token
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/api/v1/admin/refresh-token'
+   * #swagger.description = 'Refresh admin JWT access token'
    */
   const response = await fetch(`${ADMIN_URL}/admin/v1/auth${req.url}`, {
     method: req.method,
@@ -90,8 +98,10 @@ router.route("/refresh-token").post(async (req, res) => {
 
 router.route("/password").patch(authenticateAdmin, async (req, res) => {
   /**
-   * #route   PATCH /api/v1/admin/password
-   * #desc    Change admin's password
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'PATCH'
+   * #swagger.path = '/api/v1/admin/password'
+   * #swagger.description = 'Change admin's password'
    */
   const response = await fetch(`${ADMIN_URL}/admin/v1/admin${req.url}`, {
     method: req.method,
@@ -111,8 +121,10 @@ router
   .route("/rescue/forgot-password")
   .get(async (req, res) => {
     /**
-     * #route   GET /api/v1/admin/rescue/forgot-password
-     * #desc    Initiate Forgot Password Process (Send email with token)
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/api/v1/admin/rescue/forgot-password'
+     * #swagger.description = 'Initiate Forgot Password Process (Send email with token)'
      */
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
       method: req.method,
@@ -127,8 +139,10 @@ router
   })
   .post(async (req, res) => {
     /**
-     * #route   POST /api/v1/admin/rescue/forgot-password
-     * #desc    Change admin's password with forgot password secret token
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'POST'
+     * #swagger.path = '/api/v1/admin/rescue/forgot-password'
+     * #swagger.description = 'Change admin's password with forgot password secret token'
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
@@ -149,8 +163,10 @@ router
   .route("/country/faqs")
   .get(async (req, res) => {
     /**
-     * #route   GET /api/v1/admin/country/faqs
-     * #desc    Get all faqs for a country
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/api/v1/admin/country/faqs'
+     * #swagger.description = 'Get all faqs for a country'
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
@@ -169,8 +185,10 @@ router
   })
   .put(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
     /**
-     * #route   PUT /api/v1/admin/country/faqs
-     * #desc    Add given faqs to a country
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'PUT'
+     * #swagger.path = '/api/v1/admin/country/faqs'
+     * #swagger.description = 'Add given faqs to a country'
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
@@ -189,8 +207,10 @@ router
   })
   .post(authenticateAdmin, authorizeAdmin("global"), async (req, res) => {
     /**
-     * #route   POST /api/v1/admin/country/faqs
-     * #desc    Initialise faqs for a new country
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'POST'
+     * #swagger.path = '/api/v1/admin/country/faqs'
+     * #swagger.description = 'Initialise faqs for a new country'
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
@@ -209,8 +229,10 @@ router
   })
   .delete(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
     /**
-     * #route   DELETE /api/v1/admin/country/faqs
-     * #desc    Delete given faqs for a country
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'DELETE'
+     * #swagger.path = '/api/v1/admin/country/faqs'
+     * #swagger.description = 'Delete given faqs for a country'
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
@@ -232,8 +254,10 @@ router
   .route("/country/sos-centers")
   .get(async (req, res) => {
     /**
-     * #route   GET /api/v1/admin/country/sos-centers
-     * #desc    Get all sos centers for a country
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/api/v1/admin/country/sos-centers'
+     * #swagger.description = 'Get all sos centers for a country'
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
@@ -252,8 +276,10 @@ router
   })
   .put(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
     /**
-     * #route   PUT /api/v1/admin/country/sos-centers
-     * #desc    Add given sos centers to a country
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'PUT'
+     * #swagger.path = '/api/v1/admin/country/sos-centers'
+     * #swagger.description = 'Add given sos centers to a country'
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
@@ -272,8 +298,10 @@ router
   })
   .post(authenticateAdmin, authorizeAdmin("global"), async (req, res) => {
     /**
-     * #route   POST /api/v1/admin/country/sos-centers
-     * #desc    Initialise sos centers for a new country
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'POST'
+     * #swagger.path = '/api/v1/admin/country/sos-centers'
+     * #swagger.description = 'Initialise sos centers for a new country'
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
@@ -292,8 +320,10 @@ router
   })
   .delete(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
     /**
-     * #route   DELETE /api/v1/admin/country/sos-centers
-     * #desc    Delete given sos centers for a country
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'DELETE'
+     * #swagger.path = '/api/v1/admin/country/sos-centers'
+     * #swagger.description = 'Delete given sos centers for a country'
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
@@ -315,8 +345,10 @@ router
   .route("/country/articles")
   .get(async (req, res) => {
     /**
-     * #route   GET /api/v1/admin/country/articles
-     * #desc    Get all articles for a country
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/api/v1/admin/country/articles'
+     * #swagger.description = 'Get all articles for a country'
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
@@ -335,8 +367,10 @@ router
   })
   .put(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
     /**
-     * #route   PUT /api/v1/admin/country/articles
-     * #desc    Add given articles to a country
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'PUT'
+     * #swagger.path = '/api/v1/admin/country/articles'
+     * #swagger.description = 'Add given articles to a country'
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
@@ -355,8 +389,10 @@ router
   })
   .post(authenticateAdmin, authorizeAdmin("global"), async (req, res) => {
     /**
-     * #route   POST /api/v1/admin/country/articles
-     * #desc    Initialise articles for a new country
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'POST'
+     * #swagger.path = '/api/v1/admin/country/articles'
+     * #swagger.description = 'Initialise articles for a new country'
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
@@ -375,8 +411,10 @@ router
   })
   .delete(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
     /**
-     * #route   DELETE /api/v1/admin/country/articles
-     * #desc    Delete given articles for a country
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'DELETE'
+     * #swagger.path = '/api/v1/admin/country/articles'
+     * #swagger.description = 'Delete given articles for a country'
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
