@@ -151,4 +151,28 @@ router
     return res.status(response.status).send(result);
   });
 
+router.route("/consultation/all").get(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Client']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/api/v1/client/consultation/all'
+   * #swagger.description = 'Get all consultations for a client'
+   */
+
+  const response = await fetch(`${CLIENT_URL}/client/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: CLIENT_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 export { router };
