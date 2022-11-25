@@ -395,7 +395,6 @@ router.route("/consultation/schedule").put(authenticate, async (req, res) => {
     headers: {
       ...req.headers,
       host: PROVIDER_LOCAL_HOST,
-      "x-user-id": req.user.user_id,
       "Content-type": "application/json",
     },
     ...(req.body && { body: JSON.stringify(req.body) }),
