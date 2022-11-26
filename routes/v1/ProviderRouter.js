@@ -337,6 +337,32 @@ router.route("/availability/single-day").get(authenticate, async (req, res) => {
 });
 
 router
+  .route("/consultation/all/past/by-id")
+  .get(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Provider']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/api/v1/provider/consultation/all/past/by-id'
+     * #swagger.description = 'Get all the past consultations of the current provider for a specific client'
+     */
+
+    const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: PROVIDER_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
+
+router
   .route("/consultation/single-week")
   .get(authenticate, async (req, res) => {
     /**
