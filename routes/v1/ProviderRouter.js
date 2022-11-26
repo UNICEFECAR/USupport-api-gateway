@@ -336,6 +336,30 @@ router.route("/availability/single-day").get(authenticate, async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/consultation/count").get(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/api/v1/provider/consultation/count'
+   * #swagger.description = 'Get the count of all past and future consultations for the current provider'
+   */
+
+  const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: PROVIDER_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 router
   .route("/consultation/all/past/by-id")
   .get(authenticate, async (req, res) => {
@@ -543,6 +567,7 @@ router.route("/consultation/cancel").put(authenticate, async (req, res) => {
     headers: {
       ...req.headers,
       host: PROVIDER_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
       "Content-type": "application/json",
     },
     ...(req.body && { body: JSON.stringify(req.body) }),
