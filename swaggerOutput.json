@@ -1,0 +1,615 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "REST API",
+    "description": ""
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/api/v1/admin": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get Current admin",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/admin/signup": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Create new admin user account (Only global admin can create an admin account)",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/admin/login": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Login admin",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/admin/refresh-token": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Refresh admin JWT access token",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/admin/password": {
+      "patch": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Change admin",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/admin/rescue/forgot-password": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Initiate Forgot Password Process (Send email with token)",
+        "parameters": [],
+        "responses": {}
+      },
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Change admin",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/admin/country/faqs": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all faqs for a country",
+        "parameters": [],
+        "responses": {}
+      },
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Initialise faqs for a new country",
+        "parameters": [],
+        "responses": {}
+      },
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Add given faqs to a country",
+        "parameters": [],
+        "responses": {}
+      },
+      "delete": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Delete given faqs for a country",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/admin/country/sos-centers": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all sos centers for a country",
+        "parameters": [],
+        "responses": {}
+      },
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Initialise sos centers for a new country",
+        "parameters": [],
+        "responses": {}
+      },
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Add given sos centers to a country",
+        "parameters": [],
+        "responses": {}
+      },
+      "delete": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Delete given sos centers for a country",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/admin/country/articles": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all articles for a country",
+        "parameters": [],
+        "responses": {}
+      },
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Initialise articles for a new country",
+        "parameters": [],
+        "responses": {}
+      },
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Add given articles to a country",
+        "parameters": [],
+        "responses": {}
+      },
+      "delete": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Delete given articles for a country",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/client": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Get current client data",
+        "parameters": [],
+        "responses": {}
+      },
+      "put": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Update current client data",
+        "parameters": [],
+        "responses": {}
+      },
+      "delete": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Delete current client data",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/client/image": {
+      "put": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Update the client image",
+        "parameters": [],
+        "responses": {}
+      },
+      "delete": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Delete the client image",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/client/data-processing-agreement": {
+      "put": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Update the client data-processing-agreement",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/email/admin/": {
+      "post": {
+        "tags": [
+          "Email"
+        ],
+        "description": "Send email",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/email/system/forgot-password": {
+      "post": {
+        "tags": [
+          "Email"
+        ],
+        "description": "Send email for forgot password",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/email/system/welcome": {
+      "post": {
+        "tags": [
+          "Email"
+        ],
+        "description": "Send welcome email",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/provider": {
+      "get": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Get current provider data",
+        "parameters": [],
+        "responses": {}
+      },
+      "put": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Update current provider data",
+        "parameters": [],
+        "responses": {}
+      },
+      "delete": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Delete current provider data",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/provider/by-id": {
+      "get": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Get provider data by id",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/provider/all": {
+      "get": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Get all providers for a given country",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/provider/image": {
+      "put": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Update the provider image",
+        "parameters": [],
+        "responses": {}
+      },
+      "delete": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Delete the provider image",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/provider/availability/single-week": {
+      "get": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Get current provider availability for a single week",
+        "parameters": [],
+        "responses": {}
+      },
+      "put": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Update the provider availability for a single week",
+        "parameters": [],
+        "responses": {}
+      },
+      "delete": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Delete the provider availability for a single week",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/provider/availability/template": {
+      "put": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Update the provider availability for a template",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/provider/availability/single-day": {
+      "get": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Get current provider availability for a single day, excluding any slots that are already booked",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/provider/consultation/single-week": {
+      "get": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Get current provider consultations for a single week",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/provider/consultation/five-weeks": {
+      "get": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Get current provider consultations for five weeks",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/provider/consultation/block": {
+      "post": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Block a consultation",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/provider/consultation/schedule": {
+      "put": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Schedule a consultation",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/provider/consultation/reschedule": {
+      "post": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Reschedule a consultation",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/provider/consultation/cancel": {
+      "put": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Cancel a consultation",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/user": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Get Current User",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/user/languages": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Get all active languages",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/user/languages/all": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Get all languages",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/user/countries": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Get all countries",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/user/work-with": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Get all work with areas",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/user/provider/signup": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Create provider user account (Protected with admin permissions)",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/user/signup": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Create new client user account",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/user/login": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Login user with email or user access token",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/user/tmp-login": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Temporrary login a user",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/user/user-access-token": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Generate new user access token for signup",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/user/refresh-token": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Refresh JWT access token",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/user/password": {
+      "patch": {
+        "tags": [
+          "User"
+        ],
+        "description": "Change user",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/user/rescue/forgot-password": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Initiate Forgot Password Process (Send email with token)",
+        "parameters": [],
+        "responses": {}
+      },
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Change user",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/user/upload-file/": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Upload file to AWS S3 bucket",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/user/notification-preferences": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Get user",
+        "parameters": [],
+        "responses": {}
+      },
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "description": "Update user",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/v1/video": {
+      "get": {
+        "tags": [
+          "Video"
+        ],
+        "description": "Get the current video",
+        "parameters": [],
+        "responses": {}
+      }
+    }
+  }
+}

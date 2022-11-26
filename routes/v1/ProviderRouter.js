@@ -13,8 +13,10 @@ router
   .route("/")
   .get(authenticate, async (req, res) => {
     /**
-     * #route   GET /api/v1/provider
-     * #desc    Get current provider data
+     * #swagger.tags = ['Provider']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/api/v1/provider'
+     * #swagger.description = 'Get current provider data'
      */
 
     const response = await fetch(
@@ -37,8 +39,10 @@ router
   })
   .put(authenticate, async (req, res) => {
     /**
-     * #route   PUT /api/v1/provider
-     * #desc    Update current provider data
+     * #swagger.tags = ['Provider']
+     * #swagger.method = 'PUT'
+     * #swagger.path = '/api/v1/provider'
+     * #swagger.description = 'Update current provider data'
      */
     const response = await fetch(
       `${PROVIDER_URL}/provider/v1/provider${req.url}`,
@@ -60,8 +64,10 @@ router
   })
   .delete(authenticate, async (req, res) => {
     /**
-     * #route   DELETE /api/v1/provider
-     * #desc    Delete current provider data
+     * #swagger.tags = ['Provider']
+     * #swagger.method = 'DELETE'
+     * #swagger.path = '/api/v1/provider'
+     * #swagger.description = 'Delete current provider data'
      */
     const response = await fetch(
       `${PROVIDER_URL}/provider/v1/provider${req.url}`,
@@ -84,8 +90,10 @@ router
 
 router.route("/by-id").get(async (req, res) => {
   /**
-   * #route   GET /api/v1/provider/by-id
-   * #desc    Get provider data by id
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/api/v1/provider/by-id'
+   * #swagger.description = 'Get provider data by id'
    */
 
   const response = await fetch(
@@ -108,8 +116,10 @@ router.route("/by-id").get(async (req, res) => {
 
 router.route("/all").get(async (req, res) => {
   /**
-   * #route   GET /api/v1/provider/all
-   * #desc    Get all providers for a given country
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/api/v1/provider/all'
+   * #swagger.description = 'Get all providers for a given country'
    */
 
   const response = await fetch(
@@ -134,8 +144,10 @@ router
   .route("/image")
   .put(authenticate, async (req, res) => {
     /**
-     * #route   PUT /api/v1/provider/image
-     * #desc    Update the provider image
+     * #swagger.tags = ['Provider']
+     * #swagger.method = 'PUT'
+     * #swagger.path = '/api/v1/provider/image'
+     * #swagger.description = 'Update the provider image'
      */
     const response = await fetch(
       `${PROVIDER_URL}/provider/v1/provider${req.url}`,
@@ -157,8 +169,10 @@ router
   })
   .delete(authenticate, async (req, res) => {
     /**
-     * #route   DELETE /api/v1/provider/image
-     * #desc    Delete the provider image
+     * #swagger.tags = ['Provider']
+     * #swagger.method = 'DELETE'
+     * #swagger.path = '/api/v1/provider/image'
+     * #swagger.description = 'Delete the provider image'
      */
     const response = await fetch(
       `${PROVIDER_URL}/provider/v1/provider${req.url}`,
@@ -183,8 +197,10 @@ router
   .route("/availability/single-week")
   .get(authenticate, async (req, res) => {
     /**
-     * #route   GET /api/v1/provider/availability/single-week
-     * #desc    Get current provider availability for a single week
+     * #swagger.tags = ['Provider']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/api/v1/provider/availability/single-week'
+     * #swagger.description = 'Get current provider availability for a single week'
      */
 
     const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
@@ -204,8 +220,10 @@ router
   })
   .put(authenticate, async (req, res) => {
     /**
-     * #route   PUT /api/v1/provider/availability/single-week
-     * #desc    Update the provider availability for a single week
+     * #swagger.tags = ['Provider']
+     * #swagger.method = 'PUT'
+     * #swagger.path = '/api/v1/provider/availability/single-week'
+     * #swagger.description = 'Update the provider availability for a single week'
      */
     const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
       method: req.method,
@@ -224,8 +242,10 @@ router
   })
   .delete(authenticate, async (req, res) => {
     /**
-     * #route   DELETE /api/v1/provider/availability/single-week
-     * #desc    Delete the provider availability for a single week
+     * #swagger.tags = ['Provider']
+     * #swagger.method = 'DELETE'
+     * #swagger.path = '/api/v1/provider/availability/single-week'
+     * #swagger.description = 'Delete the provider availability for a single week'
      */
     const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
       method: req.method,
@@ -245,8 +265,10 @@ router
 
 router.route("/availability/template").put(authenticate, async (req, res) => {
   /**
-   * #route   PUT /api/v1/provider/availability/template
-   * #desc    Update the provider availability for a template
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'PUT'
+   * #swagger.path = '/api/v1/provider/availability/template'
+   * #swagger.description = 'Update the provider availability for a template'
    */
   const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
     method: req.method,
@@ -266,8 +288,10 @@ router.route("/availability/template").put(authenticate, async (req, res) => {
 
 router.route("/availability/single-day").get(authenticate, async (req, res) => {
   /**
-   * #route   GET /api/v1/provider/availability/single-day
-   * #desc    Get current provider availability for a single day, excluding any slots that are already booked
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/api/v1/provider/availability/single-day'
+   * #swagger.description = 'Get current provider availability for a single day, excluding any slots that are already booked'
    */
 
   const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
@@ -275,6 +299,57 @@ router.route("/availability/single-day").get(authenticate, async (req, res) => {
     headers: {
       ...req.headers,
       host: PROVIDER_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
+router
+  .route("/consultation/single-week")
+  .get(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Provider']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/api/v1/provider/consultation/single-week'
+     * #swagger.description = 'Get current provider consultations for a single week'
+     */
+
+    const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: PROVIDER_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
+
+router.route("/consultation/five-weeks").get(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/api/v1/provider/consultation/five-weeks'
+   * #swagger.description = 'Get current provider consultations for five weeks'
+   */
+
+  const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: PROVIDER_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
       "Content-type": "application/json",
       "Cache-control": "no-cache",
     },
@@ -287,8 +362,10 @@ router.route("/availability/single-day").get(authenticate, async (req, res) => {
 
 router.route("/consultation/block").post(authenticate, async (req, res) => {
   /**
-   * #route   POST /api/v1/provider/consultation/block
-   * #desc    Block a consultation
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/api/v1/provider/consultation/block'
+   * #swagger.description = 'Block a consultation'
    */
   const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
     method: req.method,
@@ -308,15 +385,16 @@ router.route("/consultation/block").post(authenticate, async (req, res) => {
 
 router.route("/consultation/schedule").put(authenticate, async (req, res) => {
   /**
-   * #route   PUT /api/v1/provider/consultation/schedule
-   * #desc    Schedule a consultation
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'PUT'
+   * #swagger.path = '/api/v1/provider/consultation/schedule'
+   * #swagger.description = 'Schedule a consultation'
    */
   const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
     method: req.method,
     headers: {
       ...req.headers,
       host: PROVIDER_LOCAL_HOST,
-      "x-user-id": req.user.user_id,
       "Content-type": "application/json",
     },
     ...(req.body && { body: JSON.stringify(req.body) }),
@@ -327,10 +405,36 @@ router.route("/consultation/schedule").put(authenticate, async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router
+  .route("/consultation/reschedule")
+  .post(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Provider']
+     * #swagger.method = 'POST'
+     * #swagger.path = '/api/v1/provider/consultation/reschedule'
+     * #swagger.description = 'Reschedule a consultation'
+     */
+    const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: PROVIDER_LOCAL_HOST,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
+
 router.route("/consultation/cancel").put(authenticate, async (req, res) => {
   /**
-   * #route   PUT /api/v1/provider/consultation/cancel
-   * #desc    Cancel a consultation
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'PUT'
+   * #swagger.path = '/api/v1/provider/consultation/cancel'
+   * #swagger.description = 'Cancel a consultation'
    */
   const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
     method: req.method,

@@ -9,8 +9,10 @@ const EMAIL_URL = process.env.EMAIL_URL;
 
 router.route("/admin").post(async (req, res) => {
   /**
-   * #route   POST /api/v1/email/admin/
-   * #desc    Send email
+   * #swagger.tags = ['Email']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/api/v1/email/admin/'
+   * #swagger.description = 'Send email'
    */
 
   const response = await fetch(`${EMAIL_URL}/email/v1${req.url}`, {
@@ -30,8 +32,10 @@ router.route("/admin").post(async (req, res) => {
 
 router.route("/system/forgot-password").post(async (req, res) => {
   /**
-   * #route   POST /api/v1/email/system/forgot-password
-   * #desc    Send email for forgot password
+   * #swagger.tags = ['Email']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/api/v1/email/system/forgot-password'
+   * #swagger.description = 'Send email for forgot password'
    */
 
   const response = await fetch(`${EMAIL_URL}/email/v1${req.url}`, {
@@ -51,8 +55,10 @@ router.route("/system/forgot-password").post(async (req, res) => {
 
 router.route("/system/welcome").post(async (req, res) => {
   /**
-   * #route   POST /api/v1/email/system/welcome
-   * #desc    Send welcome email
+   * #swagger.tags = ['Email']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/api/v1/email/system/welcome'
+   * #swagger.description = 'Send welcome email'
    */
 
   const response = await fetch(`${EMAIL_URL}/email/v1${req.url}`, {
