@@ -362,6 +362,56 @@ router
     return res.status(response.status).send(result);
   });
 
+router.route("/consultation/all/past").get(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/api/v1/provider/consultation/all/past'
+   * #swagger.description = 'Get all the past consultations of the current provider for all clients'
+   */
+
+  const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: PROVIDER_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
+router
+  .route("/consultation/all/upcoming")
+  .get(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Provider']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/api/v1/provider/consultation/all/upcoming'
+     * #swagger.description = 'Get all the upcoming consultations of the current provider for all clients'
+     */
+
+    const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: PROVIDER_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
+
 router
   .route("/consultation/single-week")
   .get(authenticate, async (req, res) => {
