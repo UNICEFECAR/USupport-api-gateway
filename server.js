@@ -27,7 +27,7 @@ app.use(cors());
 
 /*------------- Swagger Documentation -------------*/
 app.use(
-  "/doc",
+  "/api/v1/doc",
   swaggerUi.serve,
   swaggerUi.setup(swaggerFile, {
     swaggerOptions: { persistAuthorization: true },

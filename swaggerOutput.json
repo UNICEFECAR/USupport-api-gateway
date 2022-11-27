@@ -5,7 +5,6 @@
     "title": "REST API",
     "description": "The Microservices API of the USupport Project"
   },
-  "host": "localhost:3000",
   "basePath": "/api/v1",
   "tags": [
     {
@@ -372,6 +371,196 @@
         "responses": {}
       }
     },
+    "/client/consultation/confirm/booking": {
+      "post": {
+        "tags": [
+          "Email"
+        ],
+        "description": "Send email to client to confirm consultation booking",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/client/consultation/confirm/reschedule": {
+      "post": {
+        "tags": [
+          "Email"
+        ],
+        "description": "Send email to client to confirm consultation reschedule",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/client/consultation/confirm/cancellation": {
+      "post": {
+        "tags": [
+          "Email"
+        ],
+        "description": "Send email to client to confirm consultation cancellation",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/client/consultation/notify/cancellation": {
+      "post": {
+        "tags": [
+          "Email"
+        ],
+        "description": "Send email to client to notify about consultation cancellation",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/client/consultation/remind/start": {
+      "post": {
+        "tags": [
+          "Email"
+        ],
+        "description": "Send email to client to remind about consultation start",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/client/consultation/notify/suggestion": {
+      "post": {
+        "tags": [
+          "Email"
+        ],
+        "description": "Send email to client to notify about consultation suggestion",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/client/consultation/confirm/suggestion-booking": {
+      "post": {
+        "tags": [
+          "Email"
+        ],
+        "description": "Send email to client to confirm consultation suggestion booking",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/client/consultation/confirm/suggestion-cancellation": {
+      "post": {
+        "tags": [
+          "Email"
+        ],
+        "description": "Send email to client to confirm consultation suggestion cancellation",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/provider/consultation/notify/booking": {
+      "post": {
+        "tags": [
+          "Email"
+        ],
+        "description": "Send email to provider to notify about consultation booking",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/provider/consultation/notify/reschedule": {
+      "post": {
+        "tags": [
+          "Email"
+        ],
+        "description": "Send email to provider to notify about consultation reschedule",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/provider/consultation/notify/cancellation": {
+      "post": {
+        "tags": [
+          "Email"
+        ],
+        "description": "Send email to provider to notify about consultation cancellation",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/provider/consultation/confirm/cancellation": {
+      "post": {
+        "tags": [
+          "Email"
+        ],
+        "description": "Send email to provider to confirm consultation cancellation",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/provider/consultation/remind/start": {
+      "post": {
+        "tags": [
+          "Email"
+        ],
+        "description": "Send email to provider to remind about consultation start",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/provider/consultation/confirm/suggestion": {
+      "post": {
+        "tags": [
+          "Email"
+        ],
+        "description": "Send email to provider to confirm consultation suggestion",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/provider/consultation/notify/suggestion-booking": {
+      "post": {
+        "tags": [
+          "Email"
+        ],
+        "description": "Send email to provider to notify about consultation suggestion booking",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/provider/consultation/notify/suggestion-cancellation": {
+      "post": {
+        "tags": [
+          "Email"
+        ],
+        "description": "Send email to provider to notify about consultation suggestion cancellation",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/provider/availability/remind/add-more-slots": {
+      "post": {
+        "tags": [
+          "Email"
+        ],
+        "description": "Send email to provider to remind add more availability slots",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/provider/report/weekly": {
+      "post": {
+        "tags": [
+          "Email"
+        ],
+        "description": "Send email to provider containing weekly report",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/provider/report/monthly": {
+      "post": {
+        "tags": [
+          "Email"
+        ],
+        "description": "Send email to provider containing monthly report",
+        "parameters": [],
+        "responses": {}
+      }
+    },
     "/provider": {
       "get": {
         "tags": [
@@ -492,6 +681,16 @@
         "responses": {}
       }
     },
+    "/provider/consultation/single-week": {
+      "get": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Get current provider consultations for a single week",
+        "parameters": [],
+        "responses": {}
+      }
+    },
     "/provider/consultation/count": {
       "get": {
         "tags": [
@@ -532,16 +731,6 @@
         "responses": {}
       }
     },
-    "/provider/consultation/single-week": {
-      "get": {
-        "tags": [
-          "Provider"
-        ],
-        "description": "Get current provider consultations for a single week",
-        "parameters": [],
-        "responses": {}
-      }
-    },
     "/provider/consultation/five-weeks": {
       "get": {
         "tags": [
@@ -572,6 +761,36 @@
         "responses": {}
       }
     },
+    "/provider/consultation/suggest": {
+      "put": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Suggest a consultation",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/provider/consultation/accept-suggest": {
+      "put": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Accept a suggested consultation",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/provider/consultation/rejected-suggest": {
+      "put": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Reject a suggested consultation",
+        "parameters": [],
+        "responses": {}
+      }
+    },
     "/provider/consultation/reschedule": {
       "post": {
         "tags": [
@@ -588,6 +807,16 @@
           "Provider"
         ],
         "description": "Cancel a consultation",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/provider/calendar/five-weeks": {
+      "get": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Get current provider consultations and availability for five weeks",
         "parameters": [],
         "responses": {}
       }
