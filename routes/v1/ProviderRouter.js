@@ -578,7 +578,7 @@ router
   });
 
 router
-  .route("/consultation/rejected-suggest")
+  .route("/consultation/reject-suggest")
   .put(authenticate, async (req, res) => {
     /**
      * #swagger.tags = ['Provider']
