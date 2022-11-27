@@ -11,7 +11,7 @@ router.route("/admin").post(async (req, res) => {
   /**
    * #swagger.tags = ['Email']
    * #swagger.method = 'POST'
-   * #swagger.path = '/api/v1/email/admin/'
+   * #swagger.path = '/email/admin/'
    * #swagger.description = 'Send email'
    */
 
@@ -34,7 +34,7 @@ router.route("/system/forgot-password").post(async (req, res) => {
   /**
    * #swagger.tags = ['Email']
    * #swagger.method = 'POST'
-   * #swagger.path = '/api/v1/email/system/forgot-password'
+   * #swagger.path = '/email/system/forgot-password'
    * #swagger.description = 'Send email for forgot password'
    */
 
@@ -57,7 +57,7 @@ router.route("/system/welcome").post(async (req, res) => {
   /**
    * #swagger.tags = ['Email']
    * #swagger.method = 'POST'
-   * #swagger.path = '/api/v1/email/system/welcome'
+   * #swagger.path = '/email/system/welcome'
    * #swagger.description = 'Send welcome email'
    */
 

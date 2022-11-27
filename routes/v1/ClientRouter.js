@@ -15,7 +15,7 @@ router
     /**
      * #swagger.tags = ['Client']
      * #swagger.method = 'GET'
-     * #swagger.path = '/api/v1/client'
+     * #swagger.path = '/client'
      * #swagger.description = 'Get current client data'
      */
 
@@ -38,7 +38,7 @@ router
     /**
      * #swagger.tags = ['Client']
      * #swagger.method = 'PUT'
-     * #swagger.path = '/api/v1/client'
+     * #swagger.path = '/client'
      * #swagger.description = 'Update current client data'
      */
     const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
@@ -60,7 +60,7 @@ router
     /**
      * #swagger.tags = ['Client']
      * #swagger.method = 'DELETE'
-     * #swagger.path = '/api/v1/client'
+     * #swagger.path = '/client'
      * #swagger.description = 'Delete current client data'
      */
     const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
@@ -85,7 +85,7 @@ router
     /**
      * #swagger.tags = ['Client']
      * #swagger.method = 'PUT'
-     * #swagger.path = '/api/v1/client/image'
+     * #swagger.path = '/client/image'
      * #swagger.description = 'Update the client image'
      */
     const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
@@ -107,7 +107,7 @@ router
     /**
      * #swagger.tags = ['Client']
      * #swagger.method = 'DELETE'
-     * #swagger.path = '/api/v1/client/image'
+     * #swagger.path = '/client/image'
      * #swagger.description = 'Delete the client image'
      */
     const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
@@ -132,7 +132,7 @@ router
     /**
      * #swagger.tags = ['Client']
      * #swagger.method = 'PUT'
-     * #swagger.path = '/api/v1/client/data-processing-agreement'
+     * #swagger.path = '/client/data-processing-agreement'
      * #swagger.description = 'Update the client data-processing-agreement'
      */
     const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
@@ -155,7 +155,7 @@ router.route("/consultation/all").get(authenticate, async (req, res) => {
   /**
    * #swagger.tags = ['Client']
    * #swagger.method = 'GET'
-   * #swagger.path = '/api/v1/client/consultation/all'
+   * #swagger.path = '/client/consultation/all'
    * #swagger.description = 'Get all consultations for a client'
    */
 

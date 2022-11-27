@@ -3,25 +3,122 @@
   "info": {
     "version": "1.0.0",
     "title": "REST API",
-    "description": ""
+    "description": "The Microservices API of the USupport Project"
   },
   "host": "localhost:3000",
-  "basePath": "/",
+  "basePath": "/api/v1",
+  "tags": [
+    {
+      "name": "Admin",
+      "description": "Admin Microservice"
+    },
+    {
+      "name": "Client",
+      "description": "Client Microservice"
+    },
+    {
+      "name": "Email",
+      "description": "Email Microservice"
+    },
+    {
+      "name": "Messaging",
+      "description": "Messaging Microservice"
+    },
+    {
+      "name": "Notifications",
+      "description": "Notifications Microservice"
+    },
+    {
+      "name": "Payments",
+      "description": "Payments Microservice"
+    },
+    {
+      "name": "Provider",
+      "description": "Provider Microservice"
+    },
+    {
+      "name": "User",
+      "description": "User Microservice"
+    },
+    {
+      "name": "Video",
+      "description": "Video Microservice"
+    }
+  ],
   "schemes": [
-    "http"
+    "http",
+    "https"
+  ],
+  "securityDefinitions": {
+    "AnyAdminBearer": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "Authorization",
+      "description": "Please enter into the field the word 'Bearer' following by space and JWT"
+    },
+    "CountryAdminBearer": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "Authorization",
+      "description": "Please enter into the field the word 'Bearer' following by space and JWT"
+    },
+    "GlobalAdminBearer": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "Authorization",
+      "description": "Please enter into the field the word 'Bearer' following by space and JWT"
+    },
+    "ClientBearer": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "Authorization",
+      "description": "Please enter into the field the word 'Bearer' following by space and JWT"
+    },
+    "ProviderBearer": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "Authorization",
+      "description": "Please enter into the field the word 'Bearer' following by space and JWT"
+    }
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
   ],
   "paths": {
-    "/api/v1/admin": {
+    "/admin": {
       "get": {
         "tags": [
           "Admin"
         ],
         "description": "Get Current admin",
         "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Admin Data Object"
+          },
+          "401": {
+            "description": "Admin Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "AnyAdminBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Update current admin data",
+        "parameters": [],
         "responses": {}
       }
     },
-    "/api/v1/admin/signup": {
+    "/admin/signup": {
       "post": {
         "tags": [
           "Admin"
@@ -31,7 +128,7 @@
         "responses": {}
       }
     },
-    "/api/v1/admin/login": {
+    "/admin/login": {
       "post": {
         "tags": [
           "Admin"
@@ -41,7 +138,7 @@
         "responses": {}
       }
     },
-    "/api/v1/admin/refresh-token": {
+    "/admin/refresh-token": {
       "post": {
         "tags": [
           "Admin"
@@ -51,7 +148,7 @@
         "responses": {}
       }
     },
-    "/api/v1/admin/password": {
+    "/admin/password": {
       "patch": {
         "tags": [
           "Admin"
@@ -61,7 +158,7 @@
         "responses": {}
       }
     },
-    "/api/v1/admin/rescue/forgot-password": {
+    "/admin/rescue/forgot-password": {
       "get": {
         "tags": [
           "Admin"
@@ -79,7 +176,7 @@
         "responses": {}
       }
     },
-    "/api/v1/admin/country/faqs": {
+    "/admin/country/faqs": {
       "get": {
         "tags": [
           "Admin"
@@ -113,7 +210,7 @@
         "responses": {}
       }
     },
-    "/api/v1/admin/country/sos-centers": {
+    "/admin/country/sos-centers": {
       "get": {
         "tags": [
           "Admin"
@@ -147,7 +244,7 @@
         "responses": {}
       }
     },
-    "/api/v1/admin/country/articles": {
+    "/admin/country/articles": {
       "get": {
         "tags": [
           "Admin"
@@ -181,7 +278,7 @@
         "responses": {}
       }
     },
-    "/api/v1/client": {
+    "/client": {
       "get": {
         "tags": [
           "Client"
@@ -207,7 +304,7 @@
         "responses": {}
       }
     },
-    "/api/v1/client/image": {
+    "/client/image": {
       "put": {
         "tags": [
           "Client"
@@ -225,7 +322,7 @@
         "responses": {}
       }
     },
-    "/api/v1/client/data-processing-agreement": {
+    "/client/data-processing-agreement": {
       "put": {
         "tags": [
           "Client"
@@ -235,7 +332,17 @@
         "responses": {}
       }
     },
-    "/api/v1/email/admin/": {
+    "/client/consultation/all": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Get all consultations for a client",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/email/admin/": {
       "post": {
         "tags": [
           "Email"
@@ -245,7 +352,7 @@
         "responses": {}
       }
     },
-    "/api/v1/email/system/forgot-password": {
+    "/email/system/forgot-password": {
       "post": {
         "tags": [
           "Email"
@@ -255,7 +362,7 @@
         "responses": {}
       }
     },
-    "/api/v1/email/system/welcome": {
+    "/email/system/welcome": {
       "post": {
         "tags": [
           "Email"
@@ -265,7 +372,7 @@
         "responses": {}
       }
     },
-    "/api/v1/provider": {
+    "/provider": {
       "get": {
         "tags": [
           "Provider"
@@ -291,7 +398,7 @@
         "responses": {}
       }
     },
-    "/api/v1/provider/by-id": {
+    "/provider/by-id": {
       "get": {
         "tags": [
           "Provider"
@@ -301,7 +408,7 @@
         "responses": {}
       }
     },
-    "/api/v1/provider/all": {
+    "/provider/all": {
       "get": {
         "tags": [
           "Provider"
@@ -311,7 +418,7 @@
         "responses": {}
       }
     },
-    "/api/v1/provider/image": {
+    "/provider/image": {
       "put": {
         "tags": [
           "Provider"
@@ -329,7 +436,17 @@
         "responses": {}
       }
     },
-    "/api/v1/provider/availability/single-week": {
+    "/provider/clients": {
+      "get": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Get all the clients of the current provider",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/provider/availability/single-week": {
       "get": {
         "tags": [
           "Provider"
@@ -355,7 +472,7 @@
         "responses": {}
       }
     },
-    "/api/v1/provider/availability/template": {
+    "/provider/availability/template": {
       "put": {
         "tags": [
           "Provider"
@@ -365,7 +482,7 @@
         "responses": {}
       }
     },
-    "/api/v1/provider/availability/single-day": {
+    "/provider/availability/single-day": {
       "get": {
         "tags": [
           "Provider"
@@ -375,7 +492,47 @@
         "responses": {}
       }
     },
-    "/api/v1/provider/consultation/single-week": {
+    "/provider/consultation/count": {
+      "get": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Get the count of all past and future consultations for the current provider",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/provider/consultation/all/past/by-id": {
+      "get": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Get all the past consultations of the current provider for a specific client",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/provider/consultation/all/past": {
+      "get": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Get all the past consultations of the current provider for all clients",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/provider/consultation/all/upcoming": {
+      "get": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Get all the upcoming consultations of the current provider for all clients",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/provider/consultation/single-week": {
       "get": {
         "tags": [
           "Provider"
@@ -385,7 +542,7 @@
         "responses": {}
       }
     },
-    "/api/v1/provider/consultation/five-weeks": {
+    "/provider/consultation/five-weeks": {
       "get": {
         "tags": [
           "Provider"
@@ -395,7 +552,7 @@
         "responses": {}
       }
     },
-    "/api/v1/provider/consultation/block": {
+    "/provider/consultation/block": {
       "post": {
         "tags": [
           "Provider"
@@ -405,7 +562,7 @@
         "responses": {}
       }
     },
-    "/api/v1/provider/consultation/schedule": {
+    "/provider/consultation/schedule": {
       "put": {
         "tags": [
           "Provider"
@@ -415,7 +572,7 @@
         "responses": {}
       }
     },
-    "/api/v1/provider/consultation/reschedule": {
+    "/provider/consultation/reschedule": {
       "post": {
         "tags": [
           "Provider"
@@ -425,7 +582,7 @@
         "responses": {}
       }
     },
-    "/api/v1/provider/consultation/cancel": {
+    "/provider/consultation/cancel": {
       "put": {
         "tags": [
           "Provider"
@@ -435,7 +592,7 @@
         "responses": {}
       }
     },
-    "/api/v1/user": {
+    "/user": {
       "get": {
         "tags": [
           "User"
@@ -445,7 +602,7 @@
         "responses": {}
       }
     },
-    "/api/v1/user/languages": {
+    "/user/languages": {
       "get": {
         "tags": [
           "User"
@@ -455,7 +612,7 @@
         "responses": {}
       }
     },
-    "/api/v1/user/languages/all": {
+    "/user/languages/all": {
       "get": {
         "tags": [
           "User"
@@ -465,7 +622,7 @@
         "responses": {}
       }
     },
-    "/api/v1/user/countries": {
+    "/user/countries": {
       "get": {
         "tags": [
           "User"
@@ -475,7 +632,27 @@
         "responses": {}
       }
     },
-    "/api/v1/user/work-with": {
+    "/user/countries/by-alpha-2-code": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Get a specific country by its alpha-2 code",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/user/countries/min-max-client-age": {
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "description": "Update the country min and max client age",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/user/work-with": {
       "get": {
         "tags": [
           "User"
@@ -485,7 +662,7 @@
         "responses": {}
       }
     },
-    "/api/v1/user/provider/signup": {
+    "/user/provider/signup": {
       "post": {
         "tags": [
           "User"
@@ -495,7 +672,7 @@
         "responses": {}
       }
     },
-    "/api/v1/user/signup": {
+    "/user/signup": {
       "post": {
         "tags": [
           "User"
@@ -505,7 +682,7 @@
         "responses": {}
       }
     },
-    "/api/v1/user/login": {
+    "/user/login": {
       "post": {
         "tags": [
           "User"
@@ -515,7 +692,7 @@
         "responses": {}
       }
     },
-    "/api/v1/user/tmp-login": {
+    "/user/tmp-login": {
       "post": {
         "tags": [
           "User"
@@ -525,7 +702,7 @@
         "responses": {}
       }
     },
-    "/api/v1/user/user-access-token": {
+    "/user/user-access-token": {
       "get": {
         "tags": [
           "User"
@@ -535,7 +712,7 @@
         "responses": {}
       }
     },
-    "/api/v1/user/refresh-token": {
+    "/user/refresh-token": {
       "post": {
         "tags": [
           "User"
@@ -545,7 +722,7 @@
         "responses": {}
       }
     },
-    "/api/v1/user/password": {
+    "/user/password": {
       "patch": {
         "tags": [
           "User"
@@ -555,7 +732,7 @@
         "responses": {}
       }
     },
-    "/api/v1/user/rescue/forgot-password": {
+    "/user/rescue/forgot-password": {
       "get": {
         "tags": [
           "User"
@@ -573,7 +750,7 @@
         "responses": {}
       }
     },
-    "/api/v1/user/upload-file/": {
+    "/user/upload-file/": {
       "post": {
         "tags": [
           "User"
@@ -583,7 +760,7 @@
         "responses": {}
       }
     },
-    "/api/v1/user/notification-preferences": {
+    "/user/notification-preferences": {
       "get": {
         "tags": [
           "User"
@@ -601,7 +778,7 @@
         "responses": {}
       }
     },
-    "/api/v1/video": {
+    "/video": {
       "get": {
         "tags": [
           "Video"
