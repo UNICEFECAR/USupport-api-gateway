@@ -674,4 +674,28 @@ router.route("/consultation/cancel").put(authenticate, async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/calendar/five-weeks").get(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/provider/calendar/five-weeks'
+   * #swagger.description = 'Get current provider consultations and availability for five weeks'
+   */
+
+  const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: PROVIDER_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 export { router };
