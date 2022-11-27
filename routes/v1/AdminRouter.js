@@ -15,8 +15,11 @@ router
     /**
      * #swagger.tags = ['Admin']
      * #swagger.method = 'GET'
-     * #swagger.path = '/api/v1/admin'
+     * #swagger.path = '/admin'
      * #swagger.description = 'Get Current admin'
+     * #swagger.security = [{ "AnyAdminBearer": [] }]
+     * #swagger.responses[200] = { description: 'Admin Data Object' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1/admin${req.url}`, {
@@ -36,7 +39,7 @@ router
     /**
      * #swagger.tags = ['Admin']
      * #swagger.method = 'PUT'
-     * #swagger.path = '/api/v1/admin'
+     * #swagger.path = '/admin'
      * #swagger.description = 'Update current admin data'
      */
     const response = await fetch(`${ADMIN_URL}/admin/v1/admin${req.url}`, {
@@ -60,8 +63,8 @@ router
     /**
      * #swagger.tags = ['Admin']
      * #swagger.method = 'POST'
-     * #swagger.path = '/api/v1/admin/signup'
-     * #swagger.description = Create new admin user account (Only global admin can create an admin account)
+     * #swagger.path = '/admin/signup'
+     * #swagger.description ='Create new admin user account (Only global admin can create an admin account)'
      */
     const response = await fetch(`${ADMIN_URL}/admin/v1/auth${req.url}`, {
       method: req.method,
@@ -81,7 +84,7 @@ router.route("/login").post(async (req, res) => {
   /**
    * #swagger.tags = ['Admin']
    * #swagger.method = 'POST'
-   * #swagger.path = '/api/v1/admin/login'
+   * #swagger.path = '/admin/login'
    * #swagger.description = 'Login admin'
    */
   const response = await fetch(`${ADMIN_URL}/admin/v1/auth${req.url}`, {
@@ -102,7 +105,7 @@ router.route("/refresh-token").post(async (req, res) => {
   /**
    * #swagger.tags = ['Admin']
    * #swagger.method = 'POST'
-   * #swagger.path = '/api/v1/admin/refresh-token'
+   * #swagger.path = '/admin/refresh-token'
    * #swagger.description = 'Refresh admin JWT access token'
    */
   const response = await fetch(`${ADMIN_URL}/admin/v1/auth${req.url}`, {
@@ -123,7 +126,7 @@ router.route("/password").patch(authenticateAdmin, async (req, res) => {
   /**
    * #swagger.tags = ['Admin']
    * #swagger.method = 'PATCH'
-   * #swagger.path = '/api/v1/admin/password'
+   * #swagger.path = '/admin/password'
    * #swagger.description = 'Change admin's password'
    */
   const response = await fetch(`${ADMIN_URL}/admin/v1/admin${req.url}`, {
@@ -146,7 +149,7 @@ router
     /**
      * #swagger.tags = ['Admin']
      * #swagger.method = 'GET'
-     * #swagger.path = '/api/v1/admin/rescue/forgot-password'
+     * #swagger.path = '/admin/rescue/forgot-password'
      * #swagger.description = 'Initiate Forgot Password Process (Send email with token)'
      */
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
@@ -164,7 +167,7 @@ router
     /**
      * #swagger.tags = ['Admin']
      * #swagger.method = 'POST'
-     * #swagger.path = '/api/v1/admin/rescue/forgot-password'
+     * #swagger.path = '/admin/rescue/forgot-password'
      * #swagger.description = 'Change admin's password with forgot password secret token'
      */
 
@@ -188,7 +191,7 @@ router
     /**
      * #swagger.tags = ['Admin']
      * #swagger.method = 'GET'
-     * #swagger.path = '/api/v1/admin/country/faqs'
+     * #swagger.path = '/admin/country/faqs'
      * #swagger.description = 'Get all faqs for a country'
      */
 
@@ -210,7 +213,7 @@ router
     /**
      * #swagger.tags = ['Admin']
      * #swagger.method = 'PUT'
-     * #swagger.path = '/api/v1/admin/country/faqs'
+     * #swagger.path = '/admin/country/faqs'
      * #swagger.description = 'Add given faqs to a country'
      */
 
@@ -232,7 +235,7 @@ router
     /**
      * #swagger.tags = ['Admin']
      * #swagger.method = 'POST'
-     * #swagger.path = '/api/v1/admin/country/faqs'
+     * #swagger.path = '/admin/country/faqs'
      * #swagger.description = 'Initialise faqs for a new country'
      */
 
@@ -254,7 +257,7 @@ router
     /**
      * #swagger.tags = ['Admin']
      * #swagger.method = 'DELETE'
-     * #swagger.path = '/api/v1/admin/country/faqs'
+     * #swagger.path = '/admin/country/faqs'
      * #swagger.description = 'Delete given faqs for a country'
      */
 
@@ -279,7 +282,7 @@ router
     /**
      * #swagger.tags = ['Admin']
      * #swagger.method = 'GET'
-     * #swagger.path = '/api/v1/admin/country/sos-centers'
+     * #swagger.path = '/admin/country/sos-centers'
      * #swagger.description = 'Get all sos centers for a country'
      */
 
@@ -301,7 +304,7 @@ router
     /**
      * #swagger.tags = ['Admin']
      * #swagger.method = 'PUT'
-     * #swagger.path = '/api/v1/admin/country/sos-centers'
+     * #swagger.path = '/admin/country/sos-centers'
      * #swagger.description = 'Add given sos centers to a country'
      */
 
@@ -323,7 +326,7 @@ router
     /**
      * #swagger.tags = ['Admin']
      * #swagger.method = 'POST'
-     * #swagger.path = '/api/v1/admin/country/sos-centers'
+     * #swagger.path = '/admin/country/sos-centers'
      * #swagger.description = 'Initialise sos centers for a new country'
      */
 
@@ -345,7 +348,7 @@ router
     /**
      * #swagger.tags = ['Admin']
      * #swagger.method = 'DELETE'
-     * #swagger.path = '/api/v1/admin/country/sos-centers'
+     * #swagger.path = '/admin/country/sos-centers'
      * #swagger.description = 'Delete given sos centers for a country'
      */
 
@@ -370,7 +373,7 @@ router
     /**
      * #swagger.tags = ['Admin']
      * #swagger.method = 'GET'
-     * #swagger.path = '/api/v1/admin/country/articles'
+     * #swagger.path = '/admin/country/articles'
      * #swagger.description = 'Get all articles for a country'
      */
 
@@ -392,7 +395,7 @@ router
     /**
      * #swagger.tags = ['Admin']
      * #swagger.method = 'PUT'
-     * #swagger.path = '/api/v1/admin/country/articles'
+     * #swagger.path = '/admin/country/articles'
      * #swagger.description = 'Add given articles to a country'
      */
 
@@ -414,7 +417,7 @@ router
     /**
      * #swagger.tags = ['Admin']
      * #swagger.method = 'POST'
-     * #swagger.path = '/api/v1/admin/country/articles'
+     * #swagger.path = '/admin/country/articles'
      * #swagger.description = 'Initialise articles for a new country'
      */
 
@@ -436,7 +439,7 @@ router
     /**
      * #swagger.tags = ['Admin']
      * #swagger.method = 'DELETE'
-     * #swagger.path = '/api/v1/admin/country/articles'
+     * #swagger.path = '/admin/country/articles'
      * #swagger.description = 'Delete given articles for a country'
      */
 

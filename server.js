@@ -26,7 +26,13 @@ app.use(helmet());
 app.use(cors());
 
 /*------------- Swagger Documentation -------------*/
-app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+app.use(
+  "/doc",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerFile, {
+    swaggerOptions: { persistAuthorization: true },
+  })
+);
 
 /*------------- API Gateway Service Endpoints -------------*/
 
