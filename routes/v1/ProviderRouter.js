@@ -554,6 +554,54 @@ router.route("/consultation/suggest").put(authenticate, async (req, res) => {
 });
 
 router
+  .route("/consultation/accept-suggest")
+  .put(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Provider']
+     * #swagger.method = 'PUT'
+     * #swagger.path = '/provider/consultation/accept-suggest'
+     * #swagger.description = 'Accept a suggested consultation'
+     */
+    const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: PROVIDER_LOCAL_HOST,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
+
+router
+  .route("/consultation/rejected-suggest")
+  .put(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Provider']
+     * #swagger.method = 'PUT'
+     * #swagger.path = '/provider/consultation/rejected-suggest'
+     * #swagger.description = 'Reject a suggested consultation'
+     */
+    const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: PROVIDER_LOCAL_HOST,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
+
+router
   .route("/consultation/reschedule")
   .post(authenticate, async (req, res) => {
     /**
