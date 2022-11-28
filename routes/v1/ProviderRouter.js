@@ -250,6 +250,57 @@ router
     return res.status(response.status).send(result);
   });
 
+router
+  .route("/image/admin")
+  .put(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
+    /**
+     * #swagger.tags = ['Provider']
+     * #swagger.method = 'PUT'
+     * #swagger.path = '/provider/image/admin'
+     * #swagger.description = 'Country admin to update the provider image'
+     */
+    const response = await fetch(
+      `${PROVIDER_URL}/provider/v1/provider${req.url}`,
+      {
+        method: req.method,
+        headers: {
+          ...req.headers,
+          host: PROVIDER_LOCAL_HOST,
+          "Content-type": "application/json",
+        },
+        ...(req.body && { body: JSON.stringify(req.body) }),
+      }
+    ).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  })
+  .delete(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
+    /**
+     * #swagger.tags = ['Provider']
+     * #swagger.method = 'DELETE'
+     * #swagger.path = '/provider/image/admin'
+     * #swagger.description = 'Country admin to delete the provider image'
+     */
+    const response = await fetch(
+      `${PROVIDER_URL}/provider/v1/provider${req.url}`,
+      {
+        method: req.method,
+        headers: {
+          ...req.headers,
+          host: PROVIDER_LOCAL_HOST,
+          "Content-type": "application/json",
+        },
+        ...(req.body && { body: JSON.stringify(req.body) }),
+      }
+    ).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
+
 router.route("/clients").get(authenticate, async (req, res) => {
   /**
    * #swagger.tags = ['Provider']
