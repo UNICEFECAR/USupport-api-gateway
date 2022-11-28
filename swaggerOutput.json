@@ -3,7 +3,7 @@
   "info": {
     "version": "1.0.0",
     "title": "REST API",
-    "description": "The Microservices API of the USupport Project"
+    "description": "The Microservices API of the USupport Platform"
   },
   "basePath": "/api/v1",
   "tags": [
@@ -67,6 +67,12 @@
       "name": "Authorization",
       "description": "Please enter into the field the word 'Bearer' following by space and JWT"
     },
+    "AnyUserBearer": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "Authorization",
+      "description": "Please enter into the field the word 'Bearer' following by space and JWT"
+    },
     "ClientBearer": {
       "type": "apiKey",
       "in": "header",
@@ -113,8 +119,68 @@
           "Admin"
         ],
         "description": "Update current admin data",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "John"
+                },
+                "surname": {
+                  "type": "string",
+                  "example": "Doe"
+                },
+                "phonePrefix": {
+                  "type": "string",
+                  "example": "+44"
+                },
+                "phone": {
+                  "type": "string",
+                  "example": "1234567890"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                }
+              },
+              "required": [
+                "name",
+                "surname",
+                "email"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Admin Data Object"
+          },
+          "401": {
+            "description": "Admin Not Authorised"
+          },
+          "404": {
+            "description": "Admin Not Found"
+          },
+          "409": {
+            "description": "Email Already Used"
+          }
+        },
+        "security": [
+          {
+            "AnyAdminBearer": []
+          }
+        ]
       }
     },
     "/admin/signup": {
@@ -123,8 +189,83 @@
           "Admin"
         ],
         "description": "Create new admin user account (Only global admin can create an admin account)",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "adminCountryId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                },
+                "adminRegionId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "John"
+                },
+                "surname": {
+                  "type": "string",
+                  "example": "Doe"
+                },
+                "phonePrefix": {
+                  "type": "string",
+                  "example": "+44"
+                },
+                "phone": {
+                  "type": "string",
+                  "example": "1234567890"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "SomePass123"
+                },
+                "role": {
+                  "type": "string",
+                  "example": "country"
+                }
+              },
+              "required": [
+                "name",
+                "surname",
+                "email",
+                "password",
+                "role"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "New Admin Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          },
+          "409": {
+            "description": "Email Already Used"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
       }
     },
     "/admin/login": {
@@ -133,8 +274,44 @@
           "Admin"
         ],
         "description": "Login admin",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "SomePass123"
+                }
+              },
+              "required": [
+                "email",
+                "password"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Admin Access and Refresh Tokens"
+          },
+          "404": {
+            "description": "Incorrect Password"
+          }
+        }
       }
     },
     "/admin/refresh-token": {
@@ -143,8 +320,39 @@
           "Admin"
         ],
         "description": "Refresh admin JWT access token",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "refreshToken": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                }
+              },
+              "required": [
+                "refreshToken"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "New Access and Refresh Tokens"
+          },
+          "401": {
+            "description": "Refresh Token Not Valid"
+          }
+        }
       }
     },
     "/admin/password": {
@@ -153,8 +361,52 @@
           "Admin"
         ],
         "description": "Change admin",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "oldPassword": {
+                  "type": "string",
+                  "example": "OldPass123"
+                },
+                "newPassword": {
+                  "type": "string",
+                  "example": "NewPass123"
+                }
+              },
+              "required": [
+                "oldPassword",
+                "newPassword"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Admin Not Authorised"
+          },
+          "404": {
+            "description": "Incorrect Password"
+          }
+        },
+        "security": [
+          {
+            "AnyAdminBearer": []
+          }
+        ]
       }
     },
     "/admin/rescue/forgot-password": {
@@ -163,16 +415,74 @@
           "Admin"
         ],
         "description": "Initiate Forgot Password Process (Send email with token)",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Email of The Admin"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "404": {
+            "description": "Admin Not Found"
+          }
+        }
       },
       "post": {
         "tags": [
           "Admin"
         ],
         "description": "Change admin",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "NewPass123"
+                }
+              },
+              "required": [
+                "token",
+                "password"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "409": {
+            "description": "Invalid Reset Password Token"
+          }
+        }
       }
     },
     "/admin/country/faqs": {
@@ -180,33 +490,210 @@
         "tags": [
           "Admin"
         ],
-        "description": "Get all faqs for a country",
-        "parameters": [],
-        "responses": {}
+        "description": "Get all FAQs for a country",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "platform",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Platform for the FAQs (website, client, or provider)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of FAQ IDs"
+          },
+          "404": {
+            "description": "Platform Not Found"
+          }
+        }
       },
       "post": {
         "tags": [
           "Admin"
         ],
-        "description": "Initialise faqs for a new country",
-        "parameters": [],
-        "responses": {}
+        "description": "Initialise FAQs for a new country",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "platform": {
+                  "type": "string",
+                  "example": "website"
+                }
+              },
+              "required": [
+                "platform"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of FAQ IDs"
+          },
+          "401": {
+            "description": "No Permissions"
+          },
+          "404": {
+            "description": "Platform Not Found"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
       },
       "put": {
         "tags": [
           "Admin"
         ],
-        "description": "Add given faqs to a country",
-        "parameters": [],
-        "responses": {}
+        "description": "Add an FAQ to a country",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "platform": {
+                  "type": "string",
+                  "example": "website"
+                },
+                "id": {
+                  "type": "string",
+                  "example": "1"
+                }
+              },
+              "required": [
+                "platform",
+                "id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Array of FAQ IDs"
+          },
+          "401": {
+            "description": "No Permissions"
+          },
+          "404": {
+            "description": "Platform Not Found"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
       },
       "delete": {
         "tags": [
           "Admin"
         ],
-        "description": "Delete given faqs for a country",
-        "parameters": [],
-        "responses": {}
+        "description": "Delete an FAQ from a country",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "platform": {
+                  "type": "string",
+                  "example": "website"
+                },
+                "id": {
+                  "type": "string",
+                  "example": "1"
+                }
+              },
+              "required": [
+                "platform",
+                "id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Array of FAQ IDs"
+          },
+          "401": {
+            "description": "No Permissions"
+          },
+          "404": {
+            "description": "Platform Not Found"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
       }
     },
     "/admin/country/sos-centers": {
@@ -215,32 +702,136 @@
           "Admin"
         ],
         "description": "Get all sos centers for a country",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Sos Centers IDs"
+          }
+        }
       },
       "post": {
         "tags": [
           "Admin"
         ],
         "description": "Initialise sos centers for a new country",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Sos Centers IDs"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
       },
       "put": {
         "tags": [
           "Admin"
         ],
-        "description": "Add given sos centers to a country",
-        "parameters": [],
-        "responses": {}
+        "description": "Add given sos center to a country",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "1"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Array of Sos Centers IDs"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
       },
       "delete": {
         "tags": [
           "Admin"
         ],
-        "description": "Delete given sos centers for a country",
-        "parameters": [],
-        "responses": {}
+        "description": "Delete given sos center from a country",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "1"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Array of Sos Centers IDs"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
       }
     },
     "/admin/country/articles": {
@@ -249,32 +840,194 @@
           "Admin"
         ],
         "description": "Get all articles for a country",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Articles IDs"
+          }
+        }
       },
       "post": {
         "tags": [
           "Admin"
         ],
         "description": "Initialise articles for a new country",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Articles IDs"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
       },
       "put": {
         "tags": [
           "Admin"
         ],
         "description": "Add given articles to a country",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "1"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Array of Articles IDs"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
       },
       "delete": {
         "tags": [
           "Admin"
         ],
         "description": "Delete given articles for a country",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "1"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Array of Articles IDs"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/country/min-max-client-age": {
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Update the country min and max client age",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "minClientAge": {
+                  "type": "number",
+                  "example": 16
+                },
+                "maxClientAge": {
+                  "type": "number",
+                  "example": 24
+                }
+              },
+              "required": [
+                "minClientAge",
+                "maxClientAge"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Country Data Object"
+          },
+          "404": {
+            "description": "Country Not Found"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
       }
     },
     "/client": {
@@ -284,23 +1037,158 @@
         ],
         "description": "Get current client data",
         "parameters": [],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "Client Data Object"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
       },
       "put": {
         "tags": [
           "Client"
         ],
         "description": "Update current client data",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "John"
+                },
+                "surname": {
+                  "type": "string",
+                  "example": "Doe"
+                },
+                "nickname": {
+                  "type": "string",
+                  "example": "JD123"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                },
+                "userAccessToken": {
+                  "type": "string",
+                  "example": "b1igkLasNQ"
+                },
+                "sex": {
+                  "type": "string",
+                  "example": "unspecified"
+                },
+                "yearOfBirth": {
+                  "type": "number",
+                  "example": 2000
+                },
+                "urbanRural": {
+                  "type": "string",
+                  "example": "urban"
+                }
+              },
+              "required": [
+                "nickname"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Client Data Object"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          },
+          "404": {
+            "description": "Client Not Found"
+          },
+          "409": {
+            "description": "Email Already Used"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
       },
       "delete": {
         "tags": [
           "Client"
         ],
         "description": "Delete current client data",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "password": {
+                  "type": "string",
+                  "example": "SomePass123"
+                }
+              },
+              "required": [
+                "password"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted Client Data Object"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          },
+          "404": {
+            "description": "Client Not Found"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
       }
     },
     "/client/image": {
@@ -309,16 +1197,76 @@
           "Client"
         ],
         "description": "Update the client image",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Client Data Object"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          },
+          "404": {
+            "description": "Client Not Found"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
       },
       "delete": {
         "tags": [
           "Client"
         ],
         "description": "Delete the client image",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Client Data Object"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          },
+          "404": {
+            "description": "Client Not Found"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
       }
     },
     "/client/data-processing-agreement": {
@@ -327,8 +1275,54 @@
           "Client"
         ],
         "description": "Update the client data-processing-agreement",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "dataProcessing": {
+                  "type": "boolean",
+                  "example": true
+                }
+              },
+              "required": [
+                "dataProcessing"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Client Data Object"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          },
+          "404": {
+            "description": "Client Not Found"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
       }
     },
     "/client/consultation/all": {
@@ -337,8 +1331,38 @@
           "Client"
         ],
         "description": "Get all consultations for a client",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Objects Containing All Suggested, Scheduled, and Finished Consultations"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          },
+          "404": {
+            "description": "Provider Not Found"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
       }
     },
     "/email/admin/": {
@@ -347,8 +1371,42 @@
           "Email"
         ],
         "description": "Send email",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "subject": {
+                  "type": "string",
+                  "example": "Example Subject"
+                },
+                "title": {
+                  "type": "string",
+                  "example": "Example Title"
+                },
+                "text": {
+                  "type": "string",
+                  "example": "Some Long Text Here ..."
+                }
+              },
+              "required": [
+                "subject",
+                "title",
+                "text"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/email/system/forgot-password": {
@@ -357,8 +1415,44 @@
           "Email"
         ],
         "description": "Send email for forgot password",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "platform": {
+                  "type": "string",
+                  "example": "client"
+                },
+                "forgotPasswordToken": {
+                  "type": "string",
+                  "example": "A4cgpEWipqpNRH99"
+                }
+              },
+              "required": [
+                "platform",
+                "forgotPasswordToken"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/email/system/welcome": {
@@ -367,8 +1461,39 @@
           "Email"
         ],
         "description": "Send welcome email",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "platform": {
+                  "type": "string",
+                  "example": "client"
+                }
+              },
+              "required": [
+                "platform"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/client/consultation/confirm/booking": {
@@ -377,8 +1502,39 @@
           "Email"
         ],
         "description": "Send email to client to confirm consultation booking",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "clientEmail": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                }
+              },
+              "required": [
+                "clientEmail"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/client/consultation/confirm/reschedule": {
@@ -387,8 +1543,39 @@
           "Email"
         ],
         "description": "Send email to client to confirm consultation reschedule",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "clientEmail": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                }
+              },
+              "required": [
+                "clientEmail"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/client/consultation/confirm/cancellation": {
@@ -397,8 +1584,39 @@
           "Email"
         ],
         "description": "Send email to client to confirm consultation cancellation",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "clientEmail": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                }
+              },
+              "required": [
+                "clientEmail"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/client/consultation/notify/cancellation": {
@@ -407,8 +1625,39 @@
           "Email"
         ],
         "description": "Send email to client to notify about consultation cancellation",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "clientEmail": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                }
+              },
+              "required": [
+                "clientEmail"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/client/consultation/remind/start": {
@@ -417,8 +1666,39 @@
           "Email"
         ],
         "description": "Send email to client to remind about consultation start",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "clientEmail": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                }
+              },
+              "required": [
+                "clientEmail"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/client/consultation/notify/suggestion": {
@@ -427,8 +1707,39 @@
           "Email"
         ],
         "description": "Send email to client to notify about consultation suggestion",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "clientEmail": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                }
+              },
+              "required": [
+                "clientEmail"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/client/consultation/confirm/suggestion-booking": {
@@ -437,8 +1748,39 @@
           "Email"
         ],
         "description": "Send email to client to confirm consultation suggestion booking",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "clientEmail": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                }
+              },
+              "required": [
+                "clientEmail"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/client/consultation/confirm/suggestion-cancellation": {
@@ -447,8 +1789,39 @@
           "Email"
         ],
         "description": "Send email to client to confirm consultation suggestion cancellation",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "clientEmail": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                }
+              },
+              "required": [
+                "clientEmail"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/provider/consultation/notify/booking": {
@@ -457,8 +1830,39 @@
           "Email"
         ],
         "description": "Send email to provider to notify about consultation booking",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "providerEmail": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                }
+              },
+              "required": [
+                "providerEmail"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/provider/consultation/notify/reschedule": {
@@ -467,8 +1871,39 @@
           "Email"
         ],
         "description": "Send email to provider to notify about consultation reschedule",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "providerEmail": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                }
+              },
+              "required": [
+                "providerEmail"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/provider/consultation/notify/cancellation": {
@@ -477,8 +1912,39 @@
           "Email"
         ],
         "description": "Send email to provider to notify about consultation cancellation",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "providerEmail": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                }
+              },
+              "required": [
+                "providerEmail"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/provider/consultation/confirm/cancellation": {
@@ -487,8 +1953,39 @@
           "Email"
         ],
         "description": "Send email to provider to confirm consultation cancellation",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "providerEmail": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                }
+              },
+              "required": [
+                "providerEmail"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/provider/consultation/remind/start": {
@@ -497,8 +1994,39 @@
           "Email"
         ],
         "description": "Send email to provider to remind about consultation start",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "providerEmail": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                }
+              },
+              "required": [
+                "providerEmail"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/provider/consultation/confirm/suggestion": {
@@ -507,8 +2035,39 @@
           "Email"
         ],
         "description": "Send email to provider to confirm consultation suggestion",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "providerEmail": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                }
+              },
+              "required": [
+                "providerEmail"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/provider/consultation/notify/suggestion-booking": {
@@ -517,8 +2076,39 @@
           "Email"
         ],
         "description": "Send email to provider to notify about consultation suggestion booking",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "providerEmail": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                }
+              },
+              "required": [
+                "providerEmail"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/provider/consultation/notify/suggestion-cancellation": {
@@ -527,8 +2117,39 @@
           "Email"
         ],
         "description": "Send email to provider to notify about consultation suggestion cancellation",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "providerEmail": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                }
+              },
+              "required": [
+                "providerEmail"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/provider/availability/remind/add-more-slots": {
@@ -537,8 +2158,39 @@
           "Email"
         ],
         "description": "Send email to provider to remind add more availability slots",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "providerEmail": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                }
+              },
+              "required": [
+                "providerEmail"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/provider/report/weekly": {
@@ -547,8 +2199,39 @@
           "Email"
         ],
         "description": "Send email to provider containing weekly report",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "providerEmail": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                }
+              },
+              "required": [
+                "providerEmail"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/provider/report/monthly": {
@@ -557,8 +2240,39 @@
           "Email"
         ],
         "description": "Send email to provider containing monthly report",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "providerEmail": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                }
+              },
+              "required": [
+                "providerEmail"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/provider": {
@@ -731,6 +2445,16 @@
         "responses": {}
       }
     },
+    "/provider/consultation/single-day": {
+      "get": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Get current provider consultations for a single day",
+        "parameters": [],
+        "responses": {}
+      }
+    },
     "/provider/consultation/five-weeks": {
       "get": {
         "tags": [
@@ -827,8 +2551,38 @@
           "User"
         ],
         "description": "Get Current User",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User Data Object"
+          },
+          "401": {
+            "description": "User Not Authorised"
+          },
+          "404": {
+            "description": "User Not Found"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
       }
     },
     "/user/languages": {
@@ -838,7 +2592,11 @@
         ],
         "description": "Get all active languages",
         "parameters": [],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "Languages Data Object"
+          }
+        }
       }
     },
     "/user/languages/all": {
@@ -848,7 +2606,11 @@
         ],
         "description": "Get all languages",
         "parameters": [],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "Languages Data Object"
+          }
+        }
       }
     },
     "/user/countries": {
@@ -858,7 +2620,11 @@
         ],
         "description": "Get all countries",
         "parameters": [],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "Countries Data Object"
+          }
+        }
       }
     },
     "/user/countries/by-alpha-2-code": {
@@ -867,18 +2633,30 @@
           "User"
         ],
         "description": "Get a specific country by its alpha-2 code",
-        "parameters": [],
-        "responses": {}
-      }
-    },
-    "/user/countries/min-max-client-age": {
-      "put": {
-        "tags": [
-          "User"
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
         ],
-        "description": "Update the country min and max client age",
-        "parameters": [],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "Country Data Object"
+          },
+          "404": {
+            "description": "Country Not Found"
+          }
+        }
       }
     },
     "/user/work-with": {
@@ -887,8 +2665,20 @@
           "User"
         ],
         "description": "Get all work with areas",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Work With Data Object"
+          }
+        }
       }
     },
     "/user/provider/signup": {
@@ -896,9 +2686,140 @@
         "tags": [
           "User"
         ],
-        "description": "Create provider user account (Protected with admin permissions)",
-        "parameters": [],
-        "responses": {}
+        "description": "Create provider user account",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "John"
+                },
+                "patronym": {
+                  "type": "string",
+                  "example": "Johny"
+                },
+                "surname": {
+                  "type": "string",
+                  "example": "Doe"
+                },
+                "nickname": {
+                  "type": "string",
+                  "example": "JD123"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                },
+                "phonePrefix": {
+                  "type": "string",
+                  "example": "+44"
+                },
+                "phone": {
+                  "type": "string",
+                  "example": "1234567890"
+                },
+                "specializations": {
+                  "type": "array",
+                  "example": [
+                    "psychologist",
+                    "coach"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "street": {
+                  "type": "string",
+                  "example": "Some Street"
+                },
+                "city": {
+                  "type": "string",
+                  "example": "Another City"
+                },
+                "postcode": {
+                  "type": "string",
+                  "example": "1234"
+                },
+                "education": {
+                  "type": "array",
+                  "example": [
+                    "Education 1",
+                    "Education 2"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "sex": {
+                  "type": "string",
+                  "example": "unspecified"
+                },
+                "consultationPrice": {
+                  "type": "number",
+                  "example": 60
+                },
+                "description": {
+                  "type": "string",
+                  "example": "Some Long Description Here..."
+                },
+                "workWithIds": {
+                  "type": "array",
+                  "example": [
+                    "22e3b2f6-5c95-4044-b444-592b5d41338a",
+                    "ccd6a85d-ab7d-4700-953d-cda0775f37e5"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "languageIds": {
+                  "type": "array",
+                  "example": [
+                    "69f03082-ee81-4a11-a7a2-84e82bd54369",
+                    "2dc1092c-a13d-4d55-9b1f-81d3b3e974c1"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "name",
+                "surname",
+                "email"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "New Provider Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          },
+          "409": {
+            "description": "Email Already Used"
+          }
+        }
       }
     },
     "/user/signup": {
@@ -907,8 +2828,74 @@
           "User"
         ],
         "description": "Create new client user account",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "John"
+                },
+                "surname": {
+                  "type": "string",
+                  "example": "Doe"
+                },
+                "nickname": {
+                  "type": "string",
+                  "example": "JD123"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                },
+                "userAccessToken": {
+                  "type": "string",
+                  "example": "b1igkLasNQ"
+                },
+                "sex": {
+                  "type": "string",
+                  "example": "unspecified"
+                },
+                "yearOfBirth": {
+                  "type": "number",
+                  "example": 2000
+                },
+                "urbanRural": {
+                  "type": "string",
+                  "example": "urban"
+                }
+              },
+              "required": [
+                "nickname"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "New Client Data Object"
+          },
+          "409": {
+            "description": "Email Already Used"
+          }
+        }
       }
     },
     "/user/login": {
@@ -917,8 +2904,59 @@
           "User"
         ],
         "description": "Login user with email or user access token",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userType": {
+                  "type": "string",
+                  "example": "client"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                },
+                "userAccessToken": {
+                  "type": "string",
+                  "example": "b1igkLasNQ"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "SomePass123"
+                }
+              },
+              "required": [
+                "userType",
+                "password"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Client/Provider Access and Refresh Tokens"
+          },
+          "404": {
+            "description": "Incorrect Password"
+          }
+        }
       }
     },
     "/user/tmp-login": {
@@ -928,7 +2966,11 @@
         ],
         "description": "Temporrary login a user",
         "parameters": [],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "Client Temporary Access Token That Lasts Forever"
+          }
+        }
       }
     },
     "/user/user-access-token": {
@@ -937,8 +2979,27 @@
           "User"
         ],
         "description": "Generate new user access token for signup",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User Access Token Object"
+          }
+        }
       }
     },
     "/user/refresh-token": {
@@ -947,8 +3008,46 @@
           "User"
         ],
         "description": "Refresh JWT access token",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "refreshToken": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                }
+              },
+              "required": [
+                "refreshToken"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "New Access and Refresh Tokens"
+          },
+          "401": {
+            "description": "Refresh Token Not Valid"
+          }
+        }
       }
     },
     "/user/password": {
@@ -957,8 +3056,59 @@
           "User"
         ],
         "description": "Change user",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "oldPassword": {
+                  "type": "string",
+                  "example": "OldPass123"
+                },
+                "newPassword": {
+                  "type": "string",
+                  "example": "NewPass123"
+                }
+              },
+              "required": [
+                "oldPassword",
+                "newPassword"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "User Not Authorised"
+          },
+          "404": {
+            "description": "Incorrect Password"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
       }
     },
     "/user/rescue/forgot-password": {
@@ -967,16 +3117,95 @@
           "User"
         ],
         "description": "Initiate Forgot Password Process (Send email with token)",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Email of The User"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Type of The User"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "404": {
+            "description": "User Not Found"
+          }
+        }
       },
       "post": {
         "tags": [
           "User"
         ],
         "description": "Change user",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "NewPass123"
+                }
+              },
+              "required": [
+                "token",
+                "password"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "409": {
+            "description": "Invalid Reset Password Token"
+          }
+        }
       }
     },
     "/user/upload-file/": {
@@ -985,8 +3214,55 @@
           "User"
         ],
         "description": "Upload file to AWS S3 bucket",
-        "parameters": [],
-        "responses": {}
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "fileContent",
+            "in": "formData",
+            "type": "file",
+            "required": true,
+            "description": "File to upload"
+          },
+          {
+            "name": "fileName",
+            "in": "formData",
+            "type": "string",
+            "required": true,
+            "description": "Name of the file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "User Not Authorised"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
       }
     },
     "/user/notification-preferences": {
@@ -995,26 +3271,105 @@
           "User"
         ],
         "description": "Get user",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notification Preferences Data Object"
+          },
+          "404": {
+            "description": "Notification Preferences Not Found"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
       },
       "put": {
         "tags": [
           "User"
         ],
         "description": "Update user",
-        "parameters": [],
-        "responses": {}
-      }
-    },
-    "/video": {
-      "get": {
-        "tags": [
-          "Video"
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "consultationReminder": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "consultationReminderMin": {
+                  "type": "number",
+                  "example": 15
+                },
+                "inPlatform": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "push": {
+                  "type": "boolean",
+                  "example": true
+                }
+              },
+              "required": [
+                "email",
+                "consultationReminder",
+                "consultationReminderMin",
+                "inPlatform"
+              ]
+            }
+          }
         ],
-        "description": "Get the current video",
-        "parameters": [],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "Updated Notification Preferences Data Object"
+          },
+          "404": {
+            "description": "Notification Preferences Not Found"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
       }
     }
   }

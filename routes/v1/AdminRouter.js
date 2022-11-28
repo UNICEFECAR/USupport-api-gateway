@@ -41,6 +41,13 @@ router
      * #swagger.method = 'PUT'
      * #swagger.path = '/admin'
      * #swagger.description = 'Update current admin data'
+     * #swagger.security = [{ "AnyAdminBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $name: 'John', $surname: 'Doe', phonePrefix: '+44', phone: '1234567890', $email: 'john.doe@email.com' } }
+     * #swagger.responses[200] = { description: 'Updated Admin Data Object' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[404] = { description: 'Admin Not Found' }
+     * #swagger.responses[409] = { description: 'Email Already Used' }
      */
     const response = await fetch(`${ADMIN_URL}/admin/v1/admin${req.url}`, {
       method: req.method,
@@ -65,6 +72,13 @@ router
      * #swagger.method = 'POST'
      * #swagger.path = '/admin/signup'
      * #swagger.description ='Create new admin user account (Only global admin can create an admin account)'
+     * #swagger.security = [{ "GlobalAdminBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { adminCountryId: '22e3b2f6-5c95-4044-b444-592b5d41338a', adminRegionId: '22e3b2f6-5c95-4044-b444-592b5d41338a', $name: 'John', $surname: 'Doe', phonePrefix: '+44', phone: '1234567890', $email: 'john.doe@email.com', $password: 'SomePass123', $role: 'country' } }
+     * #swagger.responses[200] = { description: 'New Admin Data Object' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     * #swagger.responses[409] = { description: 'Email Already Used' }
      */
     const response = await fetch(`${ADMIN_URL}/admin/v1/auth${req.url}`, {
       method: req.method,
@@ -86,6 +100,11 @@ router.route("/login").post(async (req, res) => {
    * #swagger.method = 'POST'
    * #swagger.path = '/admin/login'
    * #swagger.description = 'Login admin'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $email: 'john.doe@email.com', $password: 'SomePass123' } }
+   * #swagger.responses[200] = { description: 'Admin Access and Refresh Tokens' }
+   * #swagger.responses[404] = { description: 'Incorrect Email' }
+   * #swagger.responses[404] = { description: 'Incorrect Password' }
    */
   const response = await fetch(`${ADMIN_URL}/admin/v1/auth${req.url}`, {
     method: req.method,
@@ -107,6 +126,10 @@ router.route("/refresh-token").post(async (req, res) => {
    * #swagger.method = 'POST'
    * #swagger.path = '/admin/refresh-token'
    * #swagger.description = 'Refresh admin JWT access token'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $refreshToken: '22e3b2f6-5c95-4044-b444-592b5d41338a' } }
+   * #swagger.responses[200] = { description: 'New Access and Refresh Tokens' }
+   * #swagger.responses[401] = { description: 'Refresh Token Not Valid' }
    */
   const response = await fetch(`${ADMIN_URL}/admin/v1/auth${req.url}`, {
     method: req.method,
@@ -128,6 +151,12 @@ router.route("/password").patch(authenticateAdmin, async (req, res) => {
    * #swagger.method = 'PATCH'
    * #swagger.path = '/admin/password'
    * #swagger.description = 'Change admin's password'
+   * #swagger.security = [{ "AnyAdminBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $oldPassword: 'OldPass123', $newPassword: 'NewPass123' } }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+   * #swagger.responses[404] = { description: 'Incorrect Password' }
    */
   const response = await fetch(`${ADMIN_URL}/admin/v1/admin${req.url}`, {
     method: req.method,
@@ -151,6 +180,10 @@ router
      * #swagger.method = 'GET'
      * #swagger.path = '/admin/rescue/forgot-password'
      * #swagger.description = 'Initiate Forgot Password Process (Send email with token)'
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['email'] = { in: 'query', required: true, type: 'string', description: 'Email of The Admin' }
+     * #swagger.responses[200] = { description: 'Success Status' }
+     * #swagger.responses[404] = { description: 'Admin Not Found' }
      */
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
       method: req.method,
@@ -169,6 +202,10 @@ router
      * #swagger.method = 'POST'
      * #swagger.path = '/admin/rescue/forgot-password'
      * #swagger.description = 'Change admin's password with forgot password secret token'
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $token: '22e3b2f6-5c95-4044-b444-592b5d41338a', $password: 'NewPass123' } }
+     * #swagger.responses[200] = { description: 'Success Status' }
+     * #swagger.responses[409] = { description: 'Invalid Reset Password Token' }
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
@@ -192,7 +229,12 @@ router
      * #swagger.tags = ['Admin']
      * #swagger.method = 'GET'
      * #swagger.path = '/admin/country/faqs'
-     * #swagger.description = 'Get all faqs for a country'
+     * #swagger.description = 'Get all FAQs for a country'
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['platform'] = { in: 'query', required: true, type: 'string', description: 'Platform for the FAQs (website, client, or provider)' }
+     * #swagger.responses[200] = { description: 'Array of FAQ IDs' }
+     * #swagger.responses[404] = { description: 'Platform Not Found' }
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
@@ -214,7 +256,15 @@ router
      * #swagger.tags = ['Admin']
      * #swagger.method = 'PUT'
      * #swagger.path = '/admin/country/faqs'
-     * #swagger.description = 'Add given faqs to a country'
+     * #swagger.description = 'Add an FAQ to a country'
+     * #swagger.security = [{ "CountryAdminBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $platform: 'website', $id: '1' } }
+     * #swagger.responses[200] = { description: 'Updated Array of FAQ IDs' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     * #swagger.responses[404] = { description: 'Platform Not Found' }
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
@@ -236,7 +286,15 @@ router
      * #swagger.tags = ['Admin']
      * #swagger.method = 'POST'
      * #swagger.path = '/admin/country/faqs'
-     * #swagger.description = 'Initialise faqs for a new country'
+     * #swagger.description = 'Initialise FAQs for a new country'
+     * #swagger.security = [{ "GlobalAdminBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $platform: 'website' } }
+     * #swagger.responses[200] = { description: 'Array of FAQ IDs' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     * #swagger.responses[404] = { description: 'Platform Not Found' }
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
@@ -258,7 +316,15 @@ router
      * #swagger.tags = ['Admin']
      * #swagger.method = 'DELETE'
      * #swagger.path = '/admin/country/faqs'
-     * #swagger.description = 'Delete given faqs for a country'
+     * #swagger.description = 'Delete an FAQ from a country'
+     * #swagger.security = [{ "CountryAdminBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $platform: 'website', $id: '1' } }
+     * #swagger.responses[200] = { description: 'Updated Array of FAQ IDs' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     * #swagger.responses[404] = { description: 'Platform Not Found' }
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
@@ -284,6 +350,8 @@ router
      * #swagger.method = 'GET'
      * #swagger.path = '/admin/country/sos-centers'
      * #swagger.description = 'Get all sos centers for a country'
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.responses[200] = { description: 'Array of Sos Centers IDs' }
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
@@ -305,7 +373,13 @@ router
      * #swagger.tags = ['Admin']
      * #swagger.method = 'PUT'
      * #swagger.path = '/admin/country/sos-centers'
-     * #swagger.description = 'Add given sos centers to a country'
+     * #swagger.description = 'Add given sos center to a country'
+     * #swagger.security = [{ "CountryAdminBearer": [] }]
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $id: '1' } }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     * #swagger.responses[200] = { description: 'Updated Array of Sos Centers IDs' }
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
@@ -328,6 +402,11 @@ router
      * #swagger.method = 'POST'
      * #swagger.path = '/admin/country/sos-centers'
      * #swagger.description = 'Initialise sos centers for a new country'
+     * #swagger.security = [{ "GlobalAdminBearer": [] }]
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.responses[200] = { description: 'Array of Sos Centers IDs' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
@@ -349,7 +428,13 @@ router
      * #swagger.tags = ['Admin']
      * #swagger.method = 'DELETE'
      * #swagger.path = '/admin/country/sos-centers'
-     * #swagger.description = 'Delete given sos centers for a country'
+     * #swagger.description = 'Delete given sos center from a country'
+     * #swagger.security = [{ "CountryAdminBearer": [] }]
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $id: '1' } }
+     * #swagger.responses[200] = { description: 'Updated Array of Sos Centers IDs' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
@@ -375,6 +460,8 @@ router
      * #swagger.method = 'GET'
      * #swagger.path = '/admin/country/articles'
      * #swagger.description = 'Get all articles for a country'
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.responses[200] = { description: 'Array of Articles IDs' }
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
@@ -397,6 +484,12 @@ router
      * #swagger.method = 'PUT'
      * #swagger.path = '/admin/country/articles'
      * #swagger.description = 'Add given articles to a country'
+     * #swagger.security = [{ "CountryAdminBearer": [] }]
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $id: '1' } }
+     * #swagger.responses[200] = { description: 'Updated Array of Articles IDs' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
@@ -419,6 +512,11 @@ router
      * #swagger.method = 'POST'
      * #swagger.path = '/admin/country/articles'
      * #swagger.description = 'Initialise articles for a new country'
+     * #swagger.security = [{ "GlobalAdminBearer": [] }]
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.responses[200] = { description: 'Array of Articles IDs' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
@@ -441,6 +539,12 @@ router
      * #swagger.method = 'DELETE'
      * #swagger.path = '/admin/country/articles'
      * #swagger.description = 'Delete given articles for a country'
+     * #swagger.security = [{ "CountryAdminBearer": [] }]
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $id: '1' } }
+     * #swagger.responses[200] = { description: 'Updated Array of Articles IDs' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
@@ -455,6 +559,36 @@ router
 
     const result = await response.json();
 
+    return res.status(response.status).send(result);
+  });
+
+router
+  .route("/country/min-max-client-age")
+  .put(authenticateAdmin, authorizeAdmin("global"), async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'PUT'
+     * #swagger.path = '/admin/country/min-max-client-age'
+     * #swagger.description = 'Update the country min and max client age'
+     * #swagger.security = [{ "GlobalAdminBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $minClientAge: 16, $maxClientAge: 24 } }
+     * #swagger.responses[200] = { description: 'Country Data Object' }
+     * #swagger.responses[404] = { description: 'Country Not Found' }
+     */
+
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-Type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
     return res.status(response.status).send(result);
   });
 
