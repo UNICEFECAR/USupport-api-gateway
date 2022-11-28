@@ -1,7 +1,11 @@
 import express from "express";
 import fetch from "node-fetch";
 
-import { authenticate } from "#middlewares/auth";
+import {
+  authenticate,
+  authenticateAdmin,
+  authorizeAdmin,
+} from "#middlewares/auth";
 
 const router = express.Router();
 
@@ -113,6 +117,35 @@ router.route("/by-id").get(async (req, res) => {
 
   return res.status(response.status).send(result);
 });
+
+router
+  .route("/by-id/admin")
+  .get(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
+    /**
+     * #swagger.tags = ['Provider']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/provider/by-id'
+     * #swagger.description = 'Get provider data by id'
+     */
+
+    const response = await fetch(
+      `${PROVIDER_URL}/provider/v1/provider/by-id?providerId=${req.query.providerId}`,
+      {
+        method: req.method,
+        headers: {
+          ...req.headers,
+          host: PROVIDER_LOCAL_HOST,
+          "x-admin-id": req.admin.admin_id,
+          "Content-type": "application/json",
+          "Cache-control": "no-cache",
+        },
+      }
+    ).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
 
 router.route("/all").get(async (req, res) => {
   /**
