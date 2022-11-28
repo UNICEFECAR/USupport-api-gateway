@@ -1,7 +1,11 @@
 import express from "express";
 import fetch from "node-fetch";
 
-import { authenticate } from "#middlewares/auth";
+import {
+  authenticate,
+  authenticateAdmin,
+  authorizeAdmin,
+} from "#middlewares/auth";
 
 const router = express.Router();
 
@@ -113,6 +117,59 @@ router.route("/by-id").get(async (req, res) => {
 
   return res.status(response.status).send(result);
 });
+
+router
+  .route("/by-id/admin")
+  .get(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
+    /**
+     * #swagger.tags = ['Provider']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/provider/by-id'
+     * #swagger.description = 'Country admin to get provider data by id'
+     */
+
+    const response = await fetch(
+      `${PROVIDER_URL}/provider/v1/provider/by-id?providerId=${req.query.providerId}`,
+      {
+        method: req.method,
+        headers: {
+          ...req.headers,
+          host: PROVIDER_LOCAL_HOST,
+          "x-admin-id": req.admin.admin_id,
+          "Content-type": "application/json",
+          "Cache-control": "no-cache",
+        },
+      }
+    ).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  })
+  .put(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
+    /**
+     * #swagger.tags = ['Provider']
+     * #swagger.method = 'PUT'
+     * #swagger.path = '/provider'
+     * #swagger.description = 'Country admin to update provider data by id'
+     */
+    const response = await fetch(
+      `${PROVIDER_URL}/provider/v1/provider${req.url}`,
+      {
+        method: req.method,
+        headers: {
+          ...req.headers,
+          host: PROVIDER_LOCAL_HOST,
+          "Content-type": "application/json",
+        },
+        ...(req.body && { body: JSON.stringify(req.body) }),
+      }
+    ).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
 
 router.route("/all").get(async (req, res) => {
   /**
@@ -462,6 +519,30 @@ router
     return res.status(response.status).send(result);
   });
 
+router.route("/consultation/single-day").get(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/provider/consultation/single-day'
+   * #swagger.description = 'Get current provider consultations for a single day'
+   */
+
+  const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: PROVIDER_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 router
   .route("/consultation/single-week")
   .get(authenticate, async (req, res) => {
@@ -667,6 +748,30 @@ router.route("/consultation/cancel").put(authenticate, async (req, res) => {
       "Content-type": "application/json",
     },
     ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
+router.route("/calendar/five-weeks").get(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/provider/calendar/five-weeks'
+   * #swagger.description = 'Get current provider consultations and availability for five weeks'
+   */
+
+  const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: PROVIDER_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+      "Cache-control": "no-cache",
+    },
   }).catch(console.log);
 
   const result = await response.json();
