@@ -125,7 +125,7 @@ router
      * #swagger.tags = ['Provider']
      * #swagger.method = 'GET'
      * #swagger.path = '/provider/by-id'
-     * #swagger.description = 'Get provider data by id'
+     * #swagger.description = 'Country admin to get provider data by id'
      */
 
     const response = await fetch(
@@ -139,6 +139,30 @@ router
           "Content-type": "application/json",
           "Cache-control": "no-cache",
         },
+      }
+    ).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  })
+  .put(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
+    /**
+     * #swagger.tags = ['Provider']
+     * #swagger.method = 'PUT'
+     * #swagger.path = '/provider'
+     * #swagger.description = 'Country admin to update provider data by id'
+     */
+    const response = await fetch(
+      `${PROVIDER_URL}/provider/v1/provider${req.url}`,
+      {
+        method: req.method,
+        headers: {
+          ...req.headers,
+          host: PROVIDER_LOCAL_HOST,
+          "Content-type": "application/json",
+        },
+        ...(req.body && { body: JSON.stringify(req.body) }),
       }
     ).catch(console.log);
 
