@@ -21,6 +21,9 @@ router
      * #swagger.method = 'GET'
      * #swagger.path = '/provider'
      * #swagger.description = 'Get current provider data'
+     * #swagger.security = [{ "ProviderBearer": [] }]
+     * #swagger.responses[200] = { description: 'Provider Data Object' }
+     * #swagger.responses[401] = { description: 'Provider Not Authorised' }
      */
 
     const response = await fetch(
@@ -47,6 +50,13 @@ router
      * #swagger.method = 'PUT'
      * #swagger.path = '/provider'
      * #swagger.description = 'Update current provider data'
+     * #swagger.security = [{ "ProviderBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $name: 'John', patronym: 'Johny', $surname: 'Doe', nickname: 'JD123', $email: 'john.doe@email.com', phonePrefix: '+44', phone: '1234567890', specializations: ['psychologist', 'coach'], street: 'Some Street', city: 'Another City', postcode: '1234', education: ['Education 1', 'Education 2'], sex: 'unspecified', consultationPrice: 60, description: 'Some Long Description Here...', workWithIds: ['22e3b2f6-5c95-4044-b444-592b5d41338a', 'ccd6a85d-ab7d-4700-953d-cda0775f37e5'], languageIds: ['69f03082-ee81-4a11-a7a2-84e82bd54369', '2dc1092c-a13d-4d55-9b1f-81d3b3e974c1'] } }
+     * #swagger.responses[200] = { description: 'Updated Provider Data Object' }
+     * #swagger.responses[401] = { description: 'Provider Not Authorised' }
+     * #swagger.responses[409] = { description: 'Email Already Used' }
      */
     const response = await fetch(
       `${PROVIDER_URL}/provider/v1/provider${req.url}`,
@@ -72,6 +82,14 @@ router
      * #swagger.method = 'DELETE'
      * #swagger.path = '/provider'
      * #swagger.description = 'Delete current provider data'
+     * #swagger.security = [{ "ProviderBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $password: 'SomePass123' } }
+     * #swagger.responses[200] = { description: 'Deleted Provider Data Object' }
+     * #swagger.responses[401] = { description: 'Provider Not Authorised' }
+     * #swagger.responses[404] = { description: 'Incorrect Password' }
+     * #swagger.responses[404] = { description: 'Provider Not Found' }
      */
     const response = await fetch(
       `${PROVIDER_URL}/provider/v1/provider${req.url}`,
@@ -97,7 +115,12 @@ router.route("/by-id").get(async (req, res) => {
    * #swagger.tags = ['Provider']
    * #swagger.method = 'GET'
    * #swagger.path = '/provider/by-id'
-   * #swagger.description = 'Get provider data by id'
+   * #swagger.description = 'Get provider data by id, excluding the street, city and postcode data'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['providerId'] = { in: 'query', required: true, type: 'string', description: 'The ID of the provider' }
+   * #swagger.responses[200] = { description: 'Provider Data Object' }
+   * #swagger.responses[404] = { description: 'Provider Not Found' }
    */
 
   const response = await fetch(
@@ -124,8 +147,17 @@ router
     /**
      * #swagger.tags = ['Provider']
      * #swagger.method = 'GET'
-     * #swagger.path = '/provider/by-id'
+     * #swagger.path = '/provider/by-id/admin'
      * #swagger.description = 'Country admin to get provider data by id'
+     * #swagger.security = [{ "CountryAdminBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['x-admin-id'] = { in: 'header', required: true, type: 'string', description: 'ID of the Coutnry Admin making the request' }
+     * #swagger.parameters['providerId'] = { in: 'query', required: true, type: 'string', description: 'ID of the Provider' }
+     * #swagger.responses[200] = { description: 'Provider Data Object' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     * #swagger.responses[404] = { description: 'Provider Not Found' }
      */
 
     const response = await fetch(
@@ -152,6 +184,14 @@ router
      * #swagger.method = 'PUT'
      * #swagger.path = '/provider'
      * #swagger.description = 'Country admin to update provider data by id'
+     * #swagger.security = [{ "CountryAdminBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $providerId: '2dc1092c-a13d-4d55-9b1f-81d3b3e974c1' } }
+     * #swagger.responses[200] = { description: 'Updated Provider Data Object' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     * #swagger.responses[409] = { description: 'Email Already Used' }
      */
     const response = await fetch(
       `${PROVIDER_URL}/provider/v1/provider${req.url}`,
@@ -177,6 +217,8 @@ router.route("/all").get(async (req, res) => {
    * #swagger.method = 'GET'
    * #swagger.path = '/provider/all'
    * #swagger.description = 'Get all providers for a given country'
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.responses[200] = { description: 'List With All the Providers Data Objects' }
    */
 
   const response = await fetch(
@@ -205,6 +247,12 @@ router
      * #swagger.method = 'PUT'
      * #swagger.path = '/provider/image'
      * #swagger.description = 'Update the provider image'
+     * #swagger.security = [{ "ProviderBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.responses[200] = { description: 'Updated Provider Data Object' }
+     * #swagger.responses[401] = { description: 'Provider Not Authorised' }
+     * #swagger.responses[404] = { description: 'Provider Not Found' }
      */
     const response = await fetch(
       `${PROVIDER_URL}/provider/v1/provider${req.url}`,
@@ -230,6 +278,12 @@ router
      * #swagger.method = 'DELETE'
      * #swagger.path = '/provider/image'
      * #swagger.description = 'Delete the provider image'
+     * #swagger.security = [{ "ProviderBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.responses[200] = { description: 'Updated Provider Data Object' }
+     * #swagger.responses[401] = { description: 'Provider Not Authorised' }
+     * #swagger.responses[404] = { description: 'Provider Not Found' }
      */
     const response = await fetch(
       `${PROVIDER_URL}/provider/v1/provider${req.url}`,
@@ -250,12 +304,84 @@ router
     return res.status(response.status).send(result);
   });
 
+router
+  .route("/image/admin")
+  .put(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
+    /**
+     * #swagger.tags = ['Provider']
+     * #swagger.method = 'PUT'
+     * #swagger.path = '/provider/image/admin'
+     * #swagger.description = 'Country admin to update the provider image'
+     * #swagger.security = [{ "CountryAdminBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $providerId: '2dc1092c-a13d-4d55-9b1f-81d3b3e974c1', image: 'SomeImageName' } }
+     * #swagger.responses[200] = { description: 'Updated Provider Data Object' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     * #swagger.responses[404] = { description: 'Provider Not Found' }
+     */
+    const response = await fetch(
+      `${PROVIDER_URL}/provider/v1/provider${req.url}`,
+      {
+        method: req.method,
+        headers: {
+          ...req.headers,
+          host: PROVIDER_LOCAL_HOST,
+          "Content-type": "application/json",
+        },
+        ...(req.body && { body: JSON.stringify(req.body) }),
+      }
+    ).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  })
+  .delete(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
+    /**
+     * #swagger.tags = ['Provider']
+     * #swagger.method = 'DELETE'
+     * #swagger.path = '/provider/image/admin'
+     * #swagger.description = 'Country admin to delete the provider image'
+     * #swagger.security = [{ "CountryAdminBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $providerId: '2dc1092c-a13d-4d55-9b1f-81d3b3e974c1' } }
+     * #swagger.responses[200] = { description: 'Updated Provider Data Object' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     * #swagger.responses[404] = { description: 'Provider Not Found' }
+     */
+    const response = await fetch(
+      `${PROVIDER_URL}/provider/v1/provider${req.url}`,
+      {
+        method: req.method,
+        headers: {
+          ...req.headers,
+          host: PROVIDER_LOCAL_HOST,
+          "Content-type": "application/json",
+        },
+        ...(req.body && { body: JSON.stringify(req.body) }),
+      }
+    ).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
+
 router.route("/clients").get(authenticate, async (req, res) => {
   /**
    * #swagger.tags = ['Provider']
    * #swagger.method = 'GET'
    * #swagger.path = '/provider/clients'
    * #swagger.description = 'Get all the clients of the current provider'
+   * #swagger.security = [{ "ProviderBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.responses[200] = { description: 'Clients Data Object' }
+   * #swagger.responses[404] = { description: 'Client Not Found' }
    */
   const response = await fetch(
     `${PROVIDER_URL}/provider/v1/provider${req.url}`,
@@ -284,6 +410,10 @@ router
      * #swagger.method = 'GET'
      * #swagger.path = '/provider/availability/single-week'
      * #swagger.description = 'Get current provider availability for a single week'
+     * #swagger.security = [{ "ProviderBearer": [] }]
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['startDate'] = { in: 'query', required: true, type: 'string', description: 'The Start Date (Timestamp at 00:00) of the Week' }
+     * #swagger.responses[200] = { description: 'Providers Availability Object' }
      */
 
     const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
@@ -307,6 +437,12 @@ router
      * #swagger.method = 'PUT'
      * #swagger.path = '/provider/availability/single-week'
      * #swagger.description = 'Update the provider availability for a single week'
+     * #swagger.security = [{ "ProviderBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $startDate: '1668384000', $slot: '1668416400' } }
+     * #swagger.responses[200] = { description: 'Success Status' }
+     * #swagger.responses[400] = { description: 'Slot is Not Within The Given Week' }
      */
     const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
       method: req.method,
@@ -329,6 +465,10 @@ router
      * #swagger.method = 'DELETE'
      * #swagger.path = '/provider/availability/single-week'
      * #swagger.description = 'Delete the provider availability for a single week'
+     * #swagger.security = [{ "ProviderBearer": [] }]
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $startDate: '1668384000', $slot: '1668416400' } }
+     * #swagger.responses[200] = { description: 'Success Status' }
      */
     const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
       method: req.method,
@@ -352,6 +492,12 @@ router.route("/availability/template").put(authenticate, async (req, res) => {
    * #swagger.method = 'PUT'
    * #swagger.path = '/provider/availability/template'
    * #swagger.description = 'Update the provider availability for a template'
+   * #swagger.security = [{ "ProviderBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $template: [ { "startDate": "1668384000", "slots": ["1668729600", "1668754800", "1668765600", "1668873600"] } ] } }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   * #swagger.responses[400] = { description: 'Slot is Not Within The Given Week' }
    */
   const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
     method: req.method,
@@ -374,7 +520,13 @@ router.route("/availability/single-day").get(authenticate, async (req, res) => {
    * #swagger.tags = ['Provider']
    * #swagger.method = 'GET'
    * #swagger.path = '/provider/availability/single-day'
-   * #swagger.description = 'Get current provider availability for a single day, excluding any slots that are already booked'
+   * #swagger.description = 'Get provider availability for a single day, excluding any slots that are already booked'
+   * #swagger.security = [{ "AnyUserBearer": [] }]
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['providerId'] = { in: 'query', required: false, type: 'string', description: 'The Provider ID, Only If Requested By Client ' }
+   * #swagger.parameters['startDate'] = { in: 'query', required: true, type: 'string', description: 'The Start Date (Timestamp at 00:00) of the Week' }
+   * #swagger.parameters['day'] = { in: 'query', required: true, type: 'string', description: 'The Day (Timestamp at 00:00)' }
+   * #swagger.responses[200] = { description: 'Provider Availability Object' }
    */
 
   const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
@@ -401,6 +553,12 @@ router
      * #swagger.method = 'GET'
      * #swagger.path = '/provider/consultation/single-week'
      * #swagger.description = 'Get all the consultations of the current provider for a single week'
+     * #swagger.security = [{ "ProviderBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['startDate'] = { in: 'query', required: true, type: 'string', description: 'The Start Date (Timestamp at 00:00) of the Week' }
+     * #swagger.responses[200] = { description: 'Provider Consultations Object' }
+     * #swagger.responses[404] = { description: 'Client Not Found' }
      */
 
     const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
@@ -425,6 +583,9 @@ router.route("/consultation/count").get(authenticate, async (req, res) => {
    * #swagger.method = 'GET'
    * #swagger.path = '/provider/consultation/count'
    * #swagger.description = 'Get the count of all past and future consultations for the current provider'
+   * #swagger.security = [{ "ProviderBearer": [] }]
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.responses[200] = { description: 'Provider Consultations Count' }
    */
 
   const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
@@ -451,6 +612,12 @@ router
      * #swagger.method = 'GET'
      * #swagger.path = '/provider/consultation/all/past/by-id'
      * #swagger.description = 'Get all the past consultations of the current provider for a specific client'
+     * #swagger.security = [{ "ProviderBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['clientId'] = { in: 'query', required: true, type: 'string', description: 'The ID of the Client' }
+     * #swagger.responses[200] = { description: 'Provider Consultations Object' }
+     * #swagger.responses[404] = { description: 'Client Not Found' }
      */
 
     const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
@@ -475,6 +642,11 @@ router.route("/consultation/all/past").get(authenticate, async (req, res) => {
    * #swagger.method = 'GET'
    * #swagger.path = '/provider/consultation/all/past'
    * #swagger.description = 'Get all the past consultations of the current provider for all clients'
+   * #swagger.security = [{ "ProviderBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.responses[200] = { description: 'Provider Consultations Object' }
+   * #swagger.responses[404] = { description: 'Client Not Found' }
    */
 
   const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
@@ -501,6 +673,11 @@ router
      * #swagger.method = 'GET'
      * #swagger.path = '/provider/consultation/all/upcoming'
      * #swagger.description = 'Get all the upcoming consultations of the current provider for all clients'
+     * #swagger.security = [{ "ProviderBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.responses[200] = { description: 'Provider Consultations Object' }
+     * #swagger.responses[404] = { description: 'Client Not Found' }
      */
 
     const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
@@ -525,6 +702,12 @@ router.route("/consultation/single-day").get(authenticate, async (req, res) => {
    * #swagger.method = 'GET'
    * #swagger.path = '/provider/consultation/single-day'
    * #swagger.description = 'Get current provider consultations for a single day'
+   * #swagger.security = [{ "ProviderBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['date'] = { in: 'query', required: true, type: 'string', description: 'The Day For The Consultations (Timestamp)' }
+   * #swagger.responses[200] = { description: 'Provider Consultations Object' }
+   * #swagger.responses[404] = { description: 'Client Not Found' }
    */
 
   const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
@@ -551,6 +734,12 @@ router
      * #swagger.method = 'GET'
      * #swagger.path = '/provider/consultation/single-week'
      * #swagger.description = 'Get current provider consultations for a single week'
+     * #swagger.security = [{ "ProviderBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['startDate'] = { in: 'query', required: true, type: 'string', description: 'The Start Date (Timestamp at 00:00) of the Week' }
+     * #swagger.responses[200] = { description: 'Provider Consultations Object' }
+     * #swagger.responses[404] = { description: 'Client Not Found' }
      */
 
     const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
@@ -569,36 +758,18 @@ router
     return res.status(response.status).send(result);
   });
 
-router.route("/consultation/five-weeks").get(authenticate, async (req, res) => {
-  /**
-   * #swagger.tags = ['Provider']
-   * #swagger.method = 'GET'
-   * #swagger.path = '/provider/consultation/five-weeks'
-   * #swagger.description = 'Get current provider consultations for five weeks'
-   */
-
-  const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
-    method: req.method,
-    headers: {
-      ...req.headers,
-      host: PROVIDER_LOCAL_HOST,
-      "x-user-id": req.user.user_id,
-      "Content-type": "application/json",
-      "Cache-control": "no-cache",
-    },
-  }).catch(console.log);
-
-  const result = await response.json();
-
-  return res.status(response.status).send(result);
-});
-
 router.route("/consultation/block").post(authenticate, async (req, res) => {
   /**
    * #swagger.tags = ['Provider']
    * #swagger.method = 'POST'
    * #swagger.path = '/provider/consultation/block'
    * #swagger.description = 'Block a consultation'
+   * #swagger.security = [{ "AnyUserBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { clientId: '22e3b2f6-5c95-4044-b444-592b5d41338a', providerId: '3ac854bd-fa11-4d00-acea-ce9c78ca6007', $time: '1668787200' } }
+   * #swagger.responses[200] = { description: 'Consultation ID Object' }
+   * #swagger.responses[400] = { description: 'Consultation Not Found' }
    */
   const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
     method: req.method,
@@ -622,6 +793,12 @@ router.route("/consultation/schedule").put(authenticate, async (req, res) => {
    * #swagger.method = 'PUT'
    * #swagger.path = '/provider/consultation/schedule'
    * #swagger.description = 'Schedule a consultation'
+   * #swagger.security = [{ "ClientBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $consultationId: '22e3b2f6-5c95-4044-b444-592b5d41338a' } }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   * #swagger.responses[400] = { description: 'Consultation Not Found' }
    */
   const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
     method: req.method,
@@ -644,6 +821,12 @@ router.route("/consultation/suggest").put(authenticate, async (req, res) => {
    * #swagger.method = 'PUT'
    * #swagger.path = '/provider/consultation/suggest'
    * #swagger.description = 'Suggest a consultation'
+   * #swagger.security = [{ "ProviderBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $consultationId: '22e3b2f6-5c95-4044-b444-592b5d41338a' } }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   * #swagger.responses[400] = { description: 'Consultation Not Found' }
    */
   const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
     method: req.method,
@@ -668,6 +851,12 @@ router
      * #swagger.method = 'PUT'
      * #swagger.path = '/provider/consultation/accept-suggest'
      * #swagger.description = 'Accept a suggested consultation'
+     * #swagger.security = [{ "ClientBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $consultationId: '22e3b2f6-5c95-4044-b444-592b5d41338a' } }
+     * #swagger.responses[200] = { description: 'Success Status' }
+     * #swagger.responses[400] = { description: 'Consultation Not Found' }
      */
     const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
       method: req.method,
@@ -692,6 +881,12 @@ router
      * #swagger.method = 'PUT'
      * #swagger.path = '/provider/consultation/rejected-suggest'
      * #swagger.description = 'Reject a suggested consultation'
+     * #swagger.security = [{ "ClientBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $consultationId: '22e3b2f6-5c95-4044-b444-592b5d41338a' } }
+     * #swagger.responses[200] = { description: 'Success Status' }
+     * #swagger.responses[400] = { description: 'Consultation Not Found' }
      */
     const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
       method: req.method,
@@ -716,6 +911,12 @@ router
      * #swagger.method = 'POST'
      * #swagger.path = '/provider/consultation/reschedule'
      * #swagger.description = 'Reschedule a consultation'
+     * #swagger.security = [{ "ClientBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $consultationId: '22e3b2f6-5c95-4044-b444-592b5d41338a', $newConsultationId: '9366a503-68f0-4a69-8f5e-bb401c05844f' } }
+     * #swagger.responses[200] = { description: 'Success Status' }
+     * #swagger.responses[400] = { description: 'Consultation Not Found' }
      */
     const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
       method: req.method,
@@ -738,6 +939,12 @@ router.route("/consultation/cancel").put(authenticate, async (req, res) => {
    * #swagger.method = 'PUT'
    * #swagger.path = '/provider/consultation/cancel'
    * #swagger.description = 'Cancel a consultation'
+   * #swagger.security = [{ "AnyUserBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $consultationId: '22e3b2f6-5c95-4044-b444-592b5d41338a', $canceledBy: 'client' } }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   * #swagger.responses[400] = { description: 'Consultation Not Found' }
    */
   const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
     method: req.method,
@@ -761,6 +968,10 @@ router.route("/calendar/five-weeks").get(authenticate, async (req, res) => {
    * #swagger.method = 'GET'
    * #swagger.path = '/provider/calendar/five-weeks'
    * #swagger.description = 'Get current provider consultations and availability for five weeks'
+   * #swagger.security = [{ "ProviderBearer": [] }]
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['startDate'] = { in: 'query', required: true, type: 'string', description: 'The Start Date (Timestamp at 00:00) of the First Week' }
+   * #swagger.responses[200] = { description: 'Provider Availability & Consultations Object' }
    */
 
   const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
