@@ -2282,23 +2282,127 @@
         ],
         "description": "Get current provider data",
         "parameters": [],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "Provider Data Object"
+          },
+          "401": {
+            "description": "Provider Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
       },
       "put": {
         "tags": [
           "Provider"
         ],
-        "description": "Update current provider data",
-        "parameters": [],
-        "responses": {}
+        "description": "Country admin to update provider data by id",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "providerId": {
+                  "type": "string",
+                  "example": "2dc1092c-a13d-4d55-9b1f-81d3b3e974c1"
+                }
+              },
+              "required": [
+                "providerId"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Provider Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          },
+          "409": {
+            "description": "Email Already Used"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
       },
       "delete": {
         "tags": [
           "Provider"
         ],
         "description": "Delete current provider data",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "password": {
+                  "type": "string",
+                  "example": "SomePass123"
+                }
+              },
+              "required": [
+                "password"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted Provider Data Object"
+          },
+          "401": {
+            "description": "Provider Not Authorised"
+          },
+          "404": {
+            "description": "Provider Not Found"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
       }
     },
     "/provider/by-id": {
@@ -2306,9 +2410,92 @@
         "tags": [
           "Provider"
         ],
-        "description": "Get provider data by id",
-        "parameters": [],
-        "responses": {}
+        "description": "Get provider data by id, excluding the street, city and postcode data",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "providerId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The ID of the provider"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Provider Data Object"
+          },
+          "404": {
+            "description": "Provider Not Found"
+          }
+        }
+      }
+    },
+    "/provider/by-id/admin": {
+      "get": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Country admin to get provider data by id",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "x-admin-id",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "ID of the Coutnry Admin making the request"
+          },
+          {
+            "name": "providerId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "ID of the Provider"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Provider Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          },
+          "404": {
+            "description": "Provider Not Found"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
       }
     },
     "/provider/all": {
@@ -2317,8 +2504,20 @@
           "Provider"
         ],
         "description": "Get all providers for a given country",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List With All the Providers Data Objects"
+          }
+        }
       }
     },
     "/provider/image": {
@@ -2327,16 +2526,190 @@
           "Provider"
         ],
         "description": "Update the provider image",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Provider Data Object"
+          },
+          "401": {
+            "description": "Provider Not Authorised"
+          },
+          "404": {
+            "description": "Provider Not Found"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
       },
       "delete": {
         "tags": [
           "Provider"
         ],
         "description": "Delete the provider image",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Provider Data Object"
+          },
+          "401": {
+            "description": "Provider Not Authorised"
+          },
+          "404": {
+            "description": "Provider Not Found"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
+      }
+    },
+    "/provider/image/admin": {
+      "put": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Country admin to update the provider image",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "providerId": {
+                  "type": "string",
+                  "example": "2dc1092c-a13d-4d55-9b1f-81d3b3e974c1"
+                },
+                "image": {
+                  "type": "string",
+                  "example": "SomeImageName"
+                }
+              },
+              "required": [
+                "providerId"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Provider Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          },
+          "404": {
+            "description": "Provider Not Found"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Country admin to delete the provider image",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "providerId": {
+                  "type": "string",
+                  "example": "2dc1092c-a13d-4d55-9b1f-81d3b3e974c1"
+                }
+              },
+              "required": [
+                "providerId"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Provider Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          },
+          "404": {
+            "description": "Provider Not Found"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
       }
     },
     "/provider/clients": {
@@ -2345,8 +2718,35 @@
           "Provider"
         ],
         "description": "Get all the clients of the current provider",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Clients Data Object"
+          },
+          "404": {
+            "description": "Client Not Found"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
       }
     },
     "/provider/availability/single-week": {
@@ -2355,24 +2755,134 @@
           "Provider"
         ],
         "description": "Get current provider availability for a single week",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The Start Date (Timestamp at 00:00) of the Week"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Providers Availability Object"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
       },
       "put": {
         "tags": [
           "Provider"
         ],
         "description": "Update the provider availability for a single week",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "startDate": {
+                  "type": "string",
+                  "example": "1668384000"
+                },
+                "slot": {
+                  "type": "string",
+                  "example": "1668416400"
+                }
+              },
+              "required": [
+                "startDate",
+                "slot"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "400": {
+            "description": "Slot is Not Within The Given Week"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
       },
       "delete": {
         "tags": [
           "Provider"
         ],
         "description": "Delete the provider availability for a single week",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "startDate": {
+                  "type": "string",
+                  "example": "1668384000"
+                },
+                "slot": {
+                  "type": "string",
+                  "example": "1668416400"
+                }
+              },
+              "required": [
+                "startDate",
+                "slot"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
       }
     },
     "/provider/availability/template": {
@@ -2381,8 +2891,71 @@
           "Provider"
         ],
         "description": "Update the provider availability for a template",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "template": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "startDate": {
+                        "type": "string",
+                        "example": "1668384000"
+                      },
+                      "slots": {
+                        "type": "array",
+                        "example": [
+                          "1668729600",
+                          "1668754800",
+                          "1668765600",
+                          "1668873600"
+                        ],
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "required": [
+                "template"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "400": {
+            "description": "Slot is Not Within The Given Week"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
       }
     },
     "/provider/availability/single-day": {
@@ -2390,9 +2963,47 @@
         "tags": [
           "Provider"
         ],
-        "description": "Get current provider availability for a single day, excluding any slots that are already booked",
-        "parameters": [],
-        "responses": {}
+        "description": "Get provider availability for a single day, excluding any slots that are already booked",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "providerId",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "The Provider ID, Only If Requested By Client "
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The Start Date (Timestamp at 00:00) of the Week"
+          },
+          {
+            "name": "day",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The Day (Timestamp at 00:00)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Provider Availability Object"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
       }
     },
     "/provider/consultation/single-week": {
@@ -2401,8 +3012,42 @@
           "Provider"
         ],
         "description": "Get current provider consultations for a single week",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The Start Date (Timestamp at 00:00) of the Week"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Provider Consultations Object"
+          },
+          "404": {
+            "description": "Client Not Found"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
       }
     },
     "/provider/consultation/count": {
@@ -2411,8 +3056,25 @@
           "Provider"
         ],
         "description": "Get the count of all past and future consultations for the current provider",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Provider Consultations Count"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
       }
     },
     "/provider/consultation/all/past/by-id": {
@@ -2421,8 +3083,42 @@
           "Provider"
         ],
         "description": "Get all the past consultations of the current provider for a specific client",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "clientId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The ID of the Client"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Provider Consultations Object"
+          },
+          "404": {
+            "description": "Client Not Found"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
       }
     },
     "/provider/consultation/all/past": {
@@ -2431,8 +3127,35 @@
           "Provider"
         ],
         "description": "Get all the past consultations of the current provider for all clients",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Provider Consultations Object"
+          },
+          "404": {
+            "description": "Client Not Found"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
       }
     },
     "/provider/consultation/all/upcoming": {
@@ -2441,8 +3164,35 @@
           "Provider"
         ],
         "description": "Get all the upcoming consultations of the current provider for all clients",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Provider Consultations Object"
+          },
+          "404": {
+            "description": "Client Not Found"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
       }
     },
     "/provider/consultation/single-day": {
@@ -2451,18 +3201,42 @@
           "Provider"
         ],
         "description": "Get current provider consultations for a single day",
-        "parameters": [],
-        "responses": {}
-      }
-    },
-    "/provider/consultation/five-weeks": {
-      "get": {
-        "tags": [
-          "Provider"
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The Day For The Consultations (Timestamp)"
+          }
         ],
-        "description": "Get current provider consultations for five weeks",
-        "parameters": [],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "Provider Consultations Object"
+          },
+          "404": {
+            "description": "Client Not Found"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
       }
     },
     "/provider/consultation/block": {
@@ -2471,8 +3245,59 @@
           "Provider"
         ],
         "description": "Block a consultation",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "clientId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                },
+                "providerId": {
+                  "type": "string",
+                  "example": "3ac854bd-fa11-4d00-acea-ce9c78ca6007"
+                },
+                "time": {
+                  "type": "string",
+                  "example": "1668787200"
+                }
+              },
+              "required": [
+                "time"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Consultation ID Object"
+          },
+          "400": {
+            "description": "Consultation Not Found"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
       }
     },
     "/provider/consultation/schedule": {
@@ -2481,8 +3306,51 @@
           "Provider"
         ],
         "description": "Schedule a consultation",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "consultationId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                }
+              },
+              "required": [
+                "consultationId"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "400": {
+            "description": "Consultation Not Found"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
       }
     },
     "/provider/consultation/suggest": {
@@ -2491,8 +3359,51 @@
           "Provider"
         ],
         "description": "Suggest a consultation",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "consultationId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                }
+              },
+              "required": [
+                "consultationId"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "400": {
+            "description": "Consultation Not Found"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
       }
     },
     "/provider/consultation/accept-suggest": {
@@ -2501,8 +3412,51 @@
           "Provider"
         ],
         "description": "Accept a suggested consultation",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "consultationId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                }
+              },
+              "required": [
+                "consultationId"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "400": {
+            "description": "Consultation Not Found"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
       }
     },
     "/provider/consultation/rejected-suggest": {
@@ -2511,8 +3465,51 @@
           "Provider"
         ],
         "description": "Reject a suggested consultation",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "consultationId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                }
+              },
+              "required": [
+                "consultationId"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "400": {
+            "description": "Consultation Not Found"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
       }
     },
     "/provider/consultation/reschedule": {
@@ -2521,8 +3518,56 @@
           "Provider"
         ],
         "description": "Reschedule a consultation",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "consultationId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                },
+                "newConsultationId": {
+                  "type": "string",
+                  "example": "9366a503-68f0-4a69-8f5e-bb401c05844f"
+                }
+              },
+              "required": [
+                "consultationId",
+                "newConsultationId"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "400": {
+            "description": "Consultation Not Found"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
       }
     },
     "/provider/consultation/cancel": {
@@ -2531,8 +3576,56 @@
           "Provider"
         ],
         "description": "Cancel a consultation",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "consultationId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                },
+                "canceledBy": {
+                  "type": "string",
+                  "example": "client"
+                }
+              },
+              "required": [
+                "consultationId",
+                "canceledBy"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "400": {
+            "description": "Consultation Not Found"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
       }
     },
     "/provider/calendar/five-weeks": {
@@ -2541,8 +3634,32 @@
           "Provider"
         ],
         "description": "Get current provider consultations and availability for five weeks",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The Start Date (Timestamp at 00:00) of the First Week"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Provider Availability & Consultations Object"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
       }
     },
     "/user": {
@@ -3252,7 +4369,7 @@
             "description": "Success Status"
           },
           "401": {
-            "description": "User Not Authorised"
+            "description": "No Permissions"
           },
           "500": {
             "description": "Internal Server Error"
@@ -3260,7 +4377,7 @@
         },
         "security": [
           {
-            "AnyUserBearer": []
+            "CountryAdminBearer": []
           }
         ]
       }
