@@ -2325,10 +2325,105 @@
                 "providerId": {
                   "type": "string",
                   "example": "2dc1092c-a13d-4d55-9b1f-81d3b3e974c1"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "John"
+                },
+                "patronym": {
+                  "type": "string",
+                  "example": "Johny"
+                },
+                "surname": {
+                  "type": "string",
+                  "example": "Doe"
+                },
+                "nickname": {
+                  "type": "string",
+                  "example": "JD123"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                },
+                "phonePrefix": {
+                  "type": "string",
+                  "example": "+44"
+                },
+                "phone": {
+                  "type": "string",
+                  "example": "1234567890"
+                },
+                "specializations": {
+                  "type": "array",
+                  "example": [
+                    "psychologist",
+                    "coach"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "street": {
+                  "type": "string",
+                  "example": "Some Street"
+                },
+                "city": {
+                  "type": "string",
+                  "example": "Another City"
+                },
+                "postcode": {
+                  "type": "string",
+                  "example": "1234"
+                },
+                "education": {
+                  "type": "array",
+                  "example": [
+                    "Education 1",
+                    "Education 2"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "sex": {
+                  "type": "string",
+                  "example": "unspecified"
+                },
+                "consultationPrice": {
+                  "type": "number",
+                  "example": 60
+                },
+                "description": {
+                  "type": "string",
+                  "example": "Some Long Description Here..."
+                },
+                "workWithIds": {
+                  "type": "array",
+                  "example": [
+                    "22e3b2f6-5c95-4044-b444-592b5d41338a",
+                    "ccd6a85d-ab7d-4700-953d-cda0775f37e5"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "languageIds": {
+                  "type": "array",
+                  "example": [
+                    "69f03082-ee81-4a11-a7a2-84e82bd54369",
+                    "2dc1092c-a13d-4d55-9b1f-81d3b3e974c1"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
                 }
               },
               "required": [
-                "providerId"
+                "providerId",
+                "name",
+                "surname",
+                "email"
               ]
             }
           }
@@ -2354,7 +2449,7 @@
         "tags": [
           "Provider"
         ],
-        "description": "Delete current provider data",
+        "description": "Country admin to delete current provider data",
         "parameters": [
           {
             "name": "x-language-alpha-2",
@@ -2376,13 +2471,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "password": {
+                "providerId": {
                   "type": "string",
-                  "example": "SomePass123"
+                  "example": "2dc1092c-a13d-4d55-9b1f-81d3b3e974c1"
                 }
               },
               "required": [
-                "password"
+                "providerId"
               ]
             }
           }
@@ -2392,7 +2487,7 @@
             "description": "Deleted Provider Data Object"
           },
           "401": {
-            "description": "Provider Not Authorised"
+            "description": "No Permissions"
           },
           "404": {
             "description": "Provider Not Found"
@@ -2400,7 +2495,7 @@
         },
         "security": [
           {
-            "ProviderBearer": []
+            "CountryAdminBearer": []
           }
         ]
       }
