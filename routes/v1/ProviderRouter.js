@@ -224,6 +224,7 @@ router
      * #swagger.responses[401] = { description: 'Admin Not Authorised' }
      * #swagger.responses[401] = { description: 'No Permissions' }
      * #swagger.responses[404] = { description: 'Provider Not Found' }
+     * #swagger.responses[404] = { description: 'User Not Found' }
      */
     const response = await fetch(
       `${PROVIDER_URL}/provider/v1/provider${req.url}`,
@@ -232,7 +233,6 @@ router
         headers: {
           ...req.headers,
           host: PROVIDER_LOCAL_HOST,
-          "x-user-id": req.user.user_id,
           "Content-type": "application/json",
         },
         ...(req.body && { body: JSON.stringify(req.body) }),
