@@ -429,6 +429,40 @@ router.route("/upload-file").post(authenticate, async (req, res) => {
 });
 
 router
+  .route("/upload-file/admin")
+  .post(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
+    /**
+     * #swagger.tags = ['User']
+     * #swagger.method = 'POST'
+     * #swagger.path = '/user/upload-file/'
+     * #swagger.description = 'Upload file to AWS S3 bucket'
+     * #swagger.security = [{ "CountryAdminBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.consumes = ['multipart/form-data']
+     * #swagger.parameters['fileContent'] = { in: 'formData', type: 'file', required: true, description: 'File to upload' }
+     * #swagger.parameters['fileName'] = { in: 'formData', type: 'string', required: true, description: 'Name of the file' }
+     * #swagger.responses[200] = { description: 'Success Status' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     * #swagger.responses[500] = { description: 'Internal Server Error' }
+     */
+
+    const response = await fetch(`${USER_URL}/user/v1/upload-file`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: USER_LOCAL_HOST,
+        "Content-type": "application/json",
+      },
+      body: req,
+    }).catch(console.log);
+
+    const result = await response?.json();
+    return res.status(response?.status).send(result);
+  });
+
+router
   .route("/notification-preferences")
   .get(authenticate, async (req, res) => {
     /**
