@@ -65,6 +65,93 @@ router
   });
 
 router
+  .route("/by-id")
+  .get(authenticateAdmin, authorizeAdmin("global"), async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/admin/by-id'
+     * #swagger.description = 'Get admin by id'
+     * #swagger.security = [{ "GlobalAdminBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.responses[200] = { description: 'Admin Data Object' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     * #swagger.responses[404] = { description: 'Admin Not Found' }
+     */
+
+    const response = await fetch(`${ADMIN_URL}/admin/v1/admin${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  })
+  .put(authenticateAdmin, authorizeAdmin("global"), async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'PUT'
+     * #swagger.path = '/admin/by-id'
+     * #swagger.description = 'Update admin data by id'
+     * #swagger.security = [{ "GlobalAdminBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $name: 'John', $surname: 'Doe', phonePrefix: '+44', phone: '1234567890', $email: 'john.doe@email.com', $isActive: true } }
+     * #swagger.responses[200] = { description: 'Updated Admin Data Object' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[404] = { description: 'Admin Not Found' }
+     * #swagger.responses[409] = { description: 'Email Already Used' }
+     */
+    const response = await fetch(`${ADMIN_URL}/admin/v1/admin${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
+
+router
+  .route("/all")
+  .get(authenticateAdmin, authorizeAdmin("global"), async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/admin/all'
+     * #swagger.description = 'Get all all global admins or country admins for a given country'
+     * #swagger.security = [{ "GlobalAdminBearer": [] }]
+     * #swagger.responses[200] = { description: 'Admin Data Object' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     * #swagger.responses[404] = { description: 'Admin Not Found' }
+     */
+
+    const response = await fetch(`${ADMIN_URL}/admin/v1/admin${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  });
+
+router
   .route("/signup")
   .post(authenticateAdmin, authorizeAdmin("global"), async (req, res) => {
     /**
