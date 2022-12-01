@@ -188,7 +188,7 @@ router.route("/login").post(async (req, res) => {
    * #swagger.path = '/admin/login'
    * #swagger.description = 'Login admin'
    * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
-   * #swagger.parameters['obj'] = { in: 'body', schema: { $email: 'john.doe@email.com', $password: 'SomePass123' } }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $email: 'john.doe@email.com', $password: 'SomePass123', $role: 'country' } }
    * #swagger.responses[200] = { description: 'Admin Access and Refresh Tokens' }
    * #swagger.responses[404] = { description: 'Incorrect Email' }
    * #swagger.responses[404] = { description: 'Incorrect Password' }
@@ -269,6 +269,7 @@ router
      * #swagger.description = 'Initiate Forgot Password Process (Send email with token)'
      * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
      * #swagger.parameters['email'] = { in: 'query', required: true, type: 'string', description: 'Email of The Admin' }
+     * #swagger.parameters['role'] = { in: 'query', required: true, type: 'string', description: 'Role of The Admin - country, global, or regional' }
      * #swagger.responses[200] = { description: 'Success Status' }
      * #swagger.responses[404] = { description: 'Admin Not Found' }
      */
