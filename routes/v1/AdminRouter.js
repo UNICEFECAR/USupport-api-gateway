@@ -680,4 +680,58 @@ router
     return res.status(response.status).send(result);
   });
 
+router
+  .route("/statistics/global")
+  .get(authenticateAdmin, authorizeAdmin("global"), async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/admin/statistics/global'
+     * #swagger.description = 'Get all global statistics'
+     * #swagger.security = [{ "GlobalAdminBearer": [] }]
+     * #swagger.responses[200] = { description: 'Statistics Data Object' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     */
+
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  });
+
+router.route("/statistics/country").get(authenticateAdmin, async (req, res) => {
+  /**
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/admin/statistics/country'
+   * #swagger.description = 'Get all country statistics'
+   * #swagger.security = [{ "AnyAdminBearer": [] }]
+   * #swagger.parameters['countryId'] = { in: 'query', required: true, type: 'string', description: 'ID of The Country' }
+   * #swagger.responses[200] = { description: 'Statistics Data Object' }
+   * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+   */
+
+  const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: ADMIN_LOCAL_HOST,
+      "Content-type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
 export { router };
