@@ -43,7 +43,7 @@ router
      * #swagger.description = 'Update current admin data'
      * #swagger.security = [{ "AnyAdminBearer": [] }]
      * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
-     * #swagger.parameters['obj'] = { in: 'body', schema: { $name: 'John', $surname: 'Doe', phonePrefix: '+44', phone: '1234567890', $email: 'john.doe@email.com' } }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $role: 'country', $name: 'John', $surname: 'Doe', phonePrefix: '+44', phone: '1234567890', $email: 'john.doe@email.com' } }
      * #swagger.responses[200] = { description: 'Updated Admin Data Object' }
      * #swagger.responses[401] = { description: 'Admin Not Authorised' }
      * #swagger.responses[404] = { description: 'Admin Not Found' }
@@ -102,7 +102,7 @@ router
      * #swagger.description = 'Update admin data by id'
      * #swagger.security = [{ "GlobalAdminBearer": [] }]
      * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
-     * #swagger.parameters['obj'] = { in: 'body', schema: { $name: 'John', $surname: 'Doe', phonePrefix: '+44', phone: '1234567890', $email: 'john.doe@email.com', $isActive: true } }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $role: 'country', $name: 'John', $surname: 'Doe', phonePrefix: '+44', phone: '1234567890', $email: 'john.doe@email.com', $isActive: true } }
      * #swagger.responses[200] = { description: 'Updated Admin Data Object' }
      * #swagger.responses[401] = { description: 'Admin Not Authorised' }
      * #swagger.responses[401] = { description: 'No Permissions' }
