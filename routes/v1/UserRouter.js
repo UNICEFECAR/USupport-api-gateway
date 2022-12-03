@@ -250,7 +250,7 @@ router.route("/tmp-login").post(async (req, res) => {
    * #swagger.tags = ['User']
    * #swagger.method = 'POST'
    * #swagger.path = '/user/tmp-login'
-   * #swagger.description = 'Temporrary login a user'
+   * #swagger.description = 'Temporrary login a client using JWT token'
    * #swagger.responses[200] = { description: 'Client Temporary Access Token That Lasts Forever' }
    */
   const response = await fetch(`${USER_URL}/user/v1/auth${req.url}`, {
