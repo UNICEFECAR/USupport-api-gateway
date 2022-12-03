@@ -18,6 +18,7 @@ router.route("/user").get(authenticate, async (req, res) => {
    * #swagger.security = [{ "AnyUserBearer": [] }]
    * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
    * #swagger.responses[200] = { description: 'Array of Notification Data Objects' }
+   * #swagger.responses[401] = { description: 'User Not Authorised' }
    */
 
   const response = await fetch(
@@ -49,6 +50,7 @@ router.route("/is-read").put(authenticate, async (req, res) => {
    * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
    * #swagger.parameters['obj'] = { in: 'body', schema: { $notificationId: '22e3b2f6-5c95-4044-b444-592b5d41338a' } }
    * #swagger.responses[200] = { description: 'Updated Notification Data Object' }
+   * #swagger.responses[401] = { description: 'User Not Authorised' }
    * #swagger.responses[404] = { description: 'Notification Not Found' }
    */
   const response = await fetch(
