@@ -2,9 +2,12 @@ import express from "express";
 import helmet from "helmet";
 import dotenv from "dotenv";
 import cors from "cors";
+import { createServer } from "http";
+import { Server } from "socket.io";
 
 import v1 from "#routes/index";
 import middleware from "#middlewares/index";
+import { MessagingSocket } from "#sockets/index";
 
 import swaggerUi from "swagger-ui-express";
 
@@ -26,6 +29,7 @@ app.use(helmet());
 app.use(cors());
 
 /*------------- Swagger Documentation -------------*/
+
 app.use(
   "/api/v1/doc",
   swaggerUi.serve,
@@ -49,6 +53,18 @@ app.use("/api/v1/messaging", v1.MessagingRouter);
 app.use(middleware.errorMiddleware.notFound);
 app.use(middleware.errorMiddleware.errorHandler);
 
-app.listen(PORT, () => {
+/*------------- Server Initialization -------------*/
+
+const server = createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
+
+MessagingSocket(io);
+
+server.listen(PORT, () => {
   console.log(`API Gateway Server listening on port ${PORT}`);
 });

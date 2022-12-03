@@ -17,6 +17,7 @@
     "fs": "^0.0.1-security",
     "helmet": "^6.0.0",
     "node-fetch": "^3.2.10",
+    "socket.io": "^4.5.4",
     "swagger-autogen": "^2.22.0",
     "swagger-ui-express": "^4.6.0",
     "yup": "^0.32.11"
@@ -35,6 +36,7 @@
     "#utils/*": "./utils/*.js",
     "#queries/*": "./queries/*.js",
     "#schemas/*": "./schemas/*.js",
-    "#translations/*": "./translations/*.js"
+    "#translations/*": "./translations/*.js",
+    "#sockets/*": "./sockets/*.js"
   }
 }

@@ -8,7 +8,8 @@
       "#utils/*": ["./utils/*.js"],
       "#queries/*": ["./queries/*.js"],
       "#schemas/*": ["./schemas/*.js"],
-      "#translations/*": ["./translations/*.js"]
+      "#translations/*": ["./translations/*.js"],
+      "#sockets/*": ["./sockets/*.js"]
     }
   },
   "exclude": ["node_modules"]
