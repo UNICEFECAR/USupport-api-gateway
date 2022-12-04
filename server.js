@@ -61,6 +61,7 @@ const io = new Server(server, {
     origin: "*",
     methods: ["GET", "POST"],
   },
+  path: "/api/v1/ws",
 });
 
 MessagingSocket(io);
