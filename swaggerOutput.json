@@ -133,6 +133,10 @@
             "schema": {
               "type": "object",
               "properties": {
+                "role": {
+                  "type": "string",
+                  "example": "country"
+                },
                 "name": {
                   "type": "string",
                   "example": "John"
@@ -155,6 +159,7 @@
                 }
               },
               "required": [
+                "role",
                 "name",
                 "surname",
                 "email"
@@ -179,6 +184,196 @@
         "security": [
           {
             "AnyAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/by-id": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get admin by id",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "adminId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "ID of The Admin"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Admin Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          },
+          "404": {
+            "description": "Admin Not Found"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Update admin data by id",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "role": {
+                  "type": "string",
+                  "example": "country"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "John"
+                },
+                "surname": {
+                  "type": "string",
+                  "example": "Doe"
+                },
+                "phonePrefix": {
+                  "type": "string",
+                  "example": "+44"
+                },
+                "phone": {
+                  "type": "string",
+                  "example": "1234567890"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                },
+                "isActive": {
+                  "type": "boolean",
+                  "example": true
+                }
+              },
+              "required": [
+                "role",
+                "name",
+                "surname",
+                "email",
+                "isActive"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Admin Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          },
+          "404": {
+            "description": "Admin Not Found"
+          },
+          "409": {
+            "description": "Email Already Used"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Delete admin data by id",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "adminId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                }
+              },
+              "required": [
+                "adminId"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted Admin Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          },
+          "404": {
+            "description": "Admin Not Found"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/all": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all all global admins or country admins for a given country",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Admin Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          },
+          "404": {
+            "description": "Admin Not Found"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
           }
         ]
       }
@@ -295,11 +490,16 @@
                 "password": {
                   "type": "string",
                   "example": "SomePass123"
+                },
+                "role": {
+                  "type": "string",
+                  "example": "country"
                 }
               },
               "required": [
                 "email",
-                "password"
+                "password",
+                "role"
               ]
             }
           }
@@ -429,6 +629,13 @@
             "required": true,
             "type": "string",
             "description": "Email of The Admin"
+          },
+          {
+            "name": "role",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Role of The Admin - country, global, or regional"
           }
         ],
         "responses": {
@@ -1030,6 +1237,58 @@
         ]
       }
     },
+    "/admin/statistics/global": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all global statistics",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Statistics Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/statistics/country": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all country statistics",
+        "parameters": [
+          {
+            "name": "countryId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "ID of The Country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Statistics Data Object"
+          },
+          "401": {
+            "description": "Admin Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "AnyAdminBearer": []
+          }
+        ]
+      }
+    },
     "/client": {
       "get": {
         "tags": [
@@ -1436,6 +1695,10 @@
                 "forgotPasswordToken": {
                   "type": "string",
                   "example": "A4cgpEWipqpNRH99"
+                },
+                "recipientEmail": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
                 }
               },
               "required": [
@@ -1478,6 +1741,10 @@
                 "platform": {
                   "type": "string",
                   "example": "client"
+                },
+                "recipientEmail": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
                 }
               },
               "required": [
@@ -1516,13 +1783,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "clientEmail": {
+                "recipientEmail": {
                   "type": "string",
                   "example": "john.doe@email.com"
                 }
               },
               "required": [
-                "clientEmail"
+                "recipientEmail"
               ]
             }
           }
@@ -1557,13 +1824,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "clientEmail": {
+                "recipientEmail": {
                   "type": "string",
                   "example": "john.doe@email.com"
                 }
               },
               "required": [
-                "clientEmail"
+                "recipientEmail"
               ]
             }
           }
@@ -1598,13 +1865,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "clientEmail": {
+                "recipientEmail": {
                   "type": "string",
                   "example": "john.doe@email.com"
                 }
               },
               "required": [
-                "clientEmail"
+                "recipientEmail"
               ]
             }
           }
@@ -1639,13 +1906,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "clientEmail": {
+                "recipientEmail": {
                   "type": "string",
                   "example": "john.doe@email.com"
                 }
               },
               "required": [
-                "clientEmail"
+                "recipientEmail"
               ]
             }
           }
@@ -1680,13 +1947,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "clientEmail": {
+                "recipientEmail": {
                   "type": "string",
                   "example": "john.doe@email.com"
                 }
               },
               "required": [
-                "clientEmail"
+                "recipientEmail"
               ]
             }
           }
@@ -1721,13 +1988,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "clientEmail": {
+                "recipientEmail": {
                   "type": "string",
                   "example": "john.doe@email.com"
                 }
               },
               "required": [
-                "clientEmail"
+                "recipientEmail"
               ]
             }
           }
@@ -1762,13 +2029,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "clientEmail": {
+                "recipientEmail": {
                   "type": "string",
                   "example": "john.doe@email.com"
                 }
               },
               "required": [
-                "clientEmail"
+                "recipientEmail"
               ]
             }
           }
@@ -1803,13 +2070,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "clientEmail": {
+                "recipientEmail": {
                   "type": "string",
                   "example": "john.doe@email.com"
                 }
               },
               "required": [
-                "clientEmail"
+                "recipientEmail"
               ]
             }
           }
@@ -1844,13 +2111,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "providerEmail": {
+                "recipientEmail": {
                   "type": "string",
                   "example": "john.doe@email.com"
                 }
               },
               "required": [
-                "providerEmail"
+                "recipientEmail"
               ]
             }
           }
@@ -1885,13 +2152,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "providerEmail": {
+                "recipientEmail": {
                   "type": "string",
                   "example": "john.doe@email.com"
                 }
               },
               "required": [
-                "providerEmail"
+                "recipientEmail"
               ]
             }
           }
@@ -1926,13 +2193,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "providerEmail": {
+                "recipientEmail": {
                   "type": "string",
                   "example": "john.doe@email.com"
                 }
               },
               "required": [
-                "providerEmail"
+                "recipientEmail"
               ]
             }
           }
@@ -1967,13 +2234,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "providerEmail": {
+                "recipientEmail": {
                   "type": "string",
                   "example": "john.doe@email.com"
                 }
               },
               "required": [
-                "providerEmail"
+                "recipientEmail"
               ]
             }
           }
@@ -2008,13 +2275,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "providerEmail": {
+                "recipientEmail": {
                   "type": "string",
                   "example": "john.doe@email.com"
                 }
               },
               "required": [
-                "providerEmail"
+                "recipientEmail"
               ]
             }
           }
@@ -2049,13 +2316,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "providerEmail": {
+                "recipientEmail": {
                   "type": "string",
                   "example": "john.doe@email.com"
                 }
               },
               "required": [
-                "providerEmail"
+                "recipientEmail"
               ]
             }
           }
@@ -2090,13 +2357,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "providerEmail": {
+                "recipientEmail": {
                   "type": "string",
                   "example": "john.doe@email.com"
                 }
               },
               "required": [
-                "providerEmail"
+                "recipientEmail"
               ]
             }
           }
@@ -2131,13 +2398,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "providerEmail": {
+                "recipientEmail": {
                   "type": "string",
                   "example": "john.doe@email.com"
                 }
               },
               "required": [
-                "providerEmail"
+                "recipientEmail"
               ]
             }
           }
@@ -2172,13 +2439,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "providerEmail": {
+                "recipientEmail": {
                   "type": "string",
                   "example": "john.doe@email.com"
                 }
               },
               "required": [
-                "providerEmail"
+                "recipientEmail"
               ]
             }
           }
@@ -2213,13 +2480,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "providerEmail": {
+                "recipientEmail": {
                   "type": "string",
                   "example": "john.doe@email.com"
                 }
               },
               "required": [
-                "providerEmail"
+                "recipientEmail"
               ]
             }
           }
@@ -2254,13 +2521,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "providerEmail": {
+                "recipientEmail": {
                   "type": "string",
                   "example": "john.doe@email.com"
                 }
               },
               "required": [
-                "providerEmail"
+                "recipientEmail"
               ]
             }
           }
@@ -2273,6 +2540,433 @@
             "description": "Internal Server Error"
           }
         }
+      }
+    },
+    "/messaging": {
+      "get": {
+        "tags": [
+          "Messaging"
+        ],
+        "description": "Get a chat by given ID",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "chatId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "ID Of The Chat"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chat Data Object"
+          },
+          "401": {
+            "description": "User Not Authorised"
+          },
+          "404": {
+            "description": "Chat Not Found"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Messaging"
+        ],
+        "description": "Add a message to the given chat",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "chatId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                },
+                "message": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "text"
+                    },
+                    "senderId": {
+                      "type": "string",
+                      "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                    },
+                    "time": {
+                      "type": "string",
+                      "example": "1668787200"
+                    },
+                    "content": {
+                      "type": "string",
+                      "example": "An example message."
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "senderId",
+                    "time",
+                    "content"
+                  ]
+                }
+              },
+              "required": [
+                "chatId",
+                "message"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Chat Data Object"
+          },
+          "401": {
+            "description": "User Not Authorised"
+          },
+          "404": {
+            "description": "Chat Not Found"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      }
+    },
+    "/messaging/client-socket": {
+      "get": {
+        "tags": [
+          "Messaging"
+        ],
+        "description": "Get a client socket by given chat ID",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "chatId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "ID Of The Chat"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Socket Data"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          },
+          "404": {
+            "description": "Chat Not Found"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Messaging"
+        ],
+        "description": "Update the client socket ID for a given chat ID",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "chatId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                },
+                "socketId": {
+                  "type": "string",
+                  "example": "ySjFsdF9JwVOJvbDAAAJ"
+                }
+              },
+              "required": [
+                "chatId",
+                "socketId"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Chat Data Object"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          },
+          "404": {
+            "description": "Chat Not Found"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/messaging/provider-socket": {
+      "get": {
+        "tags": [
+          "Messaging"
+        ],
+        "description": "Get a provider socket by given chat ID",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "chatId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "ID Of The Chat"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Socket Data"
+          },
+          "401": {
+            "description": "Provider Not Authorised"
+          },
+          "404": {
+            "description": "Chat Not Found"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Messaging"
+        ],
+        "description": "Update the provider socket ID for a given chat ID",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "chatId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                },
+                "socketId": {
+                  "type": "string",
+                  "example": "ySjFsdF9JwVOJvbDAAAJ"
+                }
+              },
+              "required": [
+                "chatId",
+                "socketId"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Chat Data Object"
+          },
+          "401": {
+            "description": "Provider Not Authorised"
+          },
+          "404": {
+            "description": "Chat Not Found"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
+      }
+    },
+    "/notifications/user": {
+      "get": {
+        "tags": [
+          "Notifications"
+        ],
+        "description": "Get notifications for the current user ID",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Notification Data Objects"
+          },
+          "401": {
+            "description": "User Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      }
+    },
+    "/notifications/is-read": {
+      "put": {
+        "tags": [
+          "Notifications"
+        ],
+        "description": "Update the read status of a given notification",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "notificationId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                }
+              },
+              "required": [
+                "notificationId"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Notification Data Object"
+          },
+          "401": {
+            "description": "User Not Authorised"
+          },
+          "404": {
+            "description": "Notification Not Found"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
       }
     },
     "/provider": {
@@ -2490,7 +3184,7 @@
             "description": "No Permissions"
           },
           "404": {
-            "description": "Provider Not Found"
+            "description": "User Not Found"
           }
         },
         "security": [
@@ -2833,6 +3527,9 @@
           "200": {
             "description": "Clients Data Object"
           },
+          "401": {
+            "description": "Provider Not Authorised"
+          },
           "404": {
             "description": "Client Not Found"
           }
@@ -2869,6 +3566,9 @@
         "responses": {
           "200": {
             "description": "Providers Availability Object"
+          },
+          "401": {
+            "description": "Provider Not Authorised"
           }
         },
         "security": [
@@ -2925,6 +3625,9 @@
           },
           "400": {
             "description": "Slot is Not Within The Given Week"
+          },
+          "401": {
+            "description": "Provider Not Authorised"
           }
         },
         "security": [
@@ -2971,6 +3674,9 @@
         "responses": {
           "200": {
             "description": "Success Status"
+          },
+          "401": {
+            "description": "Provider Not Authorised"
           }
         },
         "security": [
@@ -3044,6 +3750,9 @@
           },
           "400": {
             "description": "Slot is Not Within The Given Week"
+          },
+          "401": {
+            "description": "Provider Not Authorised"
           }
         },
         "security": [
@@ -3092,6 +3801,9 @@
         "responses": {
           "200": {
             "description": "Provider Availability Object"
+          },
+          "401": {
+            "description": "User Not Authorised"
           }
         },
         "security": [
@@ -3134,6 +3846,9 @@
           "200": {
             "description": "Provider Consultations Object"
           },
+          "401": {
+            "description": "Provider Not Authorised"
+          },
           "404": {
             "description": "Client Not Found"
           }
@@ -3163,6 +3878,9 @@
         "responses": {
           "200": {
             "description": "Provider Consultations Count"
+          },
+          "401": {
+            "description": "Provider Not Authorised"
           }
         },
         "security": [
@@ -3205,6 +3923,9 @@
           "200": {
             "description": "Provider Consultations Object"
           },
+          "401": {
+            "description": "Provider Not Authorised"
+          },
           "404": {
             "description": "Client Not Found"
           }
@@ -3242,6 +3963,9 @@
           "200": {
             "description": "Provider Consultations Object"
           },
+          "401": {
+            "description": "Provider Not Authorised"
+          },
           "404": {
             "description": "Client Not Found"
           }
@@ -3278,6 +4002,9 @@
         "responses": {
           "200": {
             "description": "Provider Consultations Object"
+          },
+          "401": {
+            "description": "Provider Not Authorised"
           },
           "404": {
             "description": "Client Not Found"
@@ -3322,6 +4049,9 @@
         "responses": {
           "200": {
             "description": "Provider Consultations Object"
+          },
+          "401": {
+            "description": "Provider Not Authorised"
           },
           "404": {
             "description": "Client Not Found"
@@ -3384,7 +4114,10 @@
           "200": {
             "description": "Consultation ID Object"
           },
-          "400": {
+          "401": {
+            "description": "User Not Authorised"
+          },
+          "404": {
             "description": "Consultation Not Found"
           }
         },
@@ -3437,7 +4170,10 @@
           "200": {
             "description": "Success Status"
           },
-          "400": {
+          "401": {
+            "description": "Client Not Authorised"
+          },
+          "404": {
             "description": "Consultation Not Found"
           }
         },
@@ -3490,7 +4226,10 @@
           "200": {
             "description": "Success Status"
           },
-          "400": {
+          "401": {
+            "description": "Provider Not Authorised"
+          },
+          "404": {
             "description": "Consultation Not Found"
           }
         },
@@ -3543,7 +4282,10 @@
           "200": {
             "description": "Success Status"
           },
-          "400": {
+          "401": {
+            "description": "Client Not Authorised"
+          },
+          "404": {
             "description": "Consultation Not Found"
           }
         },
@@ -3596,7 +4338,10 @@
           "200": {
             "description": "Success Status"
           },
-          "400": {
+          "401": {
+            "description": "Client Not Authorised"
+          },
+          "404": {
             "description": "Consultation Not Found"
           }
         },
@@ -3654,7 +4399,10 @@
           "200": {
             "description": "Success Status"
           },
-          "400": {
+          "401": {
+            "description": "Client Not Authorised"
+          },
+          "404": {
             "description": "Consultation Not Found"
           }
         },
@@ -3712,13 +4460,239 @@
           "200": {
             "description": "Success Status"
           },
-          "400": {
+          "401": {
+            "description": "User Not Authorised"
+          },
+          "404": {
             "description": "Consultation Not Found"
           }
         },
         "security": [
           {
             "AnyUserBearer": []
+          }
+        ]
+      }
+    },
+    "/provider/consultation/join": {
+      "put": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Client/Provider join a consultation",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "consultationId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                },
+                "userType": {
+                  "type": "string",
+                  "example": "client"
+                }
+              },
+              "required": [
+                "consultationId",
+                "userType"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "400": {
+            "description": "Consultation Not Scheduled"
+          },
+          "401": {
+            "description": "User Not Authorised"
+          },
+          "404": {
+            "description": "Consultation Not Found"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      }
+    },
+    "/provider/consultation/leave": {
+      "put": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Client/Provider leave a consultation",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "consultationId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                },
+                "userType": {
+                  "type": "string",
+                  "example": "client"
+                }
+              },
+              "required": [
+                "consultationId",
+                "userType"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "User Not Authorised"
+          },
+          "404": {
+            "description": "Consultation Not Found"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      }
+    },
+    "/provicer/services": {
+      "get": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Get all services",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Array Of Service Data Objects"
+          },
+          "401": {
+            "description": "User Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
+      }
+    },
+    "/provider/services/add": {
+      "post": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Provider to add services after a consultation took place",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "consultationId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                },
+                "services": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "serviceId": {
+                        "type": "string",
+                        "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                      },
+                      "duration": {
+                        "type": "number",
+                        "example": 15
+                      }
+                    }
+                  }
+                }
+              },
+              "required": [
+                "consultationId",
+                "services"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "400": {
+            "description": "Consultation Not Finished"
+          },
+          "401": {
+            "description": "Provider Not Authorised"
+          },
+          "404": {
+            "description": "Service Not Found"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
           }
         ]
       }
@@ -3748,6 +4722,9 @@
         "responses": {
           "200": {
             "description": "Provider Availability & Consultations Object"
+          },
+          "401": {
+            "description": "Provider Not Authorised"
           }
         },
         "security": [
@@ -4176,7 +5153,7 @@
         "tags": [
           "User"
         ],
-        "description": "Temporrary login a user",
+        "description": "Temporrary login a client using JWT token",
         "parameters": [],
         "responses": {
           "200": {
