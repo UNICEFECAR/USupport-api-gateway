@@ -47,7 +47,7 @@ router.route("/").put(authenticate, async (req, res) => {
    * #swagger.security = [{ "AnyUserBearer": [] }]
    * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
    * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
-   * #swagger.parameters['obj'] = { in: 'body', schema: { $chatId: '22e3b2f6-5c95-4044-b444-592b5d41338a', $message: { $type: 'text', $senderId: '22e3b2f6-5c95-4044-b444-592b5d41338a', $time: '1668787200', $content: 'An example message.' } } }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $chatId: '22e3b2f6-5c95-4044-b444-592b5d41338a', $message: { $type: 'text', $time: '1668787200', $content: 'An example message.' } } }
    * #swagger.responses[200] = { description: 'Updated Chat Data Object' }
    * #swagger.responses[401] = { description: 'User Not Authorised' }
    * #swagger.responses[404] = { description: 'Chat Not Found' }
@@ -57,6 +57,7 @@ router.route("/").put(authenticate, async (req, res) => {
     headers: {
       ...req.headers,
       host: MESSAGING_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
       "Content-type": "application/json",
     },
     ...(req.body && { body: JSON.stringify(req.body) }),
