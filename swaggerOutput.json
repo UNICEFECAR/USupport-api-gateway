@@ -2625,10 +2625,6 @@
                       "type": "string",
                       "example": "text"
                     },
-                    "senderId": {
-                      "type": "string",
-                      "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
-                    },
                     "time": {
                       "type": "string",
                       "example": "1668787200"
@@ -2640,7 +2636,6 @@
                   },
                   "required": [
                     "type",
-                    "senderId",
                     "time",
                     "content"
                   ]
