@@ -57,10 +57,6 @@ app.use(middleware.errorMiddleware.errorHandler);
 
 const server = createServer(app);
 const io = new Server(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-  },
   path: "/api/v1/ws",
 });
 

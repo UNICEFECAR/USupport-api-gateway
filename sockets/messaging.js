@@ -7,7 +7,7 @@ export const MessagingSocket = (io) => {
 
   io.on("connection", (socket) => {
     socket.on("join chat", async (payload) => {
-      const { language, country, chatId, userType } = JSON.parse(payload);
+      const { language, country, chatId, userType } = payload;
 
       if (userType === "client") {
         await fetch(`${MESSAGING_URL}/messaging/v1/client-socket`, {
@@ -35,7 +35,7 @@ export const MessagingSocket = (io) => {
     });
 
     socket.on("send message", async (payload) => {
-      const { language, country, chatId, to, message } = JSON.parse(payload);
+      const { language, country, chatId, to, message } = payload;
 
       if (to === "client") {
         const response = await fetch(
