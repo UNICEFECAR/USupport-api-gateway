@@ -516,4 +516,37 @@ router
     return res.status(response.status).send(result);
   });
 
+router
+  .route("/consultation/twilio-token")
+  .get(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['User']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/user/consultation/twilio-token'
+     * #swagger.description = 'Get client/provider twilio token'
+     * #swagger.security = [{ "AnyUserBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['consultationId'] = { in: 'query', required: true, type: 'string', description: 'ID of the consultation' }
+     * #swagger.responses[200] = { description: 'Twilio Token Data' }
+     * #swagger.responses[401] = { description: 'User Not Authorised' }
+     * #swagger.responses[404] = { description: 'Consultation Not Found' }
+     */
+
+    const response = await fetch(`${USER_URL}/user/v1/user${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: USER_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
+
 export { router };
