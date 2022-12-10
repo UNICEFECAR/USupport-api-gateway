@@ -57,7 +57,7 @@ export const errorHandler = (err, req, res, next) => {
 
 export const notFound = (req, res, next) => {
   //501 if endpoint does not exist
-  const error = new Error("Not Implemented");
+  const error = new Error(`Not Implemented ${req.path}`);
   error.status = 501;
   next(error);
 };
