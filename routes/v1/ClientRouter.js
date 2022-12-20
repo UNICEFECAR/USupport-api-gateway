@@ -98,6 +98,34 @@ router
     return res.status(response.status).send(result);
   });
 
+router.route("/by-id").get(async (req, res) => {
+  /**
+   * #swagger.tags = ['Client']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/client/by-id'
+   * #swagger.description = 'Get client data by id'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['clientId'] = { in: 'query', required: true, type: 'string', description: 'The ID of the client' }
+   * #swagger.responses[200] = { description: 'Client Data Object' }
+   * #swagger.responses[404] = { description: 'Client Not Found' }
+   */
+
+  const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: CLIENT_LOCAL_HOST,
+      "Content-type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 router
   .route("/image")
   .put(authenticate, async (req, res) => {
