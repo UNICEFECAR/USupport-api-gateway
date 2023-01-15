@@ -18,6 +18,8 @@ router
      * #swagger.path = '/client'
      * #swagger.description = 'Get current client data'
      * #swagger.security = [{ "ClientBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
      * #swagger.responses[200] = { description: 'Client Data Object' }
      * #swagger.responses[401] = { description: 'Client Not Authorised' }
      */
@@ -246,5 +248,90 @@ router.route("/consultation/all").get(authenticate, async (req, res) => {
 
   return res.status(response.status).send(result);
 });
+
+router
+  .route("/consultation/security-check")
+  .get(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Client']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/client/consultation/security-check'
+     * #swagger.description = 'Get security check answers by given consultation id'
+     * #swagger.security = [{ "ClientBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['consultationId'] = { in: 'query', required: true, type: 'string', description: 'The ID of the consultation' }
+     * #swagger.responses[200] = { description: 'Consultation Security Check Answers Data Object' }
+     * #swagger.responses[401] = { description: 'Client Not Authorised' }
+     */
+
+    const response = await fetch(`${CLIENT_URL}/client/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: CLIENT_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  })
+  .put(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Client']
+     * #swagger.method = 'PUT'
+     * #swagger.path = '/client/consultation/security-check'
+     * #swagger.description = 'Update consultation security check answers'
+     * #swagger.security = [{ "ClientBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $consultationId: '2dc1092c-a13d-4d55-9b1f-81d3b3e974c1', $contactsDisclosure: 'true', $suggestOutsideMeeting: 'false', $identityCoercion: 'true', $unsafeFeeling: 'true', $moreDetails: 'Some more details'  } }
+     * #swagger.responses[200] = { description: 'Updated Consultation Security Check Answers Data Object' }
+     * #swagger.responses[401] = { description: 'Client Not Authorised' }
+     */
+    const response = await fetch(`${CLIENT_URL}/client/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: CLIENT_LOCAL_HOST,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  })
+  .post(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Client']
+     * #swagger.method = 'POST'
+     * #swagger.path = '/client/consultation/security-check'
+     * #swagger.description = 'Update consultation security check answers'
+     * #swagger.security = [{ "ClientBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $consultationId: '2dc1092c-a13d-4d55-9b1f-81d3b3e974c1', $contactsDisclosure: 'true', $suggestOutsideMeeting: 'false', $identityCoercion: 'true', $unsafeFeeling: 'true', $moreDetails: 'Some more details'  } }
+     * #swagger.responses[200] = { description: 'Created Consultation Security Check Answers Data Object' }
+     * #swagger.responses[401] = { description: 'Client Not Authorised' }
+     */
+    const response = await fetch(`${CLIENT_URL}/client/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: CLIENT_LOCAL_HOST,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
 
 export { router };
