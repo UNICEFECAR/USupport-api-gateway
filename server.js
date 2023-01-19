@@ -47,6 +47,7 @@ app.use("/api/v1/admin", v1.AdminRouter);
 app.use("/api/v1/provider", v1.ProviderRouter);
 app.use("/api/v1/notifications", v1.NotificationsRouter);
 app.use("/api/v1/messaging", v1.MessagingRouter);
+app.use("/api/v1/payments", v1.PaymentsRouter);
 
 /*------------- Error middleware -------------*/
 
