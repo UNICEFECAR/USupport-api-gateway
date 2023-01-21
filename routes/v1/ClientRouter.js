@@ -334,4 +334,93 @@ router
     return res.status(response.status).send(result);
   });
 
+router.route("/mood-tracker/today").get(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Client']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/client/mood-tracker/today'
+   * #swagger.description = 'Get a mood tracker entry for the current client for the current day'
+   * #swagger.security = [{ "ClientBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.responses[200] = { description: 'Mood Track Data Object' }
+   * #swagger.responses[401] = { description: 'Client Not Authorised' }
+   */
+
+  const response = await fetch(`${CLIENT_URL}/client/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: CLIENT_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
+router.route("/mood-tracker/week").get(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Client']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/client/mood-tracker/week'
+   * #swagger.description = 'Get a mood tracker entry for the current client for a given week'
+   * #swagger.security = [{ "ClientBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['startDate'] = { in: 'query', required: true, type: 'string', description: 'The week start date' }
+   * #swagger.responses[200] = { description: 'Mood Track Data Object' }
+   * #swagger.responses[401] = { description: 'Client Not Authorised' }
+   */
+
+  const response = await fetch(`${CLIENT_URL}/client/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: CLIENT_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
+router.route("/mood-tracker").post(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Client']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/client/mood-tracker'
+   * #swagger.description = 'Add mood tracker entry for the current client for the current day'
+   * #swagger.security = [{ "ClientBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['clientId'] = { in: 'query', required: true, type: 'string', description: 'The ID of the client' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $mood: 'happy', comment: 'Additional comment', } }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   * #swagger.responses[401] = { description: 'Client Not Authorised' }
+   */
+  const response = await fetch(`${CLIENT_URL}/client/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: CLIENT_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 export { router };
