@@ -53,4 +53,25 @@ router.route("/one-time/webhook").post(async (req, res) => {
   return res.status(response?.status).send(result);
 });
 
+router.route("/one-time/history").get(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Payments']
+   * #swagger.description = 'Endpoint to retrieve the payment history.'
+   */
+
+  const response = await fetch(`${PAYMENTS_URL}/payments/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: PAYMENTS_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+    },
+  }).catch(console.log);
+
+  const result = await response?.json();
+
+  return res.status(response?.status).send(result);
+});
+
 export { router };
