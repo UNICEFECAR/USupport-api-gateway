@@ -549,4 +549,32 @@ router
     return res.status(response.status).send(result);
   });
 
+router.route("/2fa").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/user/2fa'
+   * #swagger.description = 'Request Provider 2FA OTP'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $email: 'john.doe@email.com', $password: 'SomePass123' } }
+   * #swagger.responses[200] = { description: 'Provider 2FA OTP for login' }
+   * #swagger.responses[404] = { description: 'Invalid Email' }
+   * #swagger.responses[404] = { description: 'Invalid Password' }
+   * #swagger.responses[429] = { description: 'Too Many OTP Requests' }
+   */
+  const response = await fetch(`${USER_URL}/user/v1/auth${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
 export { router };
