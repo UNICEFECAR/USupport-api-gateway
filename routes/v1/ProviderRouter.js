@@ -1164,4 +1164,35 @@ router.route("/calendar/five-weeks").get(authenticate, async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/activities").get(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/provider/activities'
+   * #swagger.description = 'Get the activities for the current provider'
+   * #swagger.security = [{ "ProviderBearer": [] }]
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.responses[200] = { description: 'Provider Activities Data Object' }
+   * #swagger.responses[401] = { description: 'Provider Not Authorised' }
+   */
+
+  const response = await fetch(
+    `${PROVIDER_URL}/provider/v1/provider${req.url}`,
+    {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: PROVIDER_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }
+  ).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 export { router };
