@@ -402,12 +402,71 @@ router.route("/mood-tracker").post(authenticate, async (req, res) => {
    * #swagger.security = [{ "ClientBearer": [] }]
    * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
    * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
-   * #swagger.parameters['clientId'] = { in: 'query', required: true, type: 'string', description: 'The ID of the client' }
    * #swagger.parameters['obj'] = { in: 'body', schema: { $mood: 'happy', comment: 'Additional comment', } }
    * #swagger.responses[200] = { description: 'Success Status' }
    * #swagger.responses[401] = { description: 'Client Not Authorised' }
    */
   const response = await fetch(`${CLIENT_URL}/client/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: CLIENT_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
+router
+  .route("/information-portal-suggestion")
+  .post(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Client']
+     * #swagger.method = 'POST'
+     * #swagger.path = '/client/information-portal-suggestion'
+     * #swagger.description = 'Add a suggestion for the information portal'
+     * #swagger.security = [{ "ClientBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $suggestion: 'Add more categories' } }
+     * #swagger.responses[200] = { description: 'Success Status' }
+     * #swagger.responses[401] = { description: 'Client Not Authorised' }
+     */
+    const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: CLIENT_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
+
+router.route("/add-rating").post(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Client']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/client/add-rating'
+   * #swagger.description = 'Add a client rating'
+   * #swagger.security = [{ "ClientBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $rating: 5, $comment: 'The platform is very helpful' } }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   * #swagger.responses[401] = { description: 'Client Not Authorised' }
+   */
+  const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
     method: req.method,
     headers: {
       ...req.headers,
