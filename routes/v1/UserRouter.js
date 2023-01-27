@@ -549,4 +549,30 @@ router
     return res.status(response.status).send(result);
   });
 
+router.route("/add-contact-form").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/user/add-contact-form/'
+   * #swagger.description = 'add contact form to the DB'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $email: 'user@mail.com', $subject: 'Subject', $message: 'Here is a sample message'  } }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   */
+  const response = await fetch(`${USER_URL}/user/v1/user${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 export { router };
