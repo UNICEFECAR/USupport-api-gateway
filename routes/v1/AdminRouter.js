@@ -218,7 +218,7 @@ router.route("/login").post(async (req, res) => {
    * #swagger.path = '/admin/login'
    * #swagger.description = 'Login admin'
    * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
-   * #swagger.parameters['obj'] = { in: 'body', schema: { $email: 'john.doe@email.com', $password: 'SomePass123', $role: 'country' } }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $email: 'john.doe@email.com', $password: 'SomePass123', $role: 'country', $otp: '1234' } }
    * #swagger.responses[200] = { description: 'Admin Access and Refresh Tokens' }
    * #swagger.responses[404] = { description: 'Incorrect Email' }
    * #swagger.responses[404] = { description: 'Incorrect Password' }
@@ -794,6 +794,34 @@ router
 
     return res.status(response.status).send(result);
   });
+
+router.route("/2fa").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/admin/2fa'
+   * #swagger.description = 'Request Admin 2FA OTP'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $email: 'john.doe@email.com', $password: 'SomePass123', $role: 'global' } }
+   * #swagger.responses[200] = { description: 'Admin 2FA OTP for login' }
+   * #swagger.responses[404] = { description: 'Invalid Email' }
+   * #swagger.responses[404] = { description: 'Invalid Password' }
+   * #swagger.responses[429] = { description: 'Too Many OTP Requests' }
+   */
+  const response = await fetch(`${ADMIN_URL}/admin/v1/auth${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: ADMIN_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
 
 router
   .route("/statistics/information-portal-suggestions")
