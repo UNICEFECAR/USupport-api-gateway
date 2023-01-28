@@ -13,6 +13,7 @@ router.route("/admin").post(async (req, res) => {
    * #swagger.method = 'POST'
    * #swagger.path = '/email/admin/'
    * #swagger.description = 'Send email'
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
    * #swagger.parameters['obj'] = { in: 'body', schema: { $subject: 'Example Subject', $title: 'Example Title', $text: 'Some Long Text Here ...' } }
    * #swagger.responses[200] = { description: 'Success Status' }
    * #swagger.responses[500] = { description: 'Internal Server Error' }
