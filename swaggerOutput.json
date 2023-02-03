@@ -1289,13 +1289,65 @@
         ]
       }
     },
+    "/admin/statistics/security-check": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get security check answers for all consultations that had issues",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Consultation Security Check Answers Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
     "/client": {
       "get": {
         "tags": [
           "Client"
         ],
         "description": "Get current client data",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Client Data Object"
@@ -1448,6 +1500,45 @@
             "ClientBearer": []
           }
         ]
+      }
+    },
+    "/client/by-id": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Get client data by id",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "clientId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The ID of the client"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Client Data Object"
+          },
+          "404": {
+            "description": "Client Not Found"
+          }
+        }
       }
     },
     "/client/image": {
@@ -1615,6 +1706,347 @@
           },
           "404": {
             "description": "Provider Not Found"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/consultation/security-check": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Get security check answers by given consultation id",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "consultationId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The ID of the consultation"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Consultation Security Check Answers Data Object"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Update consultation security check answers",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "consultationId": {
+                  "type": "string",
+                  "example": "2dc1092c-a13d-4d55-9b1f-81d3b3e974c1"
+                },
+                "contactsDisclosure": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "suggestOutsideMeeting": {
+                  "type": "string",
+                  "example": "false"
+                },
+                "identityCoercion": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "unsafeFeeling": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "moreDetails": {
+                  "type": "string",
+                  "example": "Some more details"
+                }
+              },
+              "required": [
+                "consultationId",
+                "contactsDisclosure",
+                "suggestOutsideMeeting",
+                "identityCoercion",
+                "unsafeFeeling",
+                "moreDetails"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Created Consultation Security Check Answers Data Object"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Update consultation security check answers",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "consultationId": {
+                  "type": "string",
+                  "example": "2dc1092c-a13d-4d55-9b1f-81d3b3e974c1"
+                },
+                "contactsDisclosure": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "suggestOutsideMeeting": {
+                  "type": "string",
+                  "example": "false"
+                },
+                "identityCoercion": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "unsafeFeeling": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "moreDetails": {
+                  "type": "string",
+                  "example": "Some more details"
+                }
+              },
+              "required": [
+                "consultationId",
+                "contactsDisclosure",
+                "suggestOutsideMeeting",
+                "identityCoercion",
+                "unsafeFeeling",
+                "moreDetails"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Consultation Security Check Answers Data Object"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/mood-tracker/today": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Get a mood tracker entry for the current client for the current day",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mood Track Data Object"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/mood-tracker/week": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Get a mood tracker entry for the current client for a given week",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The week start date"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mood Track Data Object"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/mood-tracker": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Add mood tracker entry for the current client for the current day",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "clientId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The ID of the client"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mood": {
+                  "type": "string",
+                  "example": "happy"
+                },
+                "comment": {
+                  "type": "string",
+                  "example": "Additional comment"
+                }
+              },
+              "required": [
+                "mood"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
           }
         },
         "security": [
@@ -2891,6 +3323,13 @@
             "required": true,
             "type": "string",
             "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "pageNo",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The notifications page number to get"
           }
         ],
         "responses": {
@@ -2908,12 +3347,42 @@
         ]
       }
     },
+    "/notifications/user-has-unread": {
+      "get": {
+        "tags": [
+          "Notifications"
+        ],
+        "description": "Get whether the current user has unread notifications",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Whether the user has unread notifications"
+          },
+          "401": {
+            "description": "User Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      }
+    },
     "/notifications/is-read": {
       "put": {
         "tags": [
           "Notifications"
         ],
-        "description": "Update the read status of a given notification",
+        "description": "Update the read status of given notifications",
         "parameters": [
           {
             "name": "x-language-alpha-2",
@@ -2935,20 +3404,26 @@
             "schema": {
               "type": "object",
               "properties": {
-                "notificationId": {
-                  "type": "string",
-                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                "notificationIds": {
+                  "type": "array",
+                  "example": [
+                    "22e3b2f6-5c95-4044-b444-592b5d41338a",
+                    "22e3b2f6-5c95-4044-b444-592b5d41338b"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
                 }
               },
               "required": [
-                "notificationId"
+                "notificationIds"
               ]
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Updated Notification Data Object"
+            "description": "Updated Notifications Data Object"
           },
           "401": {
             "description": "User Not Authorised"
@@ -2970,7 +3445,22 @@
           "Provider"
         ],
         "description": "Get current provider data",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Provider Data Object"
@@ -4983,6 +5473,10 @@
                   "items": {
                     "type": "string"
                   }
+                },
+                "videoLink": {
+                  "type": "string",
+                  "example": "https://video.link"
                 }
               },
               "required": [
@@ -5547,6 +6041,53 @@
           },
           "404": {
             "description": "Notification Preferences Not Found"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      }
+    },
+    "/user/consultation/twilio-token": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Get client/provider twilio token",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "consultationId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "ID of the consultation"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Twilio Token Data"
+          },
+          "401": {
+            "description": "User Not Authorised"
+          },
+          "404": {
+            "description": "Consultation Not Found"
           }
         },
         "security": [

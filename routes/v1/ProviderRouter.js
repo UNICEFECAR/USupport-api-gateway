@@ -1078,6 +1078,37 @@ router.route("/consultation/leave").put(authenticate, async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/consultation/time").get(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/user/consultation/time'
+   * #swagger.description = 'Get consultation time by id'
+   * #swagger.security = [{ "AnyUserBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['consultationId'] = { in: 'query', required: true, type: 'string', description: 'ID of the consultation' }
+   * #swagger.responses[200] = { description: 'Consultation Data' }
+   * #swagger.responses[401] = { description: 'User Not Authorised' }
+   * #swagger.responses[404] = { description: 'Consultation Not Found' }
+   */
+
+  const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: PROVIDER_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 router.route("/services").get(async (req, res) => {
   /**
    * #swagger.tags = ['Provider']
@@ -1158,6 +1189,37 @@ router.route("/calendar/five-weeks").get(authenticate, async (req, res) => {
       "Cache-control": "no-cache",
     },
   }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
+router.route("/activities").get(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/provider/activities'
+   * #swagger.description = 'Get the activities for the current provider'
+   * #swagger.security = [{ "ProviderBearer": [] }]
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.responses[200] = { description: 'Provider Activities Data Object' }
+   * #swagger.responses[401] = { description: 'Provider Not Authorised' }
+   */
+
+  const response = await fetch(
+    `${PROVIDER_URL}/provider/v1/provider${req.url}`,
+    {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: PROVIDER_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }
+  ).catch(console.log);
 
   const result = await response.json();
 
