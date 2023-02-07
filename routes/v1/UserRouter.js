@@ -283,6 +283,7 @@ router.route("/user-access-token").get(async (req, res) => {
       ...req.headers,
       host: USER_LOCAL_HOST,
       "Content-type": "application/json",
+      "Cache-control": "no-cache",
     },
   }).catch(console.log);
 
@@ -364,6 +365,7 @@ router
       headers: {
         ...req.headers,
         host: USER_LOCAL_HOST,
+        "Cache-control": "no-cache",
       },
     }).catch(console.log);
 
