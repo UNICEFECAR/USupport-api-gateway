@@ -1226,4 +1226,33 @@ router.route("/activities").get(authenticate, async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/random-providers").get(async (req, res) => {
+  /**
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/provider/random-providers'
+   * #swagger.description = 'Get a list of random providers'
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['numberOfProviders'] = { in: 'query', required: true, type: 'string', description: 'Number of providers }
+   * #swagger.responses[200] = { description: 'Array Of Provider Data Objects' }
+   */
+
+  const response = await fetch(
+    `${PROVIDER_URL}/provider/v1/provider${req.url}`,
+    {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: PROVIDER_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }
+  ).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 export { router };
