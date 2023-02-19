@@ -99,6 +99,7 @@ router.route("/one-time/history").get(authenticate, async (req, res) => {
       host: PAYMENTS_LOCAL_HOST,
       "x-user-id": req.user.user_id,
       "Content-type": "application/json",
+      "Cache-control": "no-cache",
     },
   }).catch(console.log);
 

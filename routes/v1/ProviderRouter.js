@@ -1233,7 +1233,7 @@ router.route("/random-providers").get(async (req, res) => {
    * #swagger.path = '/provider/random-providers'
    * #swagger.description = 'Get a list of random providers'
    * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
-   * #swagger.parameters['numberOfProviders'] = { in: 'query', required: true, type: 'string', description: 'Number of providers }
+   * #swagger.parameters['numberOfProviders'] = { in: 'query', required: true, type: 'string', description: 'Number of providers' }
    * #swagger.responses[200] = { description: 'Array Of Provider Data Objects' }
    */
 
