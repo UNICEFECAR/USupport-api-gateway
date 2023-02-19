@@ -433,6 +433,10 @@
                 "role": {
                   "type": "string",
                   "example": "country"
+                },
+                "isActive": {
+                  "type": "boolean",
+                  "example": true
                 }
               },
               "required": [
@@ -440,7 +444,8 @@
                 "surname",
                 "email",
                 "password",
-                "role"
+                "role",
+                "isActive"
               ]
             }
           }
@@ -494,12 +499,17 @@
                 "role": {
                   "type": "string",
                   "example": "country"
+                },
+                "otp": {
+                  "type": "string",
+                  "example": "1234"
                 }
               },
               "required": [
                 "email",
                 "password",
-                "role"
+                "role",
+                "otp"
               ]
             }
           }
@@ -1326,6 +1336,604 @@
         ]
       }
     },
+    "/admin/2fa": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Request Admin 2FA OTP",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "SomePass123"
+                },
+                "role": {
+                  "type": "string",
+                  "example": "global"
+                }
+              },
+              "required": [
+                "email",
+                "password",
+                "role"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Admin 2FA OTP for login"
+          },
+          "404": {
+            "description": "Invalid Password"
+          },
+          "429": {
+            "description": "Too Many OTP Requests"
+          }
+        }
+      }
+    },
+    "/admin/statistics/information-portal-suggestions": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all information portal suggestions",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "countryId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "ID of the country of the admin"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Information Portal Suggestions Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/statistics/client-ratings": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all information portal suggestions",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Client Ratings Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/statistics/contact-forms": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all contact forms",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contact Forms Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/statistics/provider-activities": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get statistics for a specific provider",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "providerId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "ID of The Provider"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Provider Statistics Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/sponsor": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get a sponsor by id and the data about his campaigns",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sponsors Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Create a sponsor",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Unicef"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "mail@user.com"
+                },
+                "phonePrefix": {
+                  "type": "string",
+                  "example": "+7"
+                },
+                "phone": {
+                  "type": "string",
+                  "example": "887777770"
+                },
+                "image": {
+                  "type": "string",
+                  "example": "default"
+                }
+              },
+              "required": [
+                "name",
+                "email"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sponsor Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Edit a sponsor",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "sponsorId": {
+                  "type": "string",
+                  "example": "2dc1092c-a13d-4d55-9b1f-81d3b3e974c1"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "Unicef"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "mail@user.com"
+                },
+                "phonePrefix": {
+                  "type": "string",
+                  "example": "+7"
+                },
+                "phone": {
+                  "type": "string",
+                  "example": "887777770"
+                },
+                "image": {
+                  "type": "string",
+                  "example": "default"
+                }
+              },
+              "required": [
+                "sponsorId",
+                "name",
+                "email"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sponsor Data Object"
+          },
+          "401": {
+            "description": "Sponsor not found"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/sponsor/create-campaign": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Create a campaign for a sponsor",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "sponsorId": {
+                  "type": "string",
+                  "example": "2dc1092c-a13d-4d55-9b1f-81d3b3e974c1"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "Unicef Campaign"
+                },
+                "couponCode": {
+                  "type": "string",
+                  "example": "UN1"
+                },
+                "budget": {
+                  "type": "number",
+                  "example": 5000
+                },
+                "numberOfCoupons": {
+                  "type": "number",
+                  "example": 500
+                },
+                "maxCouponsPerClient": {
+                  "type": "number",
+                  "example": 3
+                },
+                "startDate": {
+                  "type": "string",
+                  "example": "1668384000"
+                },
+                "endDate": {
+                  "type": "string",
+                  "example": "1768384000"
+                },
+                "termsAndConditions": {
+                  "type": "string",
+                  "example": "Default Terms and Conditions"
+                }
+              },
+              "required": [
+                "sponsorId",
+                "name",
+                "couponCode",
+                "budget",
+                "numberOfCoupons",
+                "maxCouponsPerClient",
+                "startDate",
+                "endDate",
+                "termsAndConditions"
+              ]
+            }
+          }
+        ],
+        "responses": {},
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/sponsor/update-campaign": {
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Update a campaign for a sponsor",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "campaignId": {
+                  "type": "string",
+                  "example": "2dc1092c-a13d-4d55-9b1f-81d3b3e974c1"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "Unicef Campaign"
+                },
+                "couponCode": {
+                  "type": "string",
+                  "example": "UN1"
+                },
+                "budget": {
+                  "type": "number",
+                  "example": 5000
+                },
+                "numberOfCoupons": {
+                  "type": "number",
+                  "example": 500
+                },
+                "maxCouponsPerClient": {
+                  "type": "number",
+                  "example": 3
+                },
+                "startDate": {
+                  "type": "string",
+                  "example": "1668384000"
+                },
+                "endDate": {
+                  "type": "string",
+                  "example": "1768384000"
+                },
+                "termsAndConditions": {
+                  "type": "string",
+                  "example": "Default Terms and Conditions"
+                }
+              },
+              "required": [
+                "campaignId",
+                "name",
+                "couponCode",
+                "budget",
+                "numberOfCoupons",
+                "maxCouponsPerClient",
+                "startDate",
+                "endDate",
+                "termsAndConditions"
+              ]
+            }
+          }
+        ],
+        "responses": {},
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/sponsor/campaign/by-id": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get a sponsor by id and the data about his campaigns",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Campaign Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/sponsor/coupons-data": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get the data about all the used coupons in a specific campaign",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Campaign Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
     "/client": {
       "get": {
         "tags": [
@@ -2014,13 +2622,6 @@
             "description": "Alpha 2 code of the country"
           },
           {
-            "name": "clientId",
-            "in": "query",
-            "required": true,
-            "type": "string",
-            "description": "The ID of the client"
-          },
-          {
             "name": "obj",
             "in": "body",
             "schema": {
@@ -2056,6 +2657,117 @@
         ]
       }
     },
+    "/client/information-portal-suggestion": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Add a suggestion for the information portal",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "suggestion": {
+                  "type": "string",
+                  "example": "Add more categories"
+                }
+              },
+              "required": [
+                "suggestion"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/add-rating": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Add a client rating",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "rating": {
+                  "type": "number",
+                  "example": 5
+                },
+                "comment": {
+                  "type": "string",
+                  "example": "The platform is very helpful"
+                }
+              },
+              "required": [
+                "rating",
+                "comment"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
     "/email/admin/": {
       "post": {
         "tags": [
@@ -2063,6 +2775,13 @@
         ],
         "description": "Send email",
         "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
           {
             "name": "obj",
             "in": "body",
@@ -3435,6 +4154,203 @@
         "security": [
           {
             "AnyUserBearer": []
+          }
+        ]
+      }
+    },
+    "/payments/one-time/create-payment-intent": {
+      "post": {
+        "tags": [
+          "Payments"
+        ],
+        "description": "Post create payment intent",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "consultationId": {
+                  "type": "string",
+                  "example": "90838065-6c13-4b43-ad8e-9f10c5b6ae7e"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Payment Intent information: clientSecret, price and currency"
+          },
+          "401": {
+            "description": "User Not Authorised"
+          },
+          "404": {
+            "description": "Transaction Not Found"
+          }
+        },
+        "security": [
+          {
+            "UserBearer": []
+          }
+        ]
+      }
+    },
+    "/payments/one-time/webhook": {
+      "post": {
+        "tags": [
+          "Payments"
+        ],
+        "description": "Endpoint to handle Webhooks received from Stripe.",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "stripe-signature",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Stripe signature"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Consultation ID Object"
+          },
+          "404": {
+            "description": "Consultation not found"
+          },
+          "500": {
+            "description": "Schedule consultation error"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      }
+    },
+    "/payments/one-time/history": {
+      "get": {
+        "tags": [
+          "Payments"
+        ],
+        "description": "Get Pyments History",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The maximum number of payments to retrieve."
+          },
+          {
+            "name": "start_after_payment_intent_id",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The stripe payment intent id after which to start retrieving payments."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Payment history object data"
+          },
+          "500": {
+            "description": "Payment Intents not found"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/payments/one-time/refund": {
+      "post": {
+        "tags": [
+          "Payments"
+        ],
+        "description": "Post refund existent payment.",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "consultationId": {
+                  "type": "string",
+                  "example": "90838065-6c13-4b43-ad8e-9f10c5b6ae7e"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success message"
+          },
+          "401": {
+            "description": "User Not Authorised"
+          },
+          "404": {
+            "description": "Transaction Not Found"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
           }
         ]
       }
@@ -5084,6 +6000,53 @@
         ]
       }
     },
+    "/user/consultation/time": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Get consultation time by id",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "consultationId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "ID of the consultation"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Consultation Data"
+          },
+          "401": {
+            "description": "User Not Authorised"
+          },
+          "404": {
+            "description": "Consultation Not Found"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      }
+    },
     "/provicer/services": {
       "get": {
         "tags": [
@@ -5217,6 +6180,65 @@
             "ProviderBearer": []
           }
         ]
+      }
+    },
+    "/provider/activities": {
+      "get": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Get the activities for the current provider",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Provider Activities Data Object"
+          },
+          "401": {
+            "description": "Provider Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
+      }
+    },
+    "/provider/random-providers": {
+      "get": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Get a list of random providers",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "numberOfProviders",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Number of providers"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array Of Provider Data Objects"
+          }
+        }
       }
     },
     "/user": {
@@ -5618,11 +6640,16 @@
                 "password": {
                   "type": "string",
                   "example": "SomePass123"
+                },
+                "otp": {
+                  "type": "string",
+                  "example": "1234"
                 }
               },
               "required": [
                 "userType",
-                "password"
+                "password",
+                "otp"
               ]
             }
           }
@@ -6095,6 +7122,117 @@
             "AnyUserBearer": []
           }
         ]
+      }
+    },
+    "/user/2fa": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Request Provider 2FA OTP",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "SomePass123"
+                }
+              },
+              "required": [
+                "email",
+                "password"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Provider 2FA OTP for login"
+          },
+          "404": {
+            "description": "Invalid Password"
+          },
+          "429": {
+            "description": "Too Many OTP Requests"
+          }
+        }
+      }
+    },
+    "/user/add-contact-form/": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "add contact form to the DB",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "user@mail.com"
+                },
+                "subject": {
+                  "type": "string",
+                  "example": "Subject"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Here is a sample message"
+                }
+              },
+              "required": [
+                "email",
+                "subject",
+                "message"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          }
+        }
       }
     }
   }
