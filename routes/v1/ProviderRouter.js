@@ -525,6 +525,36 @@ router
     return res.status(response.status).send(result);
   });
 
+router
+  .route("/availability/clear-slot")
+  .delete(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Provider']
+     * #swagger.method = 'DELETE'
+     * #swagger.path = '/provider/availability/clear-slot'
+     * #swagger.description = 'Delete all availability for a particular slot'
+     * #swagger.security = [{ "ProviderBearer": [] }]
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $startDate: '1668384000', $slot: '1668384000', $campaignIds: ['3489eecc-6d96-40bd-8b2d-1d8568cd8c7b'] } }
+     * #swagger.responses[200] = { description: 'Success Status' }
+     * #swagger.responses[401] = { description: 'Provider Not Authorised' }
+     */
+    const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: PROVIDER_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
+
 router.route("/availability/template").put(authenticate, async (req, res) => {
   /**
    * #swagger.tags = ['Provider']
@@ -1244,6 +1274,100 @@ router.route("/random-providers").get(async (req, res) => {
       headers: {
         ...req.headers,
         host: PROVIDER_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }
+  ).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
+router.route("/campaigns").get(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/provider/campaigns'
+   * #swagger.description = 'Get a list of all campaigns'
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['numberOfProviders'] = { in: 'query', required: true, type: 'string', description: 'Number of providers' }
+   * #swagger.responses[200] = { description: 'Array Of Campaign Data Objects' }
+   */
+
+  const response = await fetch(
+    `${PROVIDER_URL}/provider/v1/provider${req.url}`,
+    {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: PROVIDER_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }
+  ).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
+router.route("/campaigns/enroll").post(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/provider/campaigns/enroll'
+   * #swagger.description = 'Enroll a provider to a campaign'
+   * #swagger.security = [{ "ProviderBearer": [] }]
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['campaignId'] = { in: 'body', required: true, type: 'string', description: 'Campaign ID' }
+   * #swagger.responses[200] = { description: 'Campaign Enrolled' }
+   * #swagger.responses[401] = { description: 'Provider Not Authorised' }
+   */
+
+  const response = await fetch(
+    `${PROVIDER_URL}/provider/v1/provider${req.url}`,
+    {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: PROVIDER_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }
+  ).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
+router.route("/campaigns/consultations").get(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/provider/campaigns-consultations'
+   * #swagger.description = 'Get a list of all the provider consultations for a specific campaign '
+   * #swagger.security = [{ "ProviderBearer": [] }]
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['campaignId'] = { in: 'query', required: true, type: 'string', description: 'Campaign ID' }
+   * #swagger.responses[200] = { description: 'Array Of Campaign Data Objects' }
+   * #swagger.responses[401] = { description: 'Provider Not Authorised' }
+   */
+
+  const response = await fetch(
+    `${PROVIDER_URL}/provider/v1/provider${req.url}`,
+    {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: PROVIDER_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
         "Content-type": "application/json",
         "Cache-control": "no-cache",
       },
