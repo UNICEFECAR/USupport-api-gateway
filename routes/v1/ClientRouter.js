@@ -513,4 +513,33 @@ router
     return res.status(response.status).send(result);
   });
 
+router.route("/check-coupon").get(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Client']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/client/check-coupon'
+   * #swagger.description = 'Check if a coupon is valid'
+   * #swagger.security = [{ "ClientBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['couponCode'] = { in: 'query', required: true, type: 'string', description: 'Coupon code' }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   * #swagger.responses[401] = { description: 'Client Not Authorised' }
+   */
+  const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: CLIENT_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 export { router };

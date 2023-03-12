@@ -45,6 +45,39 @@ router
 
     return res.status(response?.status).send(result);
   });
+router
+  .route("/one-time/cancel-payment-intent")
+  .put(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Payments']
+     * #swagger.method = 'PUT'
+     * #swagger.path = '/payments/one-time/create-payment-intent'
+     * #swagger.description = 'Cancel a payment intent'
+     * #swagger.security = [{ "UserBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $paymentIntentId: 'pi_9f10c5b6ae7e' } }
+     * #swagger.responses[200] = { description: 'Payment Intent cancelled successfully' }
+     * #swagger.responses[401] = { description: 'User Not Authorised' }
+     * #swagger.responses[404] = { description: 'Currency Not Found' }
+     * #swagger.responses[404] = { description: 'Stripe customer ID Not Found' }
+     */
+
+    const response = await fetch(`${PAYMENTS_URL}/payments/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: PAYMENTS_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response?.json();
+
+    return res.status(response?.status).send(result);
+  });
 
 router.route("/one-time/webhook").post(async (req, res) => {
   /**

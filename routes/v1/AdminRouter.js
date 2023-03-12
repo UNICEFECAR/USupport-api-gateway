@@ -1126,7 +1126,7 @@ router
      * #swagger.tags = ['Admin']
      * #swagger.method = 'GET'
      * #swagger.path = '/admin/sponsor/campaign/by-id'
-     * #swagger.description = 'Get a sponsor by id and the data about his campaigns'
+     * #swagger.description = 'Get the data about a campaign by it's id'
      * #swagger.security = [{ "CountryAdminBearer": [] }]
      * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
      * #swagger.paramteres['campaignId'] = { in: 'query', required: true, type: 'string', description: 'The id of the campaign' }
