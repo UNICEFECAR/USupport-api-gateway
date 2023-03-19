@@ -3,10 +3,8 @@ kind: Service
 metadata:
   name: gateway-service
 spec:
-  type: NodePort
   selector:
     app: gateway
   ports:
-    - nodePort: 31479
-      port: 8080
+    - port: 3000
       targetPort: 3000
