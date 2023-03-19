@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gateway-config
+data:
+  NODE_ENV: production
+  PORT: 3000
+
+  ADMIN_URL: http://admin:3007
+  CLIENT_URL: http://client:3001
+  EMAIL_URL: http://email:3008
+  MESSAGING_URL: http://messaging:3006
+  NOTIFICATIONS_URL: http://notifications:3005
+  PAYMENTS_URL: http://payments:3004
+  PROVIDER_URL: http://provider:3002
+  VIDEO_URL: http://video:3003
+  USER_URL: http://user:3010
+
+  HOST_URL: staging.usupport.online
