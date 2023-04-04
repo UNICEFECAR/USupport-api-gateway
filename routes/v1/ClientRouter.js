@@ -363,16 +363,17 @@ router.route("/mood-tracker/today").get(authenticate, async (req, res) => {
   return res.status(response.status).send(result);
 });
 
-router.route("/mood-tracker/week").get(authenticate, async (req, res) => {
+router.route("/mood-tracker/entries").get(authenticate, async (req, res) => {
   /**
    * #swagger.tags = ['Client']
    * #swagger.method = 'GET'
-   * #swagger.path = '/client/mood-tracker/week'
-   * #swagger.description = 'Get a mood tracker entry for the current client for a given week'
+   * #swagger.path = '/client/mood-tracker/entries'
+   * #swagger.description = 'Get n mood tracker entries for the current client'
    * #swagger.security = [{ "ClientBearer": [] }]
    * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
    * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
-   * #swagger.parameters['startDate'] = { in: 'query', required: true, type: 'string', description: 'The week start date' }
+   * #swagger.parameters['limit'] = { in: 'query', required: true, type: 'number', description: 'The amount of entries' }
+   * #swagger.parameters['pageNum'] = { in: 'query', required: true, type: 'string', description: 'The pageNum to be used' }
    * #swagger.responses[200] = { description: 'Mood Track Data Object' }
    * #swagger.responses[401] = { description: 'Client Not Authorised' }
    */
