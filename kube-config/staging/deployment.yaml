@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+  namespace: default
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: gateway
+  template:
+    metadata:
+      labels:
+        app: gateway
+    spec:
+      containers:
+      - name: gateway
+        image: 482053628475.dkr.ecr.eu-central-1.amazonaws.com/usupport-api-gw:beta
+        imagePullPolicy: Always
+        envFrom:
+        - configMapRef:
+            name: gateway-config
+        ports:
+        - containerPort: 3000
+      imagePullSecrets:
+      - name: regcred
