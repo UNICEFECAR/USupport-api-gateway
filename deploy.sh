@@ -19,10 +19,10 @@ then
 
     # Build docker image of the service locally
     docker build -t gateway:$IMAGE_TAG .
-    docker tag gateway:$IMAGE_TAG 482053628475.dkr.ecr.eu-central-1.amazonaws.com/usupport-gateway-api:$IMAGE_TAG
+    docker tag gateway:$IMAGE_TAG 482053628475.dkr.ecr.eu-central-1.amazonaws.com/usupport-api-gw:$IMAGE_TAG
 
     # Push image to 
-    docker push 482053628475.dkr.ecr.eu-central-1.amazonaws.com/usupport-gateway-api:$IMAGE_TAG
+    docker push 482053628475.dkr.ecr.eu-central-1.amazonaws.com/usupport-api-gw:$IMAGE_TAG
 
     cd kube-config
     
