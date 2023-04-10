@@ -363,16 +363,17 @@ router.route("/mood-tracker/today").get(authenticate, async (req, res) => {
   return res.status(response.status).send(result);
 });
 
-router.route("/mood-tracker/week").get(authenticate, async (req, res) => {
+router.route("/mood-tracker/entries").get(authenticate, async (req, res) => {
   /**
    * #swagger.tags = ['Client']
    * #swagger.method = 'GET'
-   * #swagger.path = '/client/mood-tracker/week'
-   * #swagger.description = 'Get a mood tracker entry for the current client for a given week'
+   * #swagger.path = '/client/mood-tracker/entries'
+   * #swagger.description = 'Get n mood tracker entries for the current client'
    * #swagger.security = [{ "ClientBearer": [] }]
    * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
    * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
-   * #swagger.parameters['startDate'] = { in: 'query', required: true, type: 'string', description: 'The week start date' }
+   * #swagger.parameters['limit'] = { in: 'query', required: true, type: 'number', description: 'The amount of entries' }
+   * #swagger.parameters['pageNum'] = { in: 'query', required: true, type: 'string', description: 'The pageNum to be used' }
    * #swagger.responses[200] = { description: 'Mood Track Data Object' }
    * #swagger.responses[401] = { description: 'Client Not Authorised' }
    */
@@ -541,5 +542,37 @@ router.route("/check-coupon").get(authenticate, async (req, res) => {
 
   return res.status(response.status).send(result);
 });
+
+router
+  .route("/consultation/unblock-slot")
+  .put(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Client']
+     * #swagger.method = 'PUT'
+     * #swagger.path = '/client/consultation/unblock-slot'
+     * #swagger.description = 'Client to unblock a slot'
+     * #swagger.security = [{ "AnyUserBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $consultationId: '22e3b2f6-5c95-4044-b444-592b5d41338a'} }
+     * #swagger.responses[200] = { description: 'Success Status' }
+     * #swagger.responses[401] = { description: 'User Not Authorised' }
+     * #swagger.responses[404] = { description: 'Consultation Not Found' }
+     */
+    const response = await fetch(`${CLIENT_URL}/client/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: CLIENT_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
 
 export { router };
