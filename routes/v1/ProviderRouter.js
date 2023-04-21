@@ -915,6 +915,7 @@ router.route("/consultation/suggest").put(authenticate, async (req, res) => {
       ...req.headers,
       host: PROVIDER_LOCAL_HOST,
       "Content-type": "application/json",
+      "x-user-id": req.user.user_id,
     },
     ...(req.body && { body: JSON.stringify(req.body) }),
   }).catch(console.log);
