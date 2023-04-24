@@ -575,4 +575,143 @@ router
     return res.status(response.status).send(result);
   });
 
+router.route("/my-qa/answered/all").get(async (req, res) => {
+  /**
+   * #swagger.tags = ['Client']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/client/my-qa/answered/all'
+   * #swagger.description = 'Get all anwered questions'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   * #swagger.responses[401] = { description: 'Client Not Authorised' }
+   */
+  const response = await fetch(`${CLIENT_URL}/client/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: CLIENT_LOCAL_HOST,
+      "Content-type": "application/json",
+      "Cache-Control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
+router.route("/my-qa/create-question").post(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Client']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/client/my-qa/create-question'
+   * #swagger.description = 'Create a question'
+   * #swagger.security = [{ "ClientBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $question: 'How to focus better' } }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   * #swagger.responses[401] = { description: 'Client Not Authorised' }
+   */
+  const response = await fetch(`${CLIENT_URL}/client/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: CLIENT_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
+router.route("/my-qa/client-questions").get(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Client']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/client/my-qa/client-questions'
+   * #swagger.description = 'Get all questions asked by a client'
+   * #swagger.security = [{ "ClientBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   * #swagger.responses[401] = { description: 'Client Not Authorised' }
+   */
+  const response = await fetch(`${CLIENT_URL}/client/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: CLIENT_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+      "Cache-Control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
+router.route("/my-qa/questions").get(async (req, res) => {
+  /**
+   * #swagger.tags = ['Client']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/client/my-qa/all-questions'
+   * #swagger.description = 'Get all questions'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['orderBy'] = { in: 'query', required: true, type: 'string', description: 'The sorting order' }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   * #swagger.responses[401] = { description: 'Client Not Authorised' }
+   */
+  const response = await fetch(`${CLIENT_URL}/client/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: CLIENT_LOCAL_HOST,
+      "Content-type": "application/json",
+      "Cache-Control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
+router.route("/my-qa/answer-vote").post(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Client']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/client/my-qa/vote-answer'
+   * #swagger.description = 'Vote an answer'
+   * #swagger.security = [{ "ClientBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $answerId: '22e3b2f6-5c95-4044-b444-592b5d41338a', $vote: 'like' } }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   * #swagger.responses[401] = { description: 'Client Not Authorised' }
+   */
+  const response = await fetch(`${CLIENT_URL}/client/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: CLIENT_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 export { router };

@@ -915,6 +915,7 @@ router.route("/consultation/suggest").put(authenticate, async (req, res) => {
       ...req.headers,
       host: PROVIDER_LOCAL_HOST,
       "Content-type": "application/json",
+      "x-user-id": req.user.user_id,
     },
     ...(req.body && { body: JSON.stringify(req.body) }),
   }).catch(console.log);
@@ -1405,6 +1406,126 @@ router.route("/status").get(authenticate, async (req, res) => {
       },
     }
   ).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
+router.route("/my-qa/create-answer").post(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/provider/my-qa/create-answer'
+   * #swagger.description = 'Create an answer for a question'
+   * #swagger.security = [{ "ProviderBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $questionId: '22e3b2f6-5c95-4044-b444-592b5d41338a', $title: 'How to deal with stress at work', $text: 'Lorem ipsum dolor sit amet', tags: [ {tagId: '44e3b2f6-5c95-4044-b444-592b5d41338a'}, { tag: 'Newly added tag', isNew: true } ] } }
+   * #swagger.responses[200] = { description: 'Answer Created' }
+   * #swagger.responses[401] = { description: 'Provider Not Authorised' }
+   */
+
+  const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: PROVIDER_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
+router.route("/my-qa/archive-question").post(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/provider/my-qa/archive-question'
+   * #swagger.description = 'Archive a question'
+   * #swagger.security = [{ "ProviderBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $questionId: '22e3b2f6-5c95-4044-b444-592b5d41338a', $reason: 'spam', additionalText: 'This question was spam' } }
+   * #swagger.responses[200] = { description: 'Question Archived' }
+   * #swagger.responses[401] = { description: 'Provider Not Authorised' }
+   *
+   */
+
+  const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: PROVIDER_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
+router.route("/my-qa/questions").get(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/provider/my-qa/questions'
+   * #swagger.description = 'Get questions'
+   * #swagger.security = [{ "ProviderBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['type'] = { in: 'query', required: true, type: 'string', description: 'The type of questions the provider needs - answered/unanswered/self-answered' }
+   * #swagger.responses[200] = { description: 'Array Of Question Data Objects' }
+   * #swagger.responses[401] = { description: 'Provider Not Authorised' }
+   */
+
+  const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: PROVIDER_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
+router.route("/my-qa/tags").get(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/provider/my-qa/tags'
+   * #swagger.description = 'Get all tags'
+   * #swagger.security = [{ "ProviderBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.responses[200] = { description: 'Array Of Tag Data Objects' }
+   * #swagger.responses[401] = { description: 'Provider Not Authorised' }
+   */
+
+  const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: PROVIDER_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
 
   const result = await response.json();
 
