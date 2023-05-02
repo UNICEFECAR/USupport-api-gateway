@@ -1503,17 +1503,15 @@ router.route("/my-qa/questions").get(authenticate, async (req, res) => {
   return res.status(response.status).send(result);
 });
 
-router.route("/my-qa/tags").get(authenticate, async (req, res) => {
+router.route("/my-qa/tags").get(async (req, res) => {
   /**
    * #swagger.tags = ['Provider']
    * #swagger.method = 'GET'
    * #swagger.path = '/provider/my-qa/tags'
    * #swagger.description = 'Get all tags'
-   * #swagger.security = [{ "ProviderBearer": [] }]
    * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
    * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
    * #swagger.responses[200] = { description: 'Array Of Tag Data Objects' }
-   * #swagger.responses[401] = { description: 'Provider Not Authorised' }
    */
 
   const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
@@ -1521,7 +1519,6 @@ router.route("/my-qa/tags").get(authenticate, async (req, res) => {
     headers: {
       ...req.headers,
       host: PROVIDER_LOCAL_HOST,
-      "x-user-id": req.user.user_id,
       "Content-type": "application/json",
       "Cache-control": "no-cache",
     },
