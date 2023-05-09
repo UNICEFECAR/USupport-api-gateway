@@ -176,7 +176,10 @@ router
      * #swagger.responses[401] = { description: 'No Permissions' }
      * #swagger.responses[409] = { description: 'Email Already Used' }
      */
-    const payload = { userType: "provider", ...req.body };
+
+    // Put a placeholder password in order to pass the passport validation
+    // This password won't be used in any way to authenticate the provider
+    const payload = { userType: "provider", password: "asdasdA1", ...req.body };
 
     const response = await fetch(`${USER_URL}/user/v1/auth/signup`, {
       method: req.method,
