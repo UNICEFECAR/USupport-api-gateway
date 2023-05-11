@@ -1191,6 +1191,12 @@ router
      * #swagger.description = 'Get all providers'
      * #swagger.security = [{ "CountryAdminBearer": [] }]
      * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['limit'] = { in: 'query', required: true, type: 'number', description: 'The amount of providers to fetch' }
+     * #swagger.parameters['offset'] = { in: 'query', required: true, type: 'number', description: 'The offset/pageNumber of providers to fetch' }
+     * #swagger.parameters['price'] = { in: 'query', required: false, type: 'number', description: 'The minimum price of a provider' }
+     * #swagger.parameters['status'] = { in: 'query', required: false, type: 'string', description: 'The status of a provider - active/inactive' }
+     * #swagger.parameters['free'] = { in: 'query', required: false, type: 'string', description: 'If the provider is free or not - true/false as a string' }
+     * #swagger.parameters['specialization'] = { in: 'query', required: false, type: 'string', description: 'The specialization of a provider - psychologist, psychotherapist, psychiatrist, any' }
      * #swagger.responses[200] = { description: 'Providers Data Object' }
      * #swagger.responses[401] = { description: 'Admin Not Authorised' }
      * #swagger.responses[401] = { description: 'No Permissions' }
