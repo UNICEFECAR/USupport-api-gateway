@@ -364,6 +364,7 @@ router
           ...req.headers,
           host: PROVIDER_LOCAL_HOST,
           "Content-type": "application/json",
+          "x-admin-id": req.admin.admin_id,
         },
         ...(req.body && { body: JSON.stringify(req.body) }),
       }
@@ -396,6 +397,7 @@ router
           ...req.headers,
           host: PROVIDER_LOCAL_HOST,
           "Content-type": "application/json",
+          "x-admin-id": req.admin.admin_id,
         },
         ...(req.body && { body: JSON.stringify(req.body) }),
       }
