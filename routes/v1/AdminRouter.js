@@ -43,7 +43,7 @@ router
      * #swagger.description = 'Update current admin data'
      * #swagger.security = [{ "AnyAdminBearer": [] }]
      * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
-     * #swagger.parameters['obj'] = { in: 'body', schema: { $role: 'country', $name: 'John', $surname: 'Doe', phonePrefix: '+44', phone: '1234567890', $email: 'john.doe@email.com' } }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $role: 'country', $name: 'John', $surname: 'Doe', phone: '+441234567890', $email: 'john.doe@email.com' } }
      * #swagger.responses[200] = { description: 'Updated Admin Data Object' }
      * #swagger.responses[401] = { description: 'Admin Not Authorised' }
      * #swagger.responses[404] = { description: 'Admin Not Found' }
@@ -102,7 +102,7 @@ router
      * #swagger.description = 'Update admin data by id'
      * #swagger.security = [{ "GlobalAdminBearer": [] }]
      * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
-     * #swagger.parameters['obj'] = { in: 'body', schema: { $role: 'country', $name: 'John', $surname: 'Doe', phonePrefix: '+44', phone: '1234567890', $email: 'john.doe@email.com', $isActive: true } }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $role: 'country', $name: 'John', $surname: 'Doe', phone: '+441234567890', $email: 'john.doe@email.com', $isActive: true } }
      * #swagger.responses[200] = { description: 'Updated Admin Data Object' }
      * #swagger.responses[401] = { description: 'Admin Not Authorised' }
      * #swagger.responses[401] = { description: 'No Permissions' }
@@ -191,7 +191,7 @@ router
      * #swagger.description ='Create new admin user account (Only global admin can create an admin account)'
      * #swagger.security = [{ "GlobalAdminBearer": [] }]
      * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
-     * #swagger.parameters['obj'] = { in: 'body', schema: { adminCountryId: '22e3b2f6-5c95-4044-b444-592b5d41338a', adminRegionId: '22e3b2f6-5c95-4044-b444-592b5d41338a', $name: 'John', $surname: 'Doe', phonePrefix: '+44', phone: '1234567890', $email: 'john.doe@email.com', $password: 'SomePass123', $role: 'country', $isActive: true } }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { adminCountryId: '22e3b2f6-5c95-4044-b444-592b5d41338a', adminRegionId: '22e3b2f6-5c95-4044-b444-592b5d41338a', $name: 'John', $surname: 'Doe', phone: '+441234567890', $email: 'john.doe@email.com', $password: 'SomePass123', $role: 'country', $isActive: true } }
      * #swagger.responses[200] = { description: 'New Admin Data Object' }
      * #swagger.responses[401] = { description: 'Admin Not Authorised' }
      * #swagger.responses[401] = { description: 'No Permissions' }
@@ -987,7 +987,7 @@ router
      * #swagger.description = 'Create a sponsor'
      * #swagger.security = [{ "CountryAdminBearer": [] }]
      * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
-     * #swagger.parameters['obj'] = { in: 'body', schema: { $name: 'Unicef', $email: 'mail@user.com', phonePrefix: '+7', phone: '887777770', image: 'default' } }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $name: 'Unicef', $email: 'mail@user.com',  phone: '+7887777770', image: 'default' } }
      * #swagger.responses[200] = { description: 'Sponsor Data Object' }
      * #swagger.responses[401] = { description: 'Admin Not Authorised' }
      * #swagger.responses[401] = { description: 'No Permissions' }
@@ -1014,7 +1014,7 @@ router
      * #swagger.description = 'Edit a sponsor'
      * #swagger.security = [{ "CountryAdminBearer": [] }]
      * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
-     * #swagger.parameters['obj'] = { in: 'body', schema: { $sponsorId: '2dc1092c-a13d-4d55-9b1f-81d3b3e974c1', $name: 'Unicef', $email: 'mail@user.com', phonePrefix: '+7', phone: '887777770', image: 'default' } }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $sponsorId: '2dc1092c-a13d-4d55-9b1f-81d3b3e974c1', $name: 'Unicef', $email: 'mail@user.com', phone: '+7887777770', image: 'default' } }
      * #swagger.responses[200] = { description: 'Sponsor Data Object' }
      * #swagger.responses[401] = { description: 'Admin Not Authorised' }
      * #swagger.responses[401] = { description: 'No Permissions' }
