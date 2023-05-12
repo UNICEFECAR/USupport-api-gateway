@@ -308,6 +308,7 @@ router
       headers: {
         ...req.headers,
         host: ADMIN_LOCAL_HOST,
+        "Cache-control": "no-cache",
       },
     }).catch(console.log);
 
