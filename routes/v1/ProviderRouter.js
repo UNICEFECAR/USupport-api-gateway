@@ -55,7 +55,7 @@ router
      * #swagger.security = [{ "ProviderBearer": [] }]
      * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
      * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
-     * #swagger.parameters['obj'] = { in: 'body', schema: { $name: 'John', patronym: 'Johny', $surname: 'Doe', nickname: 'JD123', $email: 'john.doe@email.com', phonePrefix: '+44', phone: '1234567890', specializations: ['psychologist', 'coach'], street: 'Some Street', city: 'Another City', postcode: '1234', education: ['Education 1', 'Education 2'], sex: 'unspecified', consultationPrice: 60, description: 'Some Long Description Here...', workWithIds: ['22e3b2f6-5c95-4044-b444-592b5d41338a', 'ccd6a85d-ab7d-4700-953d-cda0775f37e5'], languageIds: ['69f03082-ee81-4a11-a7a2-84e82bd54369', '2dc1092c-a13d-4d55-9b1f-81d3b3e974c1'], videoLink: 'https://video.link' } }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $name: 'John', patronym: 'Johny', $surname: 'Doe', nickname: 'JD123', $email: 'john.doe@email.com', phone: '+441234567890', specializations: ['psychologist', 'coach'], street: 'Some Street', city: 'Another City', postcode: '1234', education: ['Education 1', 'Education 2'], sex: 'unspecified', consultationPrice: 60, description: 'Some Long Description Here...', workWithIds: ['22e3b2f6-5c95-4044-b444-592b5d41338a', 'ccd6a85d-ab7d-4700-953d-cda0775f37e5'], languageIds: ['69f03082-ee81-4a11-a7a2-84e82bd54369', '2dc1092c-a13d-4d55-9b1f-81d3b3e974c1'], videoLink: 'https://video.link' } }
      * #swagger.responses[200] = { description: 'Updated Provider Data Object' }
      * #swagger.responses[401] = { description: 'Provider Not Authorised' }
      * #swagger.responses[409] = { description: 'Email Already Used' }
@@ -189,7 +189,7 @@ router
      * #swagger.security = [{ "CountryAdminBearer": [] }]
      * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
      * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
-     * #swagger.parameters['obj'] = { in: 'body', schema: { $providerId: '2dc1092c-a13d-4d55-9b1f-81d3b3e974c1', $name: 'John', patronym: 'Johny', $surname: 'Doe', nickname: 'JD123', $email: 'john.doe@email.com', phonePrefix: '+44', phone: '1234567890', specializations: ['psychologist', 'coach'], street: 'Some Street', city: 'Another City', postcode: '1234', education: ['Education 1', 'Education 2'], sex: 'unspecified', consultationPrice: 60, description: 'Some Long Description Here...', workWithIds: ['22e3b2f6-5c95-4044-b444-592b5d41338a', 'ccd6a85d-ab7d-4700-953d-cda0775f37e5'], languageIds: ['69f03082-ee81-4a11-a7a2-84e82bd54369', '2dc1092c-a13d-4d55-9b1f-81d3b3e974c1'] } }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $providerId: '2dc1092c-a13d-4d55-9b1f-81d3b3e974c1', $name: 'John', patronym: 'Johny', $surname: 'Doe', nickname: 'JD123', $email: 'john.doe@email.com',  phone: '+441234567890', specializations: ['psychologist', 'coach'], street: 'Some Street', city: 'Another City', postcode: '1234', education: ['Education 1', 'Education 2'], sex: 'unspecified', consultationPrice: 60, description: 'Some Long Description Here...', workWithIds: ['22e3b2f6-5c95-4044-b444-592b5d41338a', 'ccd6a85d-ab7d-4700-953d-cda0775f37e5'], languageIds: ['69f03082-ee81-4a11-a7a2-84e82bd54369', '2dc1092c-a13d-4d55-9b1f-81d3b3e974c1'] } }
      * #swagger.responses[200] = { description: 'Updated Provider Data Object' }
      * #swagger.responses[401] = { description: 'Admin Not Authorised' }
      * #swagger.responses[401] = { description: 'No Permissions' }
@@ -364,6 +364,7 @@ router
           ...req.headers,
           host: PROVIDER_LOCAL_HOST,
           "Content-type": "application/json",
+          "x-admin-id": req.admin.admin_id,
         },
         ...(req.body && { body: JSON.stringify(req.body) }),
       }
@@ -396,6 +397,7 @@ router
           ...req.headers,
           host: PROVIDER_LOCAL_HOST,
           "Content-type": "application/json",
+          "x-admin-id": req.admin.admin_id,
         },
         ...(req.body && { body: JSON.stringify(req.body) }),
       }
