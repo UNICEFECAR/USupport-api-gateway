@@ -197,6 +197,11 @@ router
      * #swagger.responses[401] = { description: 'No Permissions' }
      * #swagger.responses[409] = { description: 'Email Already Used' }
      */
+
+    // Put a placeholder password in order to pass the passport validation
+    // This password won't be used in any way to authenticate the provider
+    const payload = { ...req.body, password: "asdasdA1" };
+
     const response = await fetch(`${ADMIN_URL}/admin/v1/auth${req.url}`, {
       method: req.method,
       headers: {
@@ -204,7 +209,7 @@ router
         host: ADMIN_LOCAL_HOST,
         "Content-type": "application/json",
       },
-      ...(req.body && { body: JSON.stringify(req.body) }),
+      ...(req.body && { body: JSON.stringify(payload) }),
     }).catch(console.log);
 
     const result = await response.json();
