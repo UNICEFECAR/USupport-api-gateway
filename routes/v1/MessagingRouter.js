@@ -183,4 +183,35 @@ router
     return res.status(response.status).send(result);
   });
 
+router.route("/all-chat-data").get(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Messaging']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/messaging/all-chat-data'
+   * #swagger.description = 'Get all chat data by given provider detail ID and client detail ID'
+   * #swagger.security = [{ "AnyUserBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['providerDetailId'] = { in: 'query', required: true, type: 'string', description: 'ID Of The Provider Detail' }
+   * #swagger.parameters['clientDetailId'] = { in: 'query', required: true, type: 'string', description: 'ID Of The Client Detail' }
+   * #swagger.responses[200] = { description: 'Chat Data Object' }
+   * #swagger.responses[401] = { description: 'User Not Authorised' }
+   * #swagger.responses[404] = { description: 'Chat Not Found' }
+   */
+
+  const response = await fetch(`${MESSAGING_URL}/messaging/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: MESSAGING_LOCAL_HOST,
+      "Content-type": "application/json",
+      "x-user-id": req.user.user_id,
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
 export { router };
