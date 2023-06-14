@@ -23,9 +23,29 @@ const PORT = process.env.PORT || 3000;
 
 /*------------- Security Config -------------*/
 
+// Configure CORS to allow requests only from your frontend
+const allowedOrigins = [
+  "https://staging.usupport.online",
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:5175",
+  "http://localhost:5176",
+  "http://localhost:5177",
+];
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+};
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
+app.use(cors(corsOptions));
 app.use(cors());
 
 /*------------- Swagger Documentation -------------*/
