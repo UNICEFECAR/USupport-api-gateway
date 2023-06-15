@@ -636,4 +636,53 @@ router.route("/change-language").put(authenticate, async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/email-otp").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/user/email-otp'
+   * #swagger.description = 'Send code to email for email verification'
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $email: 'john.doe@email.com'} }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   * #swagger.responses[409] = { description: 'Email already used' }
+   */
+  const response = await fetch(`${USER_URL}/user/v1/auth${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
+router.route("/validate-captcha").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/user/validate-captcha'
+   * #swagger.description = 'Validate captcha'
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $captcha: 'captcha'} }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   */
+  const response = await fetch(`${USER_URL}/user/v1/auth${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 export { router };
