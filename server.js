@@ -26,27 +26,55 @@ const PORT = process.env.PORT || 3000;
 // Configure CORS to allow requests only from your frontend
 const allowedOrigins = [
   "https://staging.usupport.online",
-  "http://localhost:5173",
-  "http://localhost:5174",
-  "http://localhost:5175",
-  "http://localhost:5176",
-  "http://localhost:5177",
+  "https://usupport.online",
 ];
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
+
+if (process.env.NODE_ENV === "development") {
+  allowedOrigins.push(
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "http://localhost:5175",
+    "http://localhost:5176",
+    "http://localhost:5177"
+  );
+}
+
+const customCorsMiddleware = (req, res, next) => {
+  const corsOptions = {
+    origin: (origin, callback) => {
+      if (allowedOrigins.includes(origin) || isSameOrigin(req)) {
+        // Handle same-origin request or allowed origin
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+  };
+
+  cors(corsOptions)(req, res, next);
+};
+// Function to check if the request is from the same origin
+const isSameOrigin = (req) => {
+  const { origin } = req.headers;
+  const host = req.get("host");
+  let hostAllowed = false;
+  allowedOrigins.forEach((o) => {
+    if (o.includes(host)) hostAllowed = true;
+  });
+  if ((!origin && hostAllowed) || hostAllowed) return true;
+  if (!hostAllowed) return false;
+  return false;
 };
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
-app.use(cors(corsOptions));
-app.use(cors());
+app.use(customCorsMiddleware);
+app.use(
+  cors({
+    origin: allowedOrigins,
+  })
+);
 
 /*------------- Swagger Documentation -------------*/
 
