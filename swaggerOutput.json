@@ -145,13 +145,9 @@
                   "type": "string",
                   "example": "Doe"
                 },
-                "phonePrefix": {
-                  "type": "string",
-                  "example": "+44"
-                },
                 "phone": {
                   "type": "string",
-                  "example": "1234567890"
+                  "example": "+441234567890"
                 },
                 "email": {
                   "type": "string",
@@ -258,13 +254,9 @@
                   "type": "string",
                   "example": "Doe"
                 },
-                "phonePrefix": {
-                  "type": "string",
-                  "example": "+44"
-                },
                 "phone": {
                   "type": "string",
-                  "example": "1234567890"
+                  "example": "+441234567890"
                 },
                 "email": {
                   "type": "string",
@@ -414,13 +406,9 @@
                   "type": "string",
                   "example": "Doe"
                 },
-                "phonePrefix": {
-                  "type": "string",
-                  "example": "+44"
-                },
                 "phone": {
                   "type": "string",
-                  "example": "1234567890"
+                  "example": "+441234567890"
                 },
                 "email": {
                   "type": "string",
@@ -1615,13 +1603,9 @@
                   "type": "string",
                   "example": "mail@user.com"
                 },
-                "phonePrefix": {
-                  "type": "string",
-                  "example": "+7"
-                },
                 "phone": {
                   "type": "string",
-                  "example": "887777770"
+                  "example": "+7887777770"
                 },
                 "image": {
                   "type": "string",
@@ -1680,13 +1664,9 @@
                   "type": "string",
                   "example": "mail@user.com"
                 },
-                "phonePrefix": {
-                  "type": "string",
-                  "example": "+7"
-                },
                 "phone": {
                   "type": "string",
-                  "example": "887777770"
+                  "example": "+7887777770"
                 },
                 "image": {
                   "type": "string",
@@ -1879,7 +1859,7 @@
         "tags": [
           "Admin"
         ],
-        "description": "Get a sponsor by id and the data about his campaigns",
+        "description": "Get the data about a campaign by it",
         "parameters": [
           {
             "name": "x-country-alpha-2",
@@ -1922,6 +1902,235 @@
         "responses": {
           "200": {
             "description": "Campaign Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/all-providers": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all providers",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": true,
+            "type": "number",
+            "description": "The amount of providers to fetch"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": true,
+            "type": "number",
+            "description": "The offset/pageNumber of providers to fetch"
+          },
+          {
+            "name": "price",
+            "in": "query",
+            "required": false,
+            "type": "number",
+            "description": "The minimum price of a provider"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "The status of a provider - active/inactive"
+          },
+          {
+            "name": "free",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "If the provider is free or not - true/false as a string"
+          },
+          {
+            "name": "specialization",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "The specialization of a provider - psychologist, psychotherapist, psychiatrist, any"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Providers Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/update-provider-status": {
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Change the status of a provider",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Providers Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/my-qa/archived": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all archived questions",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Archived questions Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/my-qa/delete-question": {
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Delete a question",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Archived questions Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/my-qa/activate-questions": {
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Activate a question",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Archived questions Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/my-qa/questions": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all questions",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The type of questions the provider needs - answered/unanswered/self-answered"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Questions Data Object"
           },
           "401": {
             "description": "No Permissions"
@@ -2556,12 +2765,12 @@
         ]
       }
     },
-    "/client/mood-tracker/week": {
+    "/client/mood-tracker/entries": {
       "get": {
         "tags": [
           "Client"
         ],
-        "description": "Get a mood tracker entry for the current client for a given week",
+        "description": "Get n mood tracker entries for the current client",
         "parameters": [
           {
             "name": "x-language-alpha-2",
@@ -2578,11 +2787,18 @@
             "description": "Alpha 2 code of the country"
           },
           {
-            "name": "startDate",
+            "name": "limit",
+            "in": "query",
+            "required": true,
+            "type": "number",
+            "description": "The amount of entries"
+          },
+          {
+            "name": "pageNum",
             "in": "query",
             "required": true,
             "type": "string",
-            "description": "The week start date"
+            "description": "The pageNum to be used"
           }
         ],
         "responses": {
@@ -2749,6 +2965,378 @@
               "required": [
                 "rating",
                 "comment"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/*add-push-notification-token": {
+      "put": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Add a push notification token for the client",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "pushNotificationToken": {
+                  "type": "string",
+                  "example": "ExponentPushToken[0yOW7cAK4encXa8_CwxEvc]"
+                }
+              },
+              "required": [
+                "pushNotificationToken"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/check-coupon": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Check if a coupon is valid",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "couponCode",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Coupon code"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/consultation/unblock-slot": {
+      "put": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Client to unblock a slot",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "consultationId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                }
+              },
+              "required": [
+                "consultationId"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "User Not Authorised"
+          },
+          "404": {
+            "description": "Consultation Not Found"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      }
+    },
+    "/client/my-qa/answered/all": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Get all anwered questions",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        }
+      }
+    },
+    "/client/my-qa/create-question": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Create a question",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "question": {
+                  "type": "string",
+                  "example": "How to focus better"
+                }
+              },
+              "required": [
+                "question"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/my-qa/client-questions": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Get all questions asked by a client",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/my-qa/all-questions": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Get all questions",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The sorting order"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        }
+      }
+    },
+    "/client/my-qa/vote-answer": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Vote an answer",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "answerId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                },
+                "vote": {
+                  "type": "string",
+                  "example": "like"
+                }
+              },
+              "required": [
+                "answerId",
+                "vote"
               ]
             }
           }
@@ -4029,6 +4617,60 @@
         ]
       }
     },
+    "/messaging/all-chat-data": {
+      "get": {
+        "tags": [
+          "Messaging"
+        ],
+        "description": "Get all chat data by given provider detail ID and client detail ID",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "providerDetailId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "ID Of The Provider Detail"
+          },
+          {
+            "name": "clientDetailId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "ID Of The Client Detail"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chat Data Object"
+          },
+          "401": {
+            "description": "User Not Authorised"
+          },
+          "404": {
+            "description": "Chat Not Found"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      }
+    },
     "/notifications/user": {
       "get": {
         "tags": [
@@ -4158,6 +4800,46 @@
         ]
       }
     },
+    "/notifications/read-all": {
+      "put": {
+        "tags": [
+          "Notifications"
+        ],
+        "description": "Update the read status of all notifications for the current user",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Notifications Data Object"
+          },
+          "401": {
+            "description": "User Not Authorised"
+          },
+          "404": {
+            "description": "Notification Not Found"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      }
+    },
     "/payments/one-time/create-payment-intent": {
       "post": {
         "tags": [
@@ -4202,6 +4884,60 @@
           },
           "404": {
             "description": "Transaction Not Found"
+          }
+        },
+        "security": [
+          {
+            "UserBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Payments"
+        ],
+        "description": "Cancel a payment intent",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "paymentIntentId": {
+                  "type": "string",
+                  "example": "pi_9f10c5b6ae7e"
+                }
+              },
+              "required": [
+                "paymentIntentId"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Payment Intent cancelled successfully"
+          },
+          "401": {
+            "description": "User Not Authorised"
+          },
+          "404": {
+            "description": "Stripe customer ID Not Found"
           }
         },
         "security": [
@@ -4441,13 +5177,9 @@
                   "type": "string",
                   "example": "john.doe@email.com"
                 },
-                "phonePrefix": {
-                  "type": "string",
-                  "example": "+44"
-                },
                 "phone": {
                   "type": "string",
-                  "example": "1234567890"
+                  "example": "+441234567890"
                 },
                 "specializations": {
                   "type": "array",
@@ -5068,6 +5800,67 @@
               "required": [
                 "startDate",
                 "slot"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Provider Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
+      }
+    },
+    "/provider/availability/clear-slot": {
+      "delete": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Delete all availability for a particular slot",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "startDate": {
+                  "type": "string",
+                  "example": "1668384000"
+                },
+                "slot": {
+                  "type": "string",
+                  "example": "1668384000"
+                },
+                "campaignIds": {
+                  "type": "array",
+                  "example": [
+                    "3489eecc-6d96-40bd-8b2d-1d8568cd8c7b"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "startDate",
+                "slot",
+                "campaignIds"
               ]
             }
           }
@@ -6241,6 +7034,363 @@
         }
       }
     },
+    "/provider/campaigns": {
+      "get": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Get a list of all campaigns",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "numberOfProviders",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Number of providers"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array Of Campaign Data Objects"
+          }
+        }
+      }
+    },
+    "/provider/campaigns/enroll": {
+      "post": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Enroll a provider to a campaign",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "campaignId",
+            "in": "body",
+            "required": true,
+            "description": "Campaign ID",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Campaign Enrolled"
+          },
+          "401": {
+            "description": "Provider Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
+      }
+    },
+    "/provider/campaigns-consultations": {
+      "get": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Get a list of all the provider consultations for a specific campaign ",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "campaignId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Campaign ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array Of Campaign Data Objects"
+          },
+          "401": {
+            "description": "Provider Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
+      }
+    },
+    "/provider/status": {
+      "get": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Get the status of the provider",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "providerId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The ID of the provider"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Provider Status"
+          },
+          "401": {
+            "description": "Provider Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
+      }
+    },
+    "/provider/my-qa/create-answer": {
+      "post": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Create an answer for a question",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "questionId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                },
+                "title": {
+                  "type": "string",
+                  "example": "How to deal with stress at work"
+                },
+                "text": {
+                  "type": "string",
+                  "example": "Lorem ipsum dolor sit amet"
+                },
+                "tags": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "tag": {
+                        "type": "string",
+                        "example": "Newly added tag"
+                      },
+                      "isNew": {
+                        "type": "boolean",
+                        "example": true
+                      }
+                    }
+                  }
+                }
+              },
+              "required": [
+                "questionId",
+                "title",
+                "text"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Answer Created"
+          },
+          "401": {
+            "description": "Provider Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
+      }
+    },
+    "/provider/my-qa/archive-question": {
+      "post": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Archive a question",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "questionId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                },
+                "reason": {
+                  "type": "string",
+                  "example": "spam"
+                },
+                "additionalText": {
+                  "type": "string",
+                  "example": "This question was spam"
+                }
+              },
+              "required": [
+                "questionId",
+                "reason"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Question Archived"
+          },
+          "401": {
+            "description": "Provider Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
+      }
+    },
+    "/provider/my-qa/questions": {
+      "get": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Get questions",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The type of questions the provider needs - answered/unanswered/self-answered"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array Of Question Data Objects"
+          },
+          "401": {
+            "description": "Provider Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
+      }
+    },
+    "/provider/my-qa/tags": {
+      "get": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Get all tags",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array Of Tag Data Objects"
+          }
+        }
+      }
+    },
     "/user": {
       "get": {
         "tags": [
@@ -6424,13 +7574,9 @@
                   "type": "string",
                   "example": "john.doe@email.com"
                 },
-                "phonePrefix": {
-                  "type": "string",
-                  "example": "+44"
-                },
                 "phone": {
                   "type": "string",
-                  "example": "1234567890"
+                  "example": "+441234567890"
                 },
                 "specializations": {
                   "type": "array",
@@ -6644,6 +7790,10 @@
                 "otp": {
                   "type": "string",
                   "example": "1234"
+                },
+                "isMobile": {
+                  "type": "boolean",
+                  "example": false
                 }
               },
               "required": [
@@ -7218,12 +8368,17 @@
                 "message": {
                   "type": "string",
                   "example": "Here is a sample message"
+                },
+                "sentFrom": {
+                  "type": "string",
+                  "example": "client"
                 }
               },
               "required": [
                 "email",
                 "subject",
-                "message"
+                "message",
+                "sentFrom"
               ]
             }
           }
@@ -7233,6 +8388,298 @@
             "description": "Success Status"
           }
         }
+      }
+    },
+    "/user/change-language": {
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "description": "Change user language",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "language": {
+                  "type": "string",
+                  "example": "en"
+                },
+                "userType": {
+                  "type": "string",
+                  "example": "client"
+                }
+              },
+              "required": [
+                "language",
+                "userType"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "User Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      }
+    },
+    "/user/email-otp": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Send code to email for email verification",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                }
+              },
+              "required": [
+                "email"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "409": {
+            "description": "Email already used"
+          }
+        }
+      }
+    },
+    "/user/validate-captcha": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Validate captcha",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "captcha": {
+                  "type": "string",
+                  "example": "captcha"
+                }
+              },
+              "required": [
+                "captcha"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          }
+        }
+      }
+    },
+    "/video/twilio-token": {
+      "get": {
+        "tags": [
+          "Video"
+        ],
+        "description": "Get client/provider twilio token",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "consultationId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "ID of the consultation"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Twilio Token Data"
+          },
+          "401": {
+            "description": "User Not Authorised"
+          },
+          "404": {
+            "description": "Consultation Not Found"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      }
+    },
+    "/video/join-consultation": {
+      "put": {
+        "tags": [
+          "Video"
+        ],
+        "description": "Client/Provider join a consultation",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "consultationId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                },
+                "userType": {
+                  "type": "string",
+                  "example": "client"
+                }
+              },
+              "required": [
+                "consultationId",
+                "userType"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "User Not Authorised"
+          },
+          "404": {
+            "description": "Consultation Not Found"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      }
+    },
+    "/video/leave-consultation": {
+      "put": {
+        "tags": [
+          "Video"
+        ],
+        "description": "Client/Provider leave a consultation",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "consultationId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                },
+                "userType": {
+                  "type": "string",
+                  "example": "client"
+                }
+              },
+              "required": [
+                "consultationId",
+                "userType"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "User Not Authorised"
+          },
+          "404": {
+            "description": "Consultation Not Found"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
       }
     }
   }
