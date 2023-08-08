@@ -1050,7 +1050,7 @@ router
      * #swagger.description = 'Create a campaign for a sponsor'
      * #swagger.security = [{ "CountryAdminBearer": [] }]
      * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
-     * #swagger.parameters['obj'] = { in: 'body', schema: { $sponsorId: '2dc1092c-a13d-4d55-9b1f-81d3b3e974c1', $name: 'Unicef Campaign', $couponCode: 'UN1', $budget: 5000, $numberOfCoupons: 500, $maxCouponsPerClient: 3, $startDate: '1668384000', $endDate: '1768384000', $termsAndConditions: 'Default Terms and Conditions'} }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $sponsorId: '2dc1092c-a13d-4d55-9b1f-81d3b3e974c1', $name: 'Unicef Campaign', $couponCode: 'UN1', $budget: 5000, $numberOfCoupons: 500, $maxCouponsPerClient: 3, $startDate: '1668384000', $endDate: '1768384000', $termsAndConditions: 'Default Terms of Use'} }
      **/
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
       method: req.method,
@@ -1077,7 +1077,7 @@ router
      * #swagger.description = 'Update a campaign for a sponsor'
      * #swagger.security = [{ "CountryAdminBearer": [] }]
      * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
-     * #swagger.parameters['obj'] = { in: 'body', schema: { $campaignId: '2dc1092c-a13d-4d55-9b1f-81d3b3e974c1', $name: 'Unicef Campaign', $couponCode: 'UN1', $budget: 5000, $numberOfCoupons: 500, $maxCouponsPerClient: 3, $startDate: '1668384000', $endDate: '1768384000', $termsAndConditions: 'Default Terms and Conditions'} }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $campaignId: '2dc1092c-a13d-4d55-9b1f-81d3b3e974c1', $name: 'Unicef Campaign', $couponCode: 'UN1', $budget: 5000, $numberOfCoupons: 500, $maxCouponsPerClient: 3, $startDate: '1668384000', $endDate: '1768384000', $termsAndConditions: 'Default Terms of Use'} }
      **/
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
       method: req.method,
