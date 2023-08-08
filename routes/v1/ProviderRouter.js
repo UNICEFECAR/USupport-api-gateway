@@ -253,6 +253,13 @@ router.route("/all").get(async (req, res) => {
    * #swagger.path = '/provider/all'
    * #swagger.description = 'Get all providers for a given country'
    * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['limit'] = { in: 'query', required: true, type: 'string', description: 'How many providers to fetch' }
+   * #swagger.parameters['offset'] = { in: 'query', required: true, type: 'string', description: 'Which page of providers to fetch' }
+   * #swagger.parameters['maxPrice'] = { in: 'query', required: false, type: 'string', description: 'The max consultation price of the providers' }
+   * #swagger.parameters['availableAfter'] = { in: 'query', required: false, type: 'string', description: 'Date after which the providers are available' }
+   * #swagger.parameters['availableBefore'] = { in: 'query', required: false, type: 'string', description: 'Date before which the providers are available' }
+   * #swagger.parameters['onlyFreeConsultation'] = { in: 'query', required: false, type: 'boolean', description: 'Fetch only free providers' }
+   * #swagger.parameters['language'] = { in: 'query', required: false, type: 'string', description: 'Language ID' }
    * #swagger.responses[200] = { description: 'List With All the Providers Data Objects' }
    */
 
