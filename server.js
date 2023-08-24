@@ -24,6 +24,7 @@ const PORT = process.env.PORT || 3000;
 /*------------- Security Config -------------*/
 
 // Configure CORS to allow requests only from your frontend
+// Add each external domain name to the array below to allow it to make requests to your API Gateway
 const allowedOrigins = [
   "https://staging.usupport.online",
   "https://usupport.online",
@@ -69,7 +70,7 @@ const isSameOrigin = (req) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
-app.use(customCorsMiddleware);
+// app.use(customCorsMiddleware);
 app.use(
   cors({
     origin: allowedOrigins,
