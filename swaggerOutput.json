@@ -1750,7 +1750,7 @@
                 },
                 "termsAndConditions": {
                   "type": "string",
-                  "example": "Default Terms and Conditions"
+                  "example": "Default Terms of Use"
                 }
               },
               "required": [
@@ -1829,7 +1829,7 @@
                 },
                 "termsAndConditions": {
                   "type": "string",
-                  "example": "Default Terms and Conditions"
+                  "example": "Default Terms of Use"
                 }
               },
               "required": [

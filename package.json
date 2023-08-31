@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "nodemon server.js",
     "prod": "node server.js",
-    "swagger": "node swagger.js"
+    "swagger": "node swagger.js",
+    "lint": "eslint . --ext .js"
   },
   "license": "GPL-3.0",
   "dependencies": {

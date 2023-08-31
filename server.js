@@ -36,7 +36,8 @@ if (process.env.NODE_ENV === "development") {
     "http://localhost:5174",
     "http://localhost:5175",
     "http://localhost:5176",
-    "http://localhost:5177"
+    "http://localhost:5177",
+    "http://192.168.1.7:5175"
   );
 }
 
@@ -70,10 +71,11 @@ const isSameOrigin = (req) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
-// app.use(customCorsMiddleware);
+app.use(customCorsMiddleware);
 app.use(
   cors({
     origin: allowedOrigins,
+    // origin: "*",
   })
 );
 
