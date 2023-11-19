@@ -1379,4 +1379,29 @@ router
     return res.status(response.status).send(result);
   });
 
+router.route("/pskz-db-snapshot-webhook").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/admin/pskz-db-snapshot-webhook'
+   * #swagger.description = 'Perform s3 bucked upload.'
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $buket: 's3-bucket-name', $key: 'file-name' } }
+   * #swagger.responses[200] = { status: 'succes', message: "Successfully uploaded", data: payload }
+   * #swagger.responses[400] = { status: 'error', message: "<error_message>", data: payload   */
+
+  const response = await fetch(`${ADMIN_URL}/admin/v1/admin${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      "Cache-control": "no-cache",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch((err) => {
+    throw err;
+  });
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
 export { router };
