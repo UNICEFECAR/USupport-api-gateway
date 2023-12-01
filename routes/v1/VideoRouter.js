@@ -99,4 +99,30 @@ router.put("/leave-consultation", authenticate, async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.put("/status", authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Video']
+   * #swagger.method = 'PUT'
+   * #swagger.path = '/video/change-consultation-status'
+   * #swagger.description = 'Change consultation status'
+   * #swagger.securty = [{ "AnyUserBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $consultationId: '22e3b2f6-5c95-4044-b444-592b5d41338a', $status: 'active' } }
+   */
+  const response = await fetch(`${VIDEO_URL}/video/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: VIDEO_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch((err) => conosole.log(err));
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 export { router };
