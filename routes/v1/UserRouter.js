@@ -488,6 +488,7 @@ router
         host: USER_LOCAL_HOST,
         "Content-type": "application/json",
         "Cache-control": "no-cache",
+        "x-user-type": req.user.type,
       },
     }).catch(console.log);
 
