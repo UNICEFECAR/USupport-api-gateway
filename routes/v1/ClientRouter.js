@@ -714,4 +714,30 @@ router.route("/my-qa/answer-vote").post(authenticate, async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/chat-history").put(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Client']
+   * #swagger.method = 'PUT'
+   * #swagger.path = '/client/chat-history'
+   * #swagger.description = 'Delete chat history for a client'
+   * #swagger.security = [{ "ClientBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code' }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   * #swagger.responses[401] = { description: 'Client Not Authorised' }
+   */
+  const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      "x-user-id": req.user.user_id,
+      host: CLIENT_LOCAL_HOST,
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
 export { router };
