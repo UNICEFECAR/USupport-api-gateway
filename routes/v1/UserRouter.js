@@ -686,4 +686,28 @@ router.route("/validate-captcha").post(async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/validate-platform-password").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/user/validate-platform-password'
+   * #swagger.description = 'Validate platform password'
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $password: 'password'} }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   */
+  const response = await fetch(`${USER_URL}/user/v1/auth${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 export { router };

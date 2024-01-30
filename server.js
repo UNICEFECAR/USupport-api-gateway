@@ -71,11 +71,11 @@ const isSameOrigin = (req) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
-app.use(customCorsMiddleware);
+// app.use(customCorsMiddleware);
 app.use(
   cors({
-    origin: allowedOrigins,
-    // origin: "*",
+    // origin: allowedOrigins,
+    origin: "*",
   })
 );
 
