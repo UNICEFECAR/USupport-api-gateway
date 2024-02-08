@@ -245,6 +245,7 @@ router.route("/login").post(async (req, res) => {
   }).catch(console.log);
 
   const result = await response.json();
+
   return res.status(response.status).send(result);
 });
 
@@ -693,6 +694,31 @@ router.route("/validate-platform-password").post(async (req, res) => {
    * #swagger.description = 'Validate platform password'
    * #swagger.parameters['obj'] = { in: 'body', schema: { $password: 'password'} }
    * #swagger.responses[200] = { description: 'Success Status' }
+   */
+  const response = await fetch(`${USER_URL}/user/v1/auth${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
+router.route("/logout").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/user/logout'
+   * #swagger.description = 'Logout user by adding his JWT to the blacklist'
+   * #swagger.security = [{ "AnyUserBearer": [] }]
+   * #swagger.responses[200] = { description: 'Success Status' }
+   * #swagger.responses[401] = { description: 'User Not Authorised' }
    */
   const response = await fetch(`${USER_URL}/user/v1/auth${req.url}`, {
     method: req.method,
