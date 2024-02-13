@@ -1405,4 +1405,29 @@ router.route("/pskz-db-snapshot-webhook").post(async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/logout").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/admin/logout'
+   * #swagger.description = 'Logout admin by adding his JWT to the blacklist'
+   * #swagger.security = [{ "AnyAdminBearer": [] }]
+   * #swagger.responses[200] = { description: 'Success Status' }
+   * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+   */
+  const response = await fetch(`${ADMIN_URL}/admin/v1/auth${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: ADMIN_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 export { router };
