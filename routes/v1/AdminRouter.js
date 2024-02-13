@@ -295,12 +295,12 @@ router.route("/password").patch(authenticateAdmin, async (req, res) => {
 });
 
 router
-  .route("/rescue/forgot-password")
-  .get(async (req, res) => {
+  .route("/rescue/forgot-password-link")
+  .post(async (req, res) => {
     /**
      * #swagger.tags = ['Admin']
-     * #swagger.method = 'GET'
-     * #swagger.path = '/admin/rescue/forgot-password'
+     * #swagger.method = 'POST'
+     * #swagger.path = '/admin/rescue/forgot-password-link'
      * #swagger.description = 'Initiate Forgot Password Process (Send email with token)'
      * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
      * #swagger.parameters['email'] = { in: 'query', required: true, type: 'string', description: 'Email of The Admin' }
@@ -315,6 +315,7 @@ router
         host: ADMIN_LOCAL_HOST,
         "Cache-control": "no-cache",
       },
+      ...(req.body && { body: JSON.stringify(req.body) }),
     }).catch(console.log);
 
     const result = await response.json();

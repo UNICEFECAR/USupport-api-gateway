@@ -245,6 +245,7 @@ router.route("/login").post(async (req, res) => {
   }).catch(console.log);
 
   const result = await response.json();
+
   return res.status(response.status).send(result);
 });
 
@@ -348,59 +349,58 @@ router.route("/password").patch(authenticate, async (req, res) => {
   return res.status(response.status).send(result);
 });
 
-router
-  .route("/rescue/forgot-password")
-  .get(async (req, res) => {
-    /**
-     * #swagger.tags = ['User']
-     * #swagger.method = 'GET'
-     * #swagger.path = '/user/rescue/forgot-password'
-     * #swagger.description = 'Initiate Forgot Password Process (Send email with token)'
-     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
-     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
-     * #swagger.parameters['email'] = { in: 'query', required: true, type: 'string', description: 'Email of The User' }
-     * #swagger.parameters['type'] = { in: 'query', required: true, type: 'string', description: 'Type of The User' }
-     * #swagger.responses[200] = { description: 'Success Status' }
-     * #swagger.responses[404] = { description: 'User Not Found' }
-     */
-    const response = await fetch(`${USER_URL}/user/v1${req.url}`, {
-      method: req.method,
-      headers: {
-        ...req.headers,
-        host: USER_LOCAL_HOST,
-        "Cache-control": "no-cache",
-      },
-    }).catch(console.log);
+router.route("/rescue/forgot-password-link").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/user/rescue/forgot-password-link'
+   * #swagger.description = 'Initiate Forgot Password Process (Send email with token)'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['email'] = { in: 'query', required: true, type: 'string', description: 'Email of The User' }
+   * #swagger.parameters['type'] = { in: 'query', required: true, type: 'string', description: 'Type of The User' }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   */
+  const response = await fetch(`${USER_URL}/user/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Cache-control": "no-cache",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
 
-    const result = await response.json();
-    return res.status(response.status).send(result);
-  })
-  .post(async (req, res) => {
-    /**
-     * #swagger.tags = ['User']
-     * #swagger.method = 'POST'
-     * #swagger.path = '/user/rescue/forgot-password'
-     * #swagger.description = 'Change user's password with forgot password secret token'
-     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
-     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
-     * #swagger.parameters['obj'] = { in: 'body', schema: { $token: '22e3b2f6-5c95-4044-b444-592b5d41338a', $password: 'NewPass123' } }
-     * #swagger.responses[200] = { description: 'Success Status' }
-     * #swagger.responses[409] = { description: 'Invalid Reset Password Token' }
-     */
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
 
-    const response = await fetch(`${USER_URL}/user/v1${req.url}`, {
-      method: req.method,
-      headers: {
-        ...req.headers,
-        host: USER_LOCAL_HOST,
-        "Content-type": "application/json",
-      },
-      ...(req.body && { body: JSON.stringify(req.body) }),
-    }).catch(console.log);
+router.route("/rescue/forgot-password").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/user/rescue/forgot-password'
+   * #swagger.description = 'Change user's password with forgot password secret token'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $token: '22e3b2f6-5c95-4044-b444-592b5d41338a', $password: 'NewPass123' } }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   * #swagger.responses[409] = { description: 'Invalid Reset Password Token' }
+   */
 
-    const result = await response.json();
-    return res.status(response.status).send(result);
-  });
+  const response = await fetch(`${USER_URL}/user/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
 
 router.route("/upload-file").post(authenticate, async (req, res) => {
   /**
@@ -694,6 +694,31 @@ router.route("/validate-platform-password").post(async (req, res) => {
    * #swagger.description = 'Validate platform password'
    * #swagger.parameters['obj'] = { in: 'body', schema: { $password: 'password'} }
    * #swagger.responses[200] = { description: 'Success Status' }
+   */
+  const response = await fetch(`${USER_URL}/user/v1/auth${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
+router.route("/logout").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/user/logout'
+   * #swagger.description = 'Logout user by adding his JWT to the blacklist'
+   * #swagger.security = [{ "AnyUserBearer": [] }]
+   * #swagger.responses[200] = { description: 'Success Status' }
+   * #swagger.responses[401] = { description: 'User Not Authorised' }
    */
   const response = await fetch(`${USER_URL}/user/v1/auth${req.url}`, {
     method: req.method,
