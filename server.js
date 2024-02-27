@@ -28,6 +28,12 @@ const PORT = process.env.PORT || 3000;
 const allowedOrigins = [
   "https://staging.usupport.online",
   "https://usupport.online",
+  "https://35.160.133.133/32",
+  "http://35.160.133.133/32",
+  "https://52.13.112.207/32",
+  "http://52.13.112.207/32",
+  "https://52.33.25.228/32",
+  "http://52.33.25.228/32",
 ];
 
 if (process.env.NODE_ENV === "development") {
