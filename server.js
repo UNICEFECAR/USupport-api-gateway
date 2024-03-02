@@ -47,40 +47,14 @@ if (process.env.NODE_ENV === "development") {
   );
 }
 
-const customCorsMiddleware = (req, res, next) => {
-  const corsOptions = {
-    origin: (origin, callback) => {
-      if (allowedOrigins.includes(origin) || isSameOrigin(req)) {
-        // Handle same-origin request or allowed origin
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-  };
-
-  cors(corsOptions)(req, res, next);
-};
-// Function to check if the request is from the same origin
-const isSameOrigin = (req) => {
-  const { origin } = req.headers;
-  const host = req.get("host");
-  let hostAllowed = false;
-  allowedOrigins.forEach((o) => {
-    if (o.includes(host)) hostAllowed = true;
-  });
-  if ((!origin && hostAllowed) || hostAllowed) return true;
-  if (!hostAllowed) return false;
-  return false;
-};
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
-app.use(customCorsMiddleware);
 app.use(
   cors({
     origin: allowedOrigins,
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept"],
   })
 );
 
