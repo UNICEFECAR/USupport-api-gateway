@@ -50,7 +50,7 @@ export const authenticateAdmin = async (req, res, next) => {
     .then((raw) => raw.json())
     .catch(console.log);
 
-  if (!result.admin_id || result.error) {
+  if (!result || !result.admin_id || result.error) {
     next(notAuthorized(language));
     return;
   } else {
