@@ -46,15 +46,22 @@ if (process.env.NODE_ENV === "development") {
     "http://192.168.1.7:5175"
   );
 }
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
 app.use(
   cors({
-    origin: allowedOrigins,
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept"],
+    origin: "*",
+    // methods: ["GET", "POST", "OPTIONS"],
+    // allowedHeaders: [
+    //   "Origin",
+    //   "X-Requested-With",
+    //   "Content-Type",
+    //   "Accept",
+    //   "x-language-alpha-2",
+    //   "x-country-alpha-2",
+    //   "Authorization",
+    // ],
   })
 );
 
