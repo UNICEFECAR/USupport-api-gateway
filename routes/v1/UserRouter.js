@@ -4,6 +4,7 @@ import fetch from "node-fetch";
 import {
   authenticate,
   authenticateAdmin,
+  authenticateIfBearer,
   authorizeAdmin,
 } from "#middlewares/auth";
 
@@ -732,6 +733,25 @@ router.route("/logout").post(async (req, res) => {
 
   const result = await response.json();
 
+  return res.status(response.status).send(result);
+});
+
+router.get("/access-platform", authenticateIfBearer, async (req, res) => {
+  const headers = {
+    ...req.headers,
+    host: USER_LOCAL_HOST,
+    "Content-type": "application/json",
+    "cache-control": "no-cache",
+  };
+  if (req.user) {
+    headers["x-user-id"] = req.user.user_id;
+  }
+  const response = await fetch(`${USER_URL}/user/v1/user${req.url}`, {
+    method: req.method,
+    headers,
+  }).catch(console.log);
+
+  const result = await response.json();
   return res.status(response.status).send(result);
 });
 
