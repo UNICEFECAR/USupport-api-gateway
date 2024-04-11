@@ -1430,4 +1430,60 @@ router.route("/logout").post(async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.get("/platform-metrics", authenticateAdmin, async (req, res) => {
+  /**
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/admin/platform-metrics'
+   * #swagger.description = 'Get all platform metrics'
+   * #swagger.security = [{ "GlobalAdminBearer": [] }]
+   * #swagger.responses[200] = { description: 'Platform Metrics Data Object' }
+   * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+   */
+
+  const response = await fetch(`${ADMIN_URL}/admin/v1/admin${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: ADMIN_LOCAL_HOST,
+      "Content-type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
+router.get(
+  "/statistics/provider-ratings",
+  authenticateAdmin,
+  async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/admin/provider-ratings'
+     * #swagger.description = 'Get all platform ratings'
+     * #swagger.security = [{ "GlobalAdminBearer": [] }]
+     * #swagger.responses[200] = { description: 'Provider Ratings Data Object' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     */
+
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  }
+);
+
 export { router };
