@@ -1538,4 +1538,36 @@ router.route("/my-qa/tags").get(async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.post("/add-rating", authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/provider/add-rating'
+   * #swagger.description = 'Add a platform rating from a provider'
+   * #swagger.security = [{ "ProviderBearer": [] }]
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $rating: 4, $review: 'Great service', $consultationId: '22e3b2f6-5c95-4044-b444-592b5d41338a' } }
+   * #swagger.responses[200] = { description: 'Rating Added' }
+   * #swagger.responses[401] = { description: 'Provider Not Authorised' }
+   */
+
+  const response = await fetch(
+    `${PROVIDER_URL}/provider/v1/provider${req.url}`,
+    {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: PROVIDER_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }
+  ).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 export { router };
