@@ -45,6 +45,7 @@ export const authenticateAdmin = async (req, res, next) => {
       "x-language-alpha-2": language,
       ...(authHeader && { Authorization: authHeader }),
       host: ADMIN_LOCAL_HOST,
+      "cache-control": "no-cache",
     },
   })
     .then((raw) => raw.json())
@@ -72,4 +73,15 @@ export const authorizeAdmin = (role) => {
       next();
     }
   };
+};
+
+export const authenticateIfBearer = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  const { platform } = req.query;
+
+  if (platform === "website" || !authHeader) {
+    next();
+  } else {
+    authenticate(req, res, next);
+  }
 };
