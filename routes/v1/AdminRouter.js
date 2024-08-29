@@ -1486,4 +1486,40 @@ router.get(
   }
 );
 
+router.post(
+  "/organization",
+  authenticateAdmin,
+  authorizeAdmin("country"),
+  async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'POST'
+     * #swagger.path = '/admin/organization'
+     * #swagger.description = 'Create a new organization'
+     * #swagger.security = [{ "CountryAdminBearer": [] }]
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $name: 'Organization Name'}
+     * #swagger.responses[200] = { description: 'Organization Data Object' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     * #swagger.responses[400] = { description: 'Organization already exists' }
+     */
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+        "x-admin-id": req.admin.admin_id,
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  }
+);
+
 export { router };
