@@ -1548,4 +1548,39 @@ router.post(
   }
 );
 
+router.post(
+  "/organization/assign-provider",
+  authenticateAdmin,
+  authorizeAdmin("country"),
+  async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'POST'
+     * #swagger.path = '/admin/organization/assign-provider'
+     * #swagger.description = 'Assign a provider to an organization'
+     * #swagger.security = [{ "CountryAdminBearer": [] }]
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $providerDetailId: '2dc1092c-a13d-4d55-9b1f-81d3b3e974c1', $organizationId: '2dc1092c-a13d-4d55-9b1f-81d3b3e974c1' } }
+     * #swagger.responses[200] = { description: 'Organization Data Object' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     */
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+        "x-admin-id": req.admin.admin_id,
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  }
+);
+
 export { router };
