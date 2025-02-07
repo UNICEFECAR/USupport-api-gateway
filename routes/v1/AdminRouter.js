@@ -294,58 +294,57 @@ router.route("/password").patch(authenticateAdmin, async (req, res) => {
   return res.status(response.status).send(result);
 });
 
-router
-  .route("/rescue/forgot-password-link")
-  .post(async (req, res) => {
-    /**
-     * #swagger.tags = ['Admin']
-     * #swagger.method = 'POST'
-     * #swagger.path = '/admin/rescue/forgot-password-link'
-     * #swagger.description = 'Initiate Forgot Password Process (Send email with token)'
-     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
-     * #swagger.parameters['email'] = { in: 'query', required: true, type: 'string', description: 'Email of The Admin' }
-     * #swagger.parameters['role'] = { in: 'query', required: true, type: 'string', description: 'Role of The Admin - country, global, or regional' }
-     * #swagger.responses[200] = { description: 'Success Status' }
-     * #swagger.responses[404] = { description: 'Admin Not Found' }
-     */
-    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
-      method: req.method,
-      headers: {
-        ...req.headers,
-        host: ADMIN_LOCAL_HOST,
-        "Cache-control": "no-cache",
-      },
-      ...(req.body && { body: JSON.stringify(req.body) }),
-    }).catch(console.log);
+router.route("/rescue/forgot-password-link").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/admin/rescue/forgot-password-link'
+   * #swagger.description = 'Initiate Forgot Password Process (Send email with token)'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['email'] = { in: 'query', required: true, type: 'string', description: 'Email of The Admin' }
+   * #swagger.parameters['role'] = { in: 'query', required: true, type: 'string', description: 'Role of The Admin - country, global, or regional' }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   * #swagger.responses[404] = { description: 'Admin Not Found' }
+   */
+  const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: ADMIN_LOCAL_HOST,
+      "Cache-control": "no-cache",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
 
-    const result = await response.json();
-    return res.status(response.status).send(result);
-  })
-  .post(async (req, res) => {
-    /**
-     * #swagger.tags = ['Admin']
-     * #swagger.method = 'POST'
-     * #swagger.path = '/admin/rescue/forgot-password'
-     * #swagger.description = 'Change admin's password with forgot password secret token'
-     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
-     * #swagger.parameters['obj'] = { in: 'body', schema: { $token: '22e3b2f6-5c95-4044-b444-592b5d41338a', $password: 'NewPass123' } }
-     * #swagger.responses[200] = { description: 'Success Status' }
-     * #swagger.responses[409] = { description: 'Invalid Reset Password Token' }
-     */
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
 
-    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
-      method: req.method,
-      headers: {
-        ...req.headers,
-        host: ADMIN_LOCAL_HOST,
-        "Content-type": "application/json",
-      },
-      ...(req.body && { body: JSON.stringify(req.body) }),
-    }).catch(console.log);
+router.route("/rescue/forgot-password").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/admin/rescue/forgot-password'
+   * #swagger.description = 'Change admin's password with forgot password secret token'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $token: '22e3b2f6-5c95-4044-b444-592b5d41338a', $password: 'NewPass123' } }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   * #swagger.responses[409] = { description: 'Invalid Reset Password Token' }
+   */
 
-    const result = await response.json();
-    return res.status(response.status).send(result);
-  });
+  const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: ADMIN_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
 
 router
   .route("/country/faqs")
