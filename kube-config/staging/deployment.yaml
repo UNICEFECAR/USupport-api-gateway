@@ -16,45 +16,13 @@ spec:
         app: gateway
     spec:
       containers:
-        - name: gateway
-          image: 482053628475.dkr.ecr.eu-central-1.amazonaws.com/usupport-api-gw:beta
-          imagePullPolicy: Always
-          envFrom:
-            - configMapRef:
-                name: gateway-config
-          ports:
-            - containerPort: 3000
-          # resources:
-          #   requests:
-          #     cpu: 400m
-          #     memory: 512Mi
-          #   limits:
-          #     cpu: 2
-          #     memory: 1024Mi
+      - name: gateway
+        image: 482053628475.dkr.ecr.eu-central-1.amazonaws.com/usupport-api-gw:beta
+        imagePullPolicy: Always
+        envFrom:
+        - configMapRef:
+            name: gateway-config
+        ports:
+        - containerPort: 3000
       imagePullSecrets:
-        - name: regcred
-# apiVersion: autoscaling/v2
-# kind: HorizontalPodAutoscaler
-# metadata:
-#   name: gateway
-#   namespace: default
-# spec:
-#   scaleTargetRef:
-#     apiVersion: apps/v1
-#     kind: Deployment
-#     name: gateway
-#   minReplicas: 1
-#   maxReplicas: 5  # Increase max replicas for better load handling
-#   metrics:
-#   - type: Resource
-#     resource:
-#       name: cpu
-#       target:
-#         type: Utilization
-#         averageUtilization: 40  # Scale earlier
-#   - type: Resource
-#     resource:
-#       name: memory
-#       target:
-#         type: Utilization
-#         averageUtilization: 60  # Scale on lower memory pressure
+      - name: regcred
