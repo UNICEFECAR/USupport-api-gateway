@@ -111,6 +111,29 @@ router.route("/countries").get(async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/countries-with-languages").get(async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/user/countries-with-languages'
+   * #swagger.description = 'Get all countries with their languages'
+   * #swagger.responses[200] = { description: 'Countries Data Object' }
+   */
+
+  const response = await fetch(`${USER_URL}/user/v1/countries/${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-Type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
 router.route("/countries/by-alpha-2-code").get(async (req, res) => {
   /**
    * #swagger.tags = ['User']
