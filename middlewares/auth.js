@@ -85,3 +85,16 @@ export const authenticateIfBearer = async (req, res, next) => {
     authenticate(req, res, next);
   }
 };
+
+export const authenticateByPlatform = async (req, res, next) => {
+  const platform = req.headers["x-platform"];
+  const platforms = ["country-admin", "global-admin", "client", "provider"];
+
+  if (!platforms.includes(platform)) {
+    next();
+  } else if (platform === "client" || platform === "provider") {
+    authenticate(req, res, next);
+  } else if (platform === "country-admin" || platform === "global-admin") {
+    authenticateAdmin(req, res, next);
+  }
+};
