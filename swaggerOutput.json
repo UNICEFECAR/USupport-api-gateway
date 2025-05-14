@@ -607,8 +607,8 @@
         ]
       }
     },
-    "/admin/rescue/forgot-password": {
-      "get": {
+    "/admin/rescue/forgot-password-link": {
+      "post": {
         "tags": [
           "Admin"
         ],
@@ -644,7 +644,9 @@
             "description": "Admin Not Found"
           }
         }
-      },
+      }
+    },
+    "/admin/rescue/forgot-password": {
       "post": {
         "tags": [
           "Admin"
@@ -1927,48 +1929,6 @@
             "required": true,
             "type": "string",
             "description": "Alpha 2 code of the country"
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": true,
-            "type": "number",
-            "description": "The amount of providers to fetch"
-          },
-          {
-            "name": "offset",
-            "in": "query",
-            "required": true,
-            "type": "number",
-            "description": "The offset/pageNumber of providers to fetch"
-          },
-          {
-            "name": "price",
-            "in": "query",
-            "required": false,
-            "type": "number",
-            "description": "The minimum price of a provider"
-          },
-          {
-            "name": "status",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "description": "The status of a provider - active/inactive"
-          },
-          {
-            "name": "free",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "description": "If the provider is free or not - true/false as a string"
-          },
-          {
-            "name": "specialization",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "description": "The specialization of a provider - psychologist, psychotherapist, psychiatrist, any"
           }
         ],
         "responses": {
@@ -2131,6 +2091,366 @@
         "responses": {
           "200": {
             "description": "Questions Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/pskz-db-snapshot-webhook": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Perform s3 bucked upload.",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "buket": {
+                  "type": "string",
+                  "example": "s3-bucket-name"
+                },
+                "key": {
+                  "type": "string",
+                  "example": "file-name"
+                }
+              },
+              "required": [
+                "buket",
+                "key"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully uploaded"
+          },
+          "400": {
+            "description": "<error_message>"
+          }
+        }
+      }
+    },
+    "/admin/logout": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Logout admin by adding his JWT to the blacklist",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Admin Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "AnyAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/platform-metrics": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all platform metrics",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Platform Metrics Data Object"
+          },
+          "401": {
+            "description": "Admin Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/provider-ratings": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all platform ratings",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Provider Ratings Data Object"
+          },
+          "401": {
+            "description": "Admin Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/organization/all": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all organizations",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Organization Data Object"
+          },
+          "401": {
+            "description": "Admin Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/organization/all/details": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all organizations",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Organization Data Object"
+          },
+          "401": {
+            "description": "Admin Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/organization": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Create a new organization",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Organization Name"
+                }
+              },
+              "required": [
+                "name"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Organization Data Object"
+          },
+          "400": {
+            "description": "Organization already exists"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Edit an organization",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "organizationId": {
+                  "type": "string",
+                  "example": "2dc1092c-a13d-4d55-9b1f-81d3b3e974c1"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "Organization Name"
+                }
+              },
+              "required": [
+                "organizationId",
+                "name"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Organization Data Object"
+          },
+          "400": {
+            "description": "Organization already exists"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/organization-details": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all organization details",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Organization Details Data Object"
+          },
+          "401": {
+            "description": "Admin Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/organization/assign-provider": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Assign a provider to an organization",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "providerDetailId": {
+                  "type": "string",
+                  "example": "2dc1092c-a13d-4d55-9b1f-81d3b3e974c1"
+                },
+                "organizationId": {
+                  "type": "string",
+                  "example": "2dc1092c-a13d-4d55-9b1f-81d3b3e974c1"
+                }
+              },
+              "required": [
+                "providerDetailId",
+                "organizationId"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Organization Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/organization/remove-provider": {
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Remove a provider from an organization",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "providerDetailId": {
+                  "type": "string",
+                  "example": "2dc1092c-a13d-4d55-9b1f-81d3b3e974c1"
+                },
+                "organizationId": {
+                  "type": "string",
+                  "example": "2dc1092c-a13d-4d55-9b1f-81d3b3e974c1"
+                }
+              },
+              "required": [
+                "providerDetailId",
+                "organizationId"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Organization Data Object"
           },
           "401": {
             "description": "No Permissions"
@@ -3339,6 +3659,43 @@
                 "vote"
               ]
             }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/chat-history": {
+      "put": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Delete chat history for a client",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code"
           }
         ],
         "responses": {
@@ -5433,6 +5790,55 @@
             "required": true,
             "type": "string",
             "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "How many providers to fetch"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Which page of providers to fetch"
+          },
+          {
+            "name": "maxPrice",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "The max consultation price of the providers"
+          },
+          {
+            "name": "availableAfter",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Date after which the providers are available"
+          },
+          {
+            "name": "availableBefore",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Date before which the providers are available"
+          },
+          {
+            "name": "onlyFreeConsultation",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "description": "Fetch only free providers"
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Language ID"
           }
         ],
         "responses": {
@@ -7391,6 +7797,62 @@
         }
       }
     },
+    "/provider/add-rating": {
+      "post": {
+        "tags": [
+          "Provider"
+        ],
+        "description": "Add a platform rating from a provider",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "rating": {
+                  "type": "number",
+                  "example": 4
+                },
+                "review": {
+                  "type": "string",
+                  "example": "Great service"
+                },
+                "consultationId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                }
+              },
+              "required": [
+                "rating",
+                "review",
+                "consultationId"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Rating Added"
+          },
+          "401": {
+            "description": "Provider Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ProviderBearer": []
+          }
+        ]
+      }
+    },
     "/user": {
       "get": {
         "tags": [
@@ -7465,6 +7927,20 @@
           "User"
         ],
         "description": "Get all countries",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Countries Data Object"
+          }
+        }
+      }
+    },
+    "/user/countries-with-languages": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Get all countries with their languages",
         "parameters": [],
         "responses": {
           "200": {
@@ -7966,8 +8442,8 @@
         ]
       }
     },
-    "/user/rescue/forgot-password": {
-      "get": {
+    "/user/rescue/forgot-password-link": {
+      "post": {
         "tags": [
           "User"
         ],
@@ -8005,12 +8481,11 @@
         "responses": {
           "200": {
             "description": "Success Status"
-          },
-          "404": {
-            "description": "User Not Found"
           }
         }
-      },
+      }
+    },
+    "/user/rescue/forgot-password": {
       "post": {
         "tags": [
           "User"
@@ -8511,6 +8986,194 @@
             "description": "Success Status"
           }
         }
+      }
+    },
+    "/user/validate-platform-password": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Validate platform password",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "password": {
+                  "type": "string",
+                  "example": "password"
+                }
+              },
+              "required": [
+                "password"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          }
+        }
+      }
+    },
+    "/user/logout": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Logout user by adding his JWT to the blacklist",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "User Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      }
+    },
+    "/access-platform": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/user/content-ratings": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Get content ratings which a user has given",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Content Rating data object"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      }
+    },
+    "/user/rating-for-content": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Get content rating for user",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Content Rating data object"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      }
+    },
+    "/user/content-rating": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Rate content",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "contentId": {
+                  "type": "number",
+                  "example": 1
+                },
+                "contentType": {
+                  "type": "string",
+                  "example": "article"
+                },
+                "positive": {
+                  "type": "boolean",
+                  "example": true
+                }
+              },
+              "required": [
+                "contentId",
+                "contentType",
+                "positive"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
       }
     },
     "/video/twilio-token": {

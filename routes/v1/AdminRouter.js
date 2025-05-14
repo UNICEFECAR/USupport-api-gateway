@@ -1415,8 +1415,9 @@ router.route("/pskz-db-snapshot-webhook").post(async (req, res) => {
    * #swagger.path = '/admin/pskz-db-snapshot-webhook'
    * #swagger.description = 'Perform s3 bucked upload.'
    * #swagger.parameters['obj'] = { in: 'body', schema: { $buket: 's3-bucket-name', $key: 'file-name' } }
-   * #swagger.responses[200] = { status: 'succes', message: "Successfully uploaded", data: payload }
-   * #swagger.responses[400] = { status: 'error', message: "<error_message>", data: payload   */
+   * #swagger.responses[200] = { description: 'Successfully uploaded' }
+   * #swagger.responses[400] = { description: '<error_message>' }
+   */
 
   const response = await fetch(`${ADMIN_URL}/admin/v1/admin${req.url}`, {
     method: req.method,
@@ -1576,7 +1577,7 @@ router
      * #swagger.description = 'Create a new organization'
      * #swagger.security = [{ "CountryAdminBearer": [] }]
      * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
-     * #swagger.parameters['obj'] = { in: 'body', schema: { $name: 'Organization Name'}
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $name: 'Organization Name'} }
      * #swagger.responses[200] = { description: 'Organization Data Object' }
      * #swagger.responses[401] = { description: 'Admin Not Authorised' }
      * #swagger.responses[401] = { description: 'No Permissions' }
@@ -1605,7 +1606,7 @@ router
      * #swagger.path = '/admin/organization'
      * #swagger.description = 'Edit an organization'
      * #swagger.security = [{ "CountryAdminBearer": [] }]
-     * #swagger.parameters['obj'] = { in: 'body', schema: { $organizationId: '2dc1092c-a13d-4d55-9b1f-81d3b3e974c1', $name: 'Organization Name'}
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $organizationId: '2dc1092c-a13d-4d55-9b1f-81d3b3e974c1', $name: 'Organization Name'} }
      * #swagger.responses[200] = { description: 'Organization Data Object' }
      * #swagger.responses[401] = { description: 'Admin Not Authorised' }
      * #swagger.responses[401] = { description: 'No Permissions' }
