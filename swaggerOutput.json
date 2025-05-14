@@ -2463,6 +2463,282 @@
         ]
       }
     },
+    "/admin/country/videos": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all videos for a country",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Videos IDs"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Initialise videos for a new country",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Videos IDs"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Add given video to a country",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "1"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Array of Videos IDs"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Delete given video from a country",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "1"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Array of Videos IDs"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/country/podcasts": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all podcasts for a country",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Podcast IDs"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Initialise podcasts for a new country",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Podcast IDs"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Add given podcast to a country",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "1"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Array of Podcast IDs"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Delete given podcast from a country",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "1"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Array of Podcast IDs"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
     "/client": {
       "get": {
         "tags": [
@@ -9174,6 +9450,59 @@
             "AnyUserBearer": []
           }
         ]
+      }
+    },
+    "/user/generate-pdf": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Generate PDF from content URL",
+        "produces": [
+          "application/pdf"
+        ],
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "contentUrl": {
+                  "type": "string",
+                  "example": "https://cms-url.com/api/content/123"
+                },
+                "contentType": {
+                  "type": "string",
+                  "example": "article"
+                }
+              },
+              "required": [
+                "contentUrl",
+                "contentType"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PDF file"
+          }
+        }
       }
     },
     "/video/twilio-token": {
