@@ -861,4 +861,34 @@ router.post("/content-rating", authenticate, async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.post("/generate-pdf", authenticateByPlatform, async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/user/generate-pdf'
+   * #swagger.description = 'Generate PDF from content URL'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $contentUrl: 'https://cms-url.com/api/content/123', $contentType: 'article' } }
+   * #swagger.responses[200] = { description: 'PDF file' }
+   */
+  const response = await fetch(`${USER_URL}/user/v1/user${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-type": "application/json",
+      "x-user-id": req.user?.user_id || null,
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  // Set appropriate headers for PDF download
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader("Content-Disposition", 'attachment; filename="content.pdf"');
+
+  // Send PDF data directly to client
+  response.body.pipe(res);
+});
+
 export { router };
