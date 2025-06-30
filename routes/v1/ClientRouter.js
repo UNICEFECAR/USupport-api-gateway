@@ -798,7 +798,7 @@ router.route("/category-interactions").get(authenticate, async (req, res) => {
   return res.status(response.status).send(result);
 });
 
-router.route("/organization").get(authenticate, async (req, res) => {
+router.route("/organization").get(async (req, res) => {
   /**
    * #swagger.tags = ['Client']
    * #swagger.method = 'GET'
@@ -815,7 +815,6 @@ router.route("/organization").get(authenticate, async (req, res) => {
     method: req.method,
     headers: {
       ...req.headers,
-      "x-user-id": req.user.user_id,
       host: CLIENT_LOCAL_HOST,
       "Cache-Control": "no-cache",
     },
