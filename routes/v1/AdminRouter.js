@@ -64,6 +64,29 @@ router
     return res.status(response.status).send(result);
   });
 
+router.get("/organization/metadata", async (req, res) => {
+  /**
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/admin/organization/metadata'
+   * #swagger.description = 'Get all organization metadata'
+   * #swagger.responses[200] = { description: 'Array of Organization Metadata' }
+   */
+  const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: ADMIN_LOCAL_HOST,
+      "Content-type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 router
   .route("/by-id")
   .get(authenticateAdmin, authorizeAdmin("global"), async (req, res) => {
