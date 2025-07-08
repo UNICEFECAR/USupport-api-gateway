@@ -1508,6 +1508,36 @@ router.get("/platform-metrics", authenticateAdmin, async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.put("/content-active-status", authenticateAdmin, async (req, res) => {
+  /**
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'PUT'
+   * #swagger.path = '/admin/content-active-status'
+   * #swagger.description = 'Update content module active status for a country'
+   * #swagger.security = [{ "CountryAdminBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $contentType: 'videos', $status: 'enabled' } }
+   * #swagger.responses[200] = { description: 'Updated Country Data Object' }
+   * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+   * #swagger.responses[401] = { description: 'No Permissions' }
+   * #swagger.responses[404] = { description: 'Country Not Found' }
+   */
+  const response = await fetch(`${ADMIN_URL}/admin/v1/admin${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: ADMIN_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 router.get(
   "/statistics/provider-ratings",
   authenticateAdmin,
