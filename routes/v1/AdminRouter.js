@@ -1714,32 +1714,58 @@ router
     return res.status(response.status).send(result);
   });
 
-router.get("/organization/:id", authenticateAdmin, async (req, res) => {
-  /**
-   * #swagger.tags = ['Admin']
-   * #swagger.method = 'GET'
-   * #swagger.path = '/admin/organization-details'
-   * #swagger.description = 'Get all organization details'
-   * #swagger.security = [{ "GlobalAdminBearer": [] }]
-   * #swagger.responses[200] = { description: 'Organization Details Data Object' }
-   * #swagger.responses[401] = { description: 'Admin Not Authorised' }
-   */
+router
+  .route("/organization/:id")
+  .get(authenticateAdmin, async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/admin/organization-details'
+     * #swagger.description = 'Get all organization details'
+     * #swagger.security = [{ "GlobalAdminBearer": [] }]
+     * #swagger.responses[200] = { description: 'Organization Details Data Object' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     */
 
-  const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
-    method: req.method,
-    headers: {
-      ...req.headers,
-      host: ADMIN_LOCAL_HOST,
-      "Content-type": "application/json",
-      "Cache-control": "no-cache",
-    },
-  }).catch(console.log);
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
 
-  const result = await response.json();
+    const result = await response.json();
 
-  return res.status(response.status).send(result);
-});
+    return res.status(response.status).send(result);
+  })
+  .delete(authenticateAdmin, async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'DELETE'
+     * #swagger.path = '/admin/organization-details'
+     * #swagger.description = 'Delete organization'
+     * #swagger.security = [{ "GlobalAdminBearer": [] }]
+     * #swagger.responses[200] = { description: 'Organization Deleted Successfully' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     */
 
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
 router.post(
   "/organization/assign-provider",
   authenticateAdmin,
