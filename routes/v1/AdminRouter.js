@@ -885,6 +885,38 @@ router
   });
 
 router
+  .route("/statistics/platform-suggestions")
+  .get(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/admin/statistics/platform-suggestions'
+     * #swagger.description = 'Get all platform suggestions'
+     * #swagger.security = [{ "CountryAdminBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['countryId'] = { in: 'query', required: true, type: 'string', description: 'ID of the country of the admin' }
+     * #swagger.responses[200] = { description: 'Information Portal Suggestions Data Object' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     */
+
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
+
+router
   .route("/statistics/client-ratings")
   .get(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
     /**
@@ -1508,6 +1540,36 @@ router.get("/platform-metrics", authenticateAdmin, async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.put("/content-active-status", authenticateAdmin, async (req, res) => {
+  /**
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'PUT'
+   * #swagger.path = '/admin/content-active-status'
+   * #swagger.description = 'Update content module active status for a country'
+   * #swagger.security = [{ "CountryAdminBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $contentType: 'videos', $status: 'enabled' } }
+   * #swagger.responses[200] = { description: 'Updated Country Data Object' }
+   * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+   * #swagger.responses[401] = { description: 'No Permissions' }
+   * #swagger.responses[404] = { description: 'Country Not Found' }
+   */
+  const response = await fetch(`${ADMIN_URL}/admin/v1/admin${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: ADMIN_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 router.get(
   "/statistics/provider-ratings",
   authenticateAdmin,
@@ -1652,32 +1714,58 @@ router
     return res.status(response.status).send(result);
   });
 
-router.get("/organization/:id", authenticateAdmin, async (req, res) => {
-  /**
-   * #swagger.tags = ['Admin']
-   * #swagger.method = 'GET'
-   * #swagger.path = '/admin/organization-details'
-   * #swagger.description = 'Get all organization details'
-   * #swagger.security = [{ "GlobalAdminBearer": [] }]
-   * #swagger.responses[200] = { description: 'Organization Details Data Object' }
-   * #swagger.responses[401] = { description: 'Admin Not Authorised' }
-   */
+router
+  .route("/organization/:id")
+  .get(authenticateAdmin, async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/admin/organization-details'
+     * #swagger.description = 'Get all organization details'
+     * #swagger.security = [{ "GlobalAdminBearer": [] }]
+     * #swagger.responses[200] = { description: 'Organization Details Data Object' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     */
 
-  const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
-    method: req.method,
-    headers: {
-      ...req.headers,
-      host: ADMIN_LOCAL_HOST,
-      "Content-type": "application/json",
-      "Cache-control": "no-cache",
-    },
-  }).catch(console.log);
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
 
-  const result = await response.json();
+    const result = await response.json();
 
-  return res.status(response.status).send(result);
-});
+    return res.status(response.status).send(result);
+  })
+  .delete(authenticateAdmin, async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'DELETE'
+     * #swagger.path = '/admin/organization-details'
+     * #swagger.description = 'Delete organization'
+     * #swagger.security = [{ "GlobalAdminBearer": [] }]
+     * #swagger.responses[200] = { description: 'Organization Deleted Successfully' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     */
 
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
 router.post(
   "/organization/assign-provider",
   authenticateAdmin,

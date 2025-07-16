@@ -849,4 +849,35 @@ router.route("/organization/:organizationId").get(async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router
+  .route("/add-platform-suggestion")
+  .post(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Client']
+     * #swagger.method = 'POST'
+     * #swagger.path = '/client/add-platform-suggestion'
+     * #swagger.description = 'Add platform suggestion'
+     * #swagger.security = [{ "ClientBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $suggestion: 'I love the app' } }
+     * #swagger.responses[200] = { description: 'Success Status' }
+     * #swagger.responses[401] = { description: 'Client Not Authorised' }
+     */
+
+    const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: CLIENT_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  });
+
 export { router };
