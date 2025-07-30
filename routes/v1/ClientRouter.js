@@ -790,6 +790,7 @@ router.route("/category-interactions").get(authenticate, async (req, res) => {
       host: CLIENT_LOCAL_HOST,
       "x-user-id": req.user.user_id,
       "Content-type": "application/json",
+      "Cache-Control": "no-cache",
     },
   }).catch(console.log);
 
