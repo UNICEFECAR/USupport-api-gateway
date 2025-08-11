@@ -1600,6 +1600,38 @@ router.get(
   }
 );
 
+router.get(
+  "/statistics/sos-center-clicks",
+  // authenticateAdmin,
+  async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/admin/statistics/sos-center-clicks'
+     * #swagger.description = 'Get aggregated SOS center click statistics'
+     * #swagger.security = [{ "AnyAdminBearer": [] }]
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.responses[200] = { description: 'SOS Center Click Statistics Data Object' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     */
+
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  }
+);
+
 router.get("/organization/all", authenticateAdmin, async (req, res) => {
   /**
    * #swagger.tags = ['Admin']
