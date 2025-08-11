@@ -1,7 +1,7 @@
 import express from "express";
 import fetch from "node-fetch";
 
-import { authenticate } from "#middlewares/auth";
+import { authenticate, authenticateIfBearer } from "#middlewares/auth";
 
 const router = express.Router();
 
@@ -872,6 +872,36 @@ router
         ...req.headers,
         host: CLIENT_LOCAL_HOST,
         "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  });
+
+router
+  .route("/sos-center-click")
+  .post(authenticateIfBearer, async (req, res) => {
+    /**
+     * #swagger.tags = ['Client']
+     * #swagger.method = 'POST'
+     * #swagger.path = '/client/sos-center-click'
+     * #swagger.description = 'Track SOS center click interaction'
+     * #swagger.security = [{ "ClientBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $sosCenterId: 123, $isMain: false, $platform: 'web' } }
+     * #swagger.responses[200] = { description: 'Success Status' }
+     * #swagger.responses[401] = { description: 'Client Not Authorised' }
+     */
+    const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: CLIENT_LOCAL_HOST,
+        "x-user-id": req.user?.user_id || null,
         "Content-type": "application/json",
       },
       ...(req.body && { body: JSON.stringify(req.body) }),
