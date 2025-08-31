@@ -882,6 +882,212 @@ router
   });
 
 router
+  .route("/baseline-assessment/add-answer")
+  .post(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Client']
+     * #swagger.method = 'POST'
+     * #swagger.path = '/client/baseline-assessment/add-answer'
+     * #swagger.description = 'Add baseline_assessment answer'
+     * #swagger.security = [{ "ClientBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $question_id: '22e3b2f6-5c95-4044-b444-592b5d41338a', $answer_value: 3, baseline_assessment_session_id: '22e3b2f6-5c95-4044-b444-592b5d41338a' } }
+     * #swagger.responses[200] = { description: 'Success Status with baseline_assessment session ID' }
+     * #swagger.responses[401] = { description: 'Client Not Authorised' }
+     * #swagger.responses[404] = { description: 'Client Not Found' }
+     */
+
+    const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: CLIENT_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  });
+
+router.route("/baseline-assessment/questions").get(async (req, res) => {
+  /**
+   * #swagger.tags = ['Client']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/client/baseline-assessment/questions'
+   * #swagger.description = 'Get all baseline_assessment questions sorted by position'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.responses[200] = { description: 'Array of baseline_assessment questions sorted by position' }
+   */
+
+  const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: CLIENT_LOCAL_HOST,
+      "Content-type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
+router
+  .route("/baseline-assessment/assessments")
+  .get(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Client']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/client/baseline-assessment/assessments'
+     * #swagger.description = 'Get all baseline_assessment sessions overview for the current client (without detailed answers)'
+     * #swagger.security = [{ "ClientBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.responses[200] = { description: 'Array of baseline_assessment sessions overview with completion stats (without detailed answers)' }
+     * #swagger.responses[401] = { description: 'Client Not Authorised' }
+     */
+
+    const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: CLIENT_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  });
+
+router
+  .route("/baseline-assessment/answers")
+  .get(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Client']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/client/baseline-assessment/answers'
+     * #swagger.description = 'Get baseline_assessment answers for a session'
+     * #swagger.security = [{ "ClientBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['sessionId'] = { in: 'query', required: true, type: 'string', description: 'The ID of the baseline_assessment session' }
+     * #swagger.responses[200] = { description: 'Array of baseline_assessment answers' }
+     * #swagger.responses[401] = { description: 'Client Not Authorised' }
+     */
+
+    const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: CLIENT_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  });
+
+router
+  .route("/baseline-assessment/latest")
+  .get(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Client']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/client/baseline-assessment/latest'
+     * #swagger.description = 'Get the latest baseline_assessment'
+     * #swagger.security = [{ "ClientBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.responses[200] = { description: 'Object of latest baseline_assessment' }
+     * #swagger.responses[401] = { description: 'Client Not Authorised' }
+     */
+
+    const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: CLIENT_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  });
+
+router
+  .route("/baseline-assessment/create-assessment")
+  .post(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Client']
+     * #swagger.method = 'POST'
+     * #swagger.path = '/client/baseline-assessment/create-assessment'
+     * #swagger.description = 'Create a new baseline_assessment session'
+     * #swagger.security = [{ "ClientBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.responses[200] = { description: 'Created baseline_assessment session object' }
+     * #swagger.responses[401] = { description: 'Client Not Authorised' }
+     */
+
+    const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: CLIENT_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  });
+
+router
+  .route("/has-checked-baseline-assessment")
+  .patch(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Client']
+     * #swagger.method = 'PATCH'
+     * #swagger.path = '/client/has-checked-baseline-assessment'
+     * #swagger.description = 'Update the client has checked baseline assessment'
+     * #swagger.security = [{ "ClientBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $hasCheckedBaselineAssesment: true } }
+     * #swagger.responses[200] = { description: 'Success Status' }
+     * #swagger.responses[401] = { description: 'Client Not Authorised' }
+     */
+    const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: CLIENT_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  });
+
+router
   .route("/sos-center-click")
   .post(authenticateIfBearer, async (req, res) => {
     /**
