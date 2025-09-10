@@ -2087,4 +2087,162 @@ router
     return res.status(response.status).send(result);
   });
 
+router
+  .route("/baseline-assessment")
+  .get(authenticateAdmin, async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/admin/baseline-assessment'
+     * #swagger.description = 'Get all baseline assessment thresholds'
+     * #swagger.security = [{ "GlobalAdminBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.responses[200] = { description: 'Array of Baseline Assessment Thresholds' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     */
+
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  })
+  .post(authenticateAdmin, async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'POST'
+     * #swagger.path = '/admin/baseline-assessment'
+     * #swagger.description = 'Create a new baseline assessment threshold'
+     * #swagger.security = [{ "GlobalAdminBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $factor: 'depression', $below: 'Low risk', $above: 'High risk' } }
+     * #swagger.responses[201] = { description: 'Created Baseline Assessment Threshold' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     * #swagger.responses[400] = { description: 'Validation Error' }
+     */
+
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
+
+router.get(
+  "/baseline-assessment/factor/:factor",
+  authenticateAdmin,
+  async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/admin/baseline-assessment/factor/{factor}'
+     * #swagger.description = 'Get baseline assessment threshold by factor'
+     * #swagger.security = [{ "GlobalAdminBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['factor'] = { in: 'path', required: true, type: 'string', description: 'The factor to get threshold for (e.g., depression, anxiety)' }
+     * #swagger.responses[200] = { description: 'Baseline Assessment Threshold Data Object' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     * #swagger.responses[404] = { description: 'Factor Not Found' }
+     */
+
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  }
+);
+
+router
+  .route("/baseline-assessment/:id")
+  .put(authenticateAdmin, async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'PUT'
+     * #swagger.path = '/admin/baseline-assessment/{id}'
+     * #swagger.description = 'Update baseline assessment threshold by UUID'
+     * #swagger.security = [{ "GlobalAdminBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['id'] = { in: 'path', required: true, type: 'string', description: 'UUID of the baseline assessment threshold' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $factor: 'depression', $below: 'Low risk', $above: 'High risk' } }
+     * #swagger.responses[200] = { description: 'Updated Baseline Assessment Threshold' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     * #swagger.responses[404] = { description: 'Baseline Assessment Threshold Not Found' }
+     * #swagger.responses[400] = { description: 'Validation Error' }
+     */
+
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
+
+router.get(
+  "/baseline-assessment/analysis",
+  authenticateAdmin,
+  async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/admin/baseline-assessment/analysis'
+     * #swagger.description = 'Get analysis of all completed baseline assessments with median calculations'
+     * #swagger.security = [{ "GlobalAdminBearer": [] }]
+     * #swagger.responses[200] = { description: 'Analysis of all completed baseline assessments with median calculations' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     */
+
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  }
+);
+
 export { router };
