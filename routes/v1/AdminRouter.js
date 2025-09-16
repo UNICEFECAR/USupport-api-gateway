@@ -1634,6 +1634,41 @@ router.get(
   }
 );
 
+router.get(
+  "/statistics/providers/availability/report",
+  //TODO: FIX THE AUTH
+  // authenticateAdmin,
+  // authorizeAdmin("country"),
+  async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/admin/statistics/providers/availability/report'
+     * #swagger.description = 'Generate and send provider availability report for the next 30 days'
+     * #swagger.security = [{ "CountryAdminBearer": [] }]
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.responses[200] = { description: 'Provider Availability Report Generation Result' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[403] = { description: 'No Permissions' }
+     */
+
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  }
+);
+
 router.get("/organization/all", authenticateAdmin, async (req, res) => {
   /**
    * #swagger.tags = ['Admin']
