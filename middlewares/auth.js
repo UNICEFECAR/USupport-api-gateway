@@ -88,9 +88,10 @@ export const authenticateIfBearer = async (req, res, next) => {
 
 export const authenticateByPlatform = async (req, res, next) => {
   const platform = req.headers["x-platform"];
+  const isGuest = req.headers["x-is-guest"];
   const platforms = ["country-admin", "global-admin", "client", "provider"];
 
-  if (!platforms.includes(platform)) {
+  if (!platforms.includes(platform) || isGuest) {
     next();
   } else if (platform === "client" || platform === "provider") {
     authenticate(req, res, next);
