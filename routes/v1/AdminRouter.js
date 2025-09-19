@@ -1636,19 +1636,18 @@ router.get(
 
 router.get(
   "/statistics/providers/availability/report",
-  //TODO: FIX THE AUTH
-  // authenticateAdmin,
-  // authorizeAdmin("country"),
+  authenticateAdmin,
+  authorizeAdmin("country"),
   async (req, res) => {
     /**
      * #swagger.tags = ['Admin']
      * #swagger.method = 'GET'
      * #swagger.path = '/admin/statistics/providers/availability/report'
-     * #swagger.description = 'Generate and send provider availability report for the next 30 days'
+     * #swagger.description = 'Download provider availability report for the next 30 days as CSV'
      * #swagger.security = [{ "CountryAdminBearer": [] }]
      * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
      * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
-     * #swagger.responses[200] = { description: 'Provider Availability Report Generation Result' }
+     * #swagger.responses[200] = { description: 'CSV file download', content: { 'text/csv': { schema: { type: 'string' } } } }
      * #swagger.responses[401] = { description: 'Admin Not Authorised' }
      * #swagger.responses[403] = { description: 'No Permissions' }
      */
@@ -1663,9 +1662,14 @@ router.get(
       },
     }).catch(console.log);
 
-    const result = await response.json();
+    const contentType = response.headers.get("content-type");
+    const contentDisposition = response.headers.get("content-disposition");
 
-    return res.status(response.status).send(result);
+    if (contentType) res.setHeader("Content-Type", contentType);
+    if (contentDisposition)
+      res.setHeader("Content-Disposition", contentDisposition);
+
+    response.body.pipe(res);
   }
 );
 
