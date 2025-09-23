@@ -1521,8 +1521,8 @@ router.get("/platform-metrics", authenticateAdmin, async (req, res) => {
    * #swagger.path = '/admin/platform-metrics'
    * #swagger.description = 'Get all platform metrics'
    * #swagger.security = [{ "GlobalAdminBearer": [] }]
-   * #swagger.parameters['year'] = { in: 'query', required: false, type: 'integer', description: 'Year' }
-   * #swagger.parameters['month'] = { in: 'query', required: false, type: 'integer', description: 'Month' }
+   * #swagger.parameters['startDate'] = { in: 'query', required: false, type: 'integer', description: 'startDate' }
+   * #swagger.parameters['endDate'] = { in: 'query', required: false, type: 'integer', description: 'endDate' }
    * #swagger.responses[200] = { description: 'Platform Metrics Data Object' }
    * #swagger.responses[401] = { description: 'Admin Not Authorised' }
    */
