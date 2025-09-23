@@ -825,6 +825,34 @@ router.route("/organization").get(async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router
+  .route("/organization/personalized")
+  .get(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Client']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/client/organization/personalized'
+     * #swagger.description = 'Get personalized organizations'
+     * #swagger.security = [{ "ClientBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.responses[200] = { description: 'Success Status' }
+     * #swagger.responses[401] = { description: 'Client Not Authorised' }
+     */
+    const response = await fetch(`${CLIENT_URL}/client/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: CLIENT_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Cache-Control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  });
+
 router.route("/organization/:organizationId").get(async (req, res) => {
   /**
    * #swagger.tags = ['Client']
@@ -991,6 +1019,7 @@ router
         host: CLIENT_LOCAL_HOST,
         "x-user-id": req.user.user_id,
         "Content-type": "application/json",
+        "Cache-control": "no-cache",
       },
     }).catch(console.log);
 
@@ -1020,6 +1049,7 @@ router
         host: CLIENT_LOCAL_HOST,
         "x-user-id": req.user.user_id,
         "Content-type": "application/json",
+        "Cache-control": "no-cache",
       },
     }).catch(console.log);
 
