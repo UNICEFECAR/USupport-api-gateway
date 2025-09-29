@@ -1,17 +1,22 @@
-import am from './am.js';
-import en from './en.js';
-import ru from './ru.js';
-import kk from './kk.js';
-import pl from './pl.js';
-import uk from './uk.js';
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
+
+const en = require('./en.json');
+const hy = require('./hy.json');
+const kk = require('./kk.json');
+const ru = require('./ru.json');
+const pl = require('./pl.json');
+const ro = require('./ro.json');
+const uk = require('./uk.json');
 
 const translations = {
-  am,
+  hy,
   en,
   kk,
   ru,
-  pl,
   uk,
+  pl,
+  ro,
 };
 
 /**
