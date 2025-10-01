@@ -1,0 +1,4 @@
+{
+  "not_authorised_error": "Utilizatorul nu este autorizat să acceseze această resursă",
+  "no_permissions_error": "Utilizatorul nu are permisiunea să acceseze această resursă"
+}

@@ -979,6 +979,39 @@ router
   });
 
 router
+  .route("/statistics/mood-tracker-report")
+  .get(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/admin/statistics/mood-tracker-report'
+     * #swagger.description = 'Get aggregated mood tracker statistics'
+     * #swagger.security = [{ "CountryAdminBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['startDate'] = { in: 'query', required: false, type: 'string', description: 'Filter results starting from this ISO date (inclusive)' }
+     * #swagger.parameters['endDate'] = { in: 'query', required: false, type: 'string', description: 'Filter results up to this ISO date (inclusive)' }
+     * #swagger.responses[200] = { description: 'Mood tracker aggregated statistics' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     */
+
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
+
+router
   .route("/statistics/provider-activities")
   .get(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
     /**
