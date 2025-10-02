@@ -885,7 +885,8 @@ router.post("/generate-pdf", authenticateByPlatform, async (req, res) => {
 
   // Set appropriate headers for PDF download
   res.setHeader("Content-Type", "application/pdf");
-  res.setHeader("Content-Disposition", "attachment; filename=\"content.pdf\"");
+  // eslint-disable-next-line
+  res.setHeader("Content-Disposition", 'attachment; filename="content.pdf"');
 
   // Send PDF data directly to client
   response.body.pipe(res);
