@@ -334,6 +334,36 @@ router
     return res.status(response.status).send(result);
   });
 
+router.route("/mood-tracker/report").get(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Client']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/client/mood-tracker/report'
+   * #swagger.description = 'Generate mood tracker report'
+   * #swagger.security = [{ "ClientBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['startDate'] = { in: 'query', required: true, type: 'string', description: 'The start date' }
+   * #swagger.parameters['endDate'] = { in: 'query', required: true, type: 'string', description: 'The end date' }
+   * #swagger.responses[200] = { description: 'Mood Tracker Report Data Object' }
+   * #swagger.responses[401] = { description: 'Client Not Authorised' }
+   */
+
+  const response = await fetch(`${CLIENT_URL}/client/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: CLIENT_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 router.route("/mood-tracker/today").get(authenticate, async (req, res) => {
   /**
    * #swagger.tags = ['Client']
@@ -362,6 +392,37 @@ router.route("/mood-tracker/today").get(authenticate, async (req, res) => {
 
   return res.status(response.status).send(result);
 });
+
+router
+  .route("/mood-tracker/has-completed")
+  .get(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Client']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/client/mood-tracker/has-completed'
+     * #swagger.description = 'Check if the current client has ever completed the mood tracker'
+     * #swagger.security = [{ "ClientBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.responses[200] = { description: 'Has Completed Status' }
+     * #swagger.responses[401] = { description: 'Client Not Authorised' }
+     */
+
+    const response = await fetch(`${CLIENT_URL}/client/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: CLIENT_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
 
 router.route("/mood-tracker/entries").get(authenticate, async (req, res) => {
   /**
@@ -393,6 +454,35 @@ router.route("/mood-tracker/entries").get(authenticate, async (req, res) => {
 
   return res.status(response.status).send(result);
 });
+
+router
+  .route("/mood-tracker/history/delete")
+  .put(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Client']
+     * #swagger.method = 'PUT'
+     * #swagger.path = '/client/mood-tracker/history/delete'
+     * #swagger.description = 'Soft delete mood tracker entry'
+     * #swagger.security = [{ "ClientBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.responses[200] = { description: 'Success Status' }
+     * #swagger.responses[401] = { description: 'Client Not Authorised' }
+     */
+    const response = await fetch(`${CLIENT_URL}/client/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: CLIENT_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
 
 router.route("/mood-tracker").post(authenticate, async (req, res) => {
   /**
@@ -825,6 +915,58 @@ router.route("/organization").get(async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/organization/specializations").get(async (req, res) => {
+  /**
+   * #swagger.tags = ['Client']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/client/organization/specializations'
+   * #swagger.description = 'Get organization specializations'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.responses[200] = { description: 'Array of organization specializations' }
+   */
+
+  const response = await fetch(`${CLIENT_URL}/client/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: CLIENT_LOCAL_HOST,
+      "Cache-Control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
+router
+  .route("/organization/personalized")
+  .get(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Client']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/client/organization/personalized'
+     * #swagger.description = 'Get personalized organizations'
+     * #swagger.security = [{ "ClientBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.responses[200] = { description: 'Success Status' }
+     * #swagger.responses[401] = { description: 'Client Not Authorised' }
+     */
+    const response = await fetch(`${CLIENT_URL}/client/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: CLIENT_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Cache-Control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  });
+
 router.route("/organization/:organizationId").get(async (req, res) => {
   /**
    * #swagger.tags = ['Client']
@@ -991,6 +1133,7 @@ router
         host: CLIENT_LOCAL_HOST,
         "x-user-id": req.user.user_id,
         "Content-type": "application/json",
+        "Cache-control": "no-cache",
       },
     }).catch(console.log);
 
@@ -1020,6 +1163,7 @@ router
         host: CLIENT_LOCAL_HOST,
         "x-user-id": req.user.user_id,
         "Content-type": "application/json",
+        "Cache-control": "no-cache",
       },
     }).catch(console.log);
 

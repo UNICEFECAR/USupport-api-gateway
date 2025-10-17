@@ -885,10 +885,37 @@ router.post("/generate-pdf", authenticateByPlatform, async (req, res) => {
 
   // Set appropriate headers for PDF download
   res.setHeader("Content-Type", "application/pdf");
-  res.setHeader("Content-Disposition", "attachment; filename=\"content.pdf\"");
+  // eslint-disable-next-line
+  res.setHeader("Content-Disposition", 'attachment; filename="content.pdf"');
 
   // Send PDF data directly to client
   response.body.pipe(res);
+});
+
+router.post("/country-event", authenticateIfBearer, async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/user/country-event'
+   * #swagger.description = 'Track country event (registration clicks, consultation actions, etc.)'
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $countryId: '22e3b2f6-5c95-4044-b444-592b5d41338a', $eventType: 'web_email_register_click', clientDetailId: '22e3b2f6-5c95-4044-b444-592b5d41338a' } }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   */
+  const response = await fetch(`${USER_URL}/user/v1/user/country-event`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-type": "application/json",
+      ...(req.user && { "x-user-id": req.user?.user_id }),
+      ...(req.user && { "x-client-detail-id": req.user?.client_detail_id }),
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
 });
 
 export { router };
