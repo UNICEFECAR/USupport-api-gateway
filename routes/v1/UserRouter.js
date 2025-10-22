@@ -944,4 +944,34 @@ router.get("/organizations-key", async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.get("/mobile-map", authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/user/mobile-map'
+   * #swagger.description = 'Get mobile map HTML page'
+   * #swagger.security = [{ "AnyUserBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['lat'] = { in: 'query', required: true, type: 'string', description: 'Latitude' }
+   * #swagger.parameters['lng'] = { in: 'query', required: true, type: 'string', description: 'Longitude' }
+   * #swagger.responses[200] = { description: 'Mobile Map HTML Page' }
+   * #swagger.responses[401] = { description: 'User Not Authorised' }
+   */
+  const response = await fetch(`${USER_URL}/user/v1/user${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "text/html",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.text();
+  res.setHeader("Content-Type", "text/html");
+  return res.status(response.status).send(result);
+});
+
 export { router };
