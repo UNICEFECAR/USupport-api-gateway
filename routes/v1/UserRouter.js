@@ -944,7 +944,7 @@ router.get("/organizations-key", async (req, res) => {
   return res.status(response.status).send(result);
 });
 
-router.get("/mobile-map", authenticate, async (req, res) => {
+router.get("/mobile-map", async (req, res) => {
   /**
    * #swagger.tags = ['User']
    * #swagger.method = 'GET'
@@ -955,6 +955,7 @@ router.get("/mobile-map", authenticate, async (req, res) => {
    * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
    * #swagger.parameters['lat'] = { in: 'query', required: true, type: 'string', description: 'Latitude' }
    * #swagger.parameters['lng'] = { in: 'query', required: true, type: 'string', description: 'Longitude' }
+   *
    * #swagger.responses[200] = { description: 'Mobile Map HTML Page' }
    * #swagger.responses[401] = { description: 'User Not Authorised' }
    */
@@ -963,14 +964,20 @@ router.get("/mobile-map", authenticate, async (req, res) => {
     headers: {
       ...req.headers,
       host: USER_LOCAL_HOST,
-      "x-user-id": req.user.user_id,
+      // "x-user-id": req.user.user_id,
       "Content-type": "text/html",
       "Cache-control": "no-cache",
+      "x-language-alpha-2": req.headers["x-language-alpha-2"] || "en",
+      "x-country-alpha-2": req.headers["x-country-alpha-2"] || "RO",
     },
   }).catch(console.log);
 
   const result = await response.text();
-  res.setHeader("Content-Type", "text/html");
+  res.setHeader(
+    "Content-Security-Policy",
+    "default-src 'self'; script-src 'self' https://maps.googleapis.com https://maps.gstatic.com 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src * data:; connect-src *;"
+  );
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
   return res.status(response.status).send(result);
 });
 
