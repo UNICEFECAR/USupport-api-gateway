@@ -944,7 +944,7 @@ router.get("/organizations-key", async (req, res) => {
   return res.status(response.status).send(result);
 });
 
-router.get("/mobile-map", async (req, res) => {
+router.get("/mobile-map", authenticate, async (req, res) => {
   /**
    * #swagger.tags = ['User']
    * #swagger.method = 'GET'
@@ -964,11 +964,11 @@ router.get("/mobile-map", async (req, res) => {
     headers: {
       ...req.headers,
       host: USER_LOCAL_HOST,
-      // "x-user-id": req.user.user_id,
+      "x-user-id": req.user.user_id,
       "Content-type": "text/html",
       "Cache-control": "no-cache",
-      "x-language-alpha-2": req.headers["x-language-alpha-2"] || "en",
-      "x-country-alpha-2": req.headers["x-country-alpha-2"] || "RO",
+      "x-language-alpha-2": req.headers["x-language-alpha-2"],
+      "x-country-alpha-2": req.headers["x-country-alpha-2"],
     },
   }).catch(console.log);
 
