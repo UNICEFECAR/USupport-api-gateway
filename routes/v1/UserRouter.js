@@ -981,4 +981,157 @@ router.get("/mobile-map", authenticate, async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.post("/content-engagement", authenticateByPlatform, async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/user/content-engagement'
+   * #swagger.description = 'Track content engagement'
+   * #swagger.security = [{ "AnyUserBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $contentId: 1, $contentType: 'article', $action: 'like' } }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   */
+  const response = await fetch(`${USER_URL}/user/v1/user${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-type": "application/json",
+      "x-user-id": req.user.user_id,
+      "x-client-detail-id": req.user.client_detail_id,
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
+router.get("/content-engagement", authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/user/content-engagement'
+   * #swagger.description = 'Get content engagement'
+   * #swagger.security = [{ "AnyUserBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.responses[200] = { description: 'Content Engagement data object' }
+   */
+  const response = await fetch(`${USER_URL}/user/v1/user${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-type": "application/json",
+      "x-user-id": req.user.user_id,
+      "x-client-detail-id": req.user.client_detail_id,
+    },
+  }).catch(console.log);
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
+router.delete("/content-engagement", authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'DELETE'
+   * #swagger.path = '/user/content-engagement'
+   * #swagger.description = 'Delete content engagement'
+   * #swagger.security = [{ "AnyUserBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   */
+  const response = await fetch(`${USER_URL}/user/v1/user${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-type": "application/json",
+      "x-user-id": req.user.user_id,
+      "x-client-detail-id": req.user.client_detail_id,
+    },
+  }).catch(console.log);
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
+router.get("/content-engagements-by-id", async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/user/content-engagements-by-id'
+   * #swagger.description = 'Get content engagements by id and content type'
+   * #swagger.security = [{ "AnyUserBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['contentType'] = { in: 'query', required: true, type: 'string', description: 'The type of the content - video, article, podcast' }
+   * #swagger.parameters['ids'] = { in: 'query', required: true, type: 'array', description: 'The ids of the content' }
+   * #swagger.responses[200] = { description: 'Content Engagements data object' }
+   */
+  const response = await fetch(`${USER_URL}/user/v1/user${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
+router.get("/content-engagements", authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/user/content-engagements'
+   * #swagger.description = 'Get content engagements'
+   * #swagger.security = [{ "AnyUserBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.responses[200] = { description: 'Content Engagements data object' }
+   */
+  const response = await fetch(`${USER_URL}/user/v1/user${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-type": "application/json",
+      "x-user-id": req.user.user_id,
+      "x-client-detail-id": req.user.client_detail_id,
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
+router.get("/country-content-engagements", async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/user/country-content-engagements'
+   * #swagger.description = 'Get content engagements by country'
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.responses[200] = { description: 'Content Engagements data object' }
+   */
+  const response = await fetch(`${USER_URL}/user/v1/user${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
 export { router };
