@@ -87,6 +87,36 @@ router.get("/organization/metadata", async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.post(
+  "/organization/translate",
+  authenticateAdmin,
+  authorizeAdmin("country"),
+  async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'POST'
+     * #swagger.path = '/admin/translate'
+     * #swagger.description = 'Translate text'
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $text: 'Hello, how are you?', $sourceLanguage: 'en', $targetLanguage: 'uk' } }
+     * #swagger.responses[200] = { description: 'Translated Text' }
+     */
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  }
+);
+
 router
   .route("/by-id")
   .get(authenticateAdmin, authorizeAdmin("global"), async (req, res) => {
