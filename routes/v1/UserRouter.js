@@ -993,15 +993,21 @@ router.post("/content-engagement", authenticateByPlatform, async (req, res) => {
    * #swagger.parameters['obj'] = { in: 'body', schema: { $contentId: 1, $contentType: 'article', $action: 'like' } }
    * #swagger.responses[200] = { description: 'Success Status' }
    */
+
+  const headers = {
+    ...req.headers,
+    host: USER_LOCAL_HOST,
+    "Content-type": "application/json",
+  };
+
+  if (req.user) {
+    headers["x-user-id"] = req.user.user_id;
+    headers["x-client-detail-id"] = req.user.client_detail_id;
+  }
+
   const response = await fetch(`${USER_URL}/user/v1/user${req.url}`, {
     method: req.method,
-    headers: {
-      ...req.headers,
-      host: USER_LOCAL_HOST,
-      "Content-type": "application/json",
-      "x-user-id": req.user.user_id,
-      "x-client-detail-id": req.user.client_detail_id,
-    },
+    headers,
     ...(req.body && { body: JSON.stringify(req.body) }),
   }).catch(console.log);
 
