@@ -44,10 +44,7 @@
       "description": "Video Microservice"
     }
   ],
-  "schemes": [
-    "http",
-    "https"
-  ],
+  "schemes": ["http", "https"],
   "securityDefinitions": {
     "AnyAdminBearer": {
       "type": "apiKey",
@@ -86,18 +83,12 @@
       "description": "Please enter into the field the word 'Bearer' following by space and JWT"
     }
   },
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
-  ],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
   "paths": {
     "/admin": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Get Current admin",
         "parameters": [],
         "responses": {
@@ -115,9 +106,7 @@
         ]
       },
       "put": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Update current admin data",
         "parameters": [
           {
@@ -154,12 +143,7 @@
                   "example": "john.doe@email.com"
                 }
               },
-              "required": [
-                "role",
-                "name",
-                "surname",
-                "email"
-              ]
+              "required": ["role", "name", "surname", "email"]
             }
           }
         ],
@@ -184,11 +168,63 @@
         ]
       }
     },
+    "/admin/organization/metadata": {
+      "get": {
+        "tags": ["Admin"],
+        "description": "Get all organization metadata",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Array of Organization Metadata"
+          }
+        }
+      }
+    },
+    "/admin/translate": {
+      "post": {
+        "tags": ["Admin"],
+        "description": "Translate text",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "example": "Hello, how are you?"
+                },
+                "sourceLanguage": {
+                  "type": "string",
+                  "example": "en"
+                },
+                "targetLanguage": {
+                  "type": "string",
+                  "example": "uk"
+                }
+              },
+              "required": ["text", "sourceLanguage", "targetLanguage"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Translated Text"
+          }
+        }
+      }
+    },
     "/admin/by-id": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Get admin by id",
         "parameters": [
           {
@@ -224,9 +260,7 @@
         ]
       },
       "put": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Update admin data by id",
         "parameters": [
           {
@@ -267,13 +301,7 @@
                   "example": true
                 }
               },
-              "required": [
-                "role",
-                "name",
-                "surname",
-                "email",
-                "isActive"
-              ]
+              "required": ["role", "name", "surname", "email", "isActive"]
             }
           }
         ],
@@ -298,9 +326,7 @@
         ]
       },
       "delete": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Delete admin data by id",
         "parameters": [
           {
@@ -321,9 +347,7 @@
                   "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
                 }
               },
-              "required": [
-                "adminId"
-              ]
+              "required": ["adminId"]
             }
           }
         ],
@@ -347,9 +371,7 @@
     },
     "/admin/all": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Get all all global admins or country admins for a given country",
         "parameters": [],
         "responses": {
@@ -372,9 +394,7 @@
     },
     "/admin/signup": {
       "post": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Create new admin user account (Only global admin can create an admin account)",
         "parameters": [
           {
@@ -458,9 +478,7 @@
     },
     "/admin/login": {
       "post": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Login admin",
         "parameters": [
           {
@@ -493,12 +511,7 @@
                   "example": "1234"
                 }
               },
-              "required": [
-                "email",
-                "password",
-                "role",
-                "otp"
-              ]
+              "required": ["email", "password", "role", "otp"]
             }
           }
         ],
@@ -514,9 +527,7 @@
     },
     "/admin/refresh-token": {
       "post": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Refresh admin JWT access token",
         "parameters": [
           {
@@ -537,9 +548,7 @@
                   "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
                 }
               },
-              "required": [
-                "refreshToken"
-              ]
+              "required": ["refreshToken"]
             }
           }
         ],
@@ -555,9 +564,7 @@
     },
     "/admin/password": {
       "patch": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Change admin",
         "parameters": [
           {
@@ -582,10 +589,7 @@
                   "example": "NewPass123"
                 }
               },
-              "required": [
-                "oldPassword",
-                "newPassword"
-              ]
+              "required": ["oldPassword", "newPassword"]
             }
           }
         ],
@@ -609,9 +613,7 @@
     },
     "/admin/rescue/forgot-password-link": {
       "post": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Initiate Forgot Password Process (Send email with token)",
         "parameters": [
           {
@@ -648,9 +650,7 @@
     },
     "/admin/rescue/forgot-password": {
       "post": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Change admin",
         "parameters": [
           {
@@ -675,10 +675,7 @@
                   "example": "NewPass123"
                 }
               },
-              "required": [
-                "token",
-                "password"
-              ]
+              "required": ["token", "password"]
             }
           }
         ],
@@ -694,9 +691,7 @@
     },
     "/admin/country/faqs": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Get all FAQs for a country",
         "parameters": [
           {
@@ -731,9 +726,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Initialise FAQs for a new country",
         "parameters": [
           {
@@ -761,9 +754,7 @@
                   "example": "website"
                 }
               },
-              "required": [
-                "platform"
-              ]
+              "required": ["platform"]
             }
           }
         ],
@@ -785,9 +776,7 @@
         ]
       },
       "put": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Add an FAQ to a country",
         "parameters": [
           {
@@ -819,10 +808,7 @@
                   "example": "1"
                 }
               },
-              "required": [
-                "platform",
-                "id"
-              ]
+              "required": ["platform", "id"]
             }
           }
         ],
@@ -844,9 +830,7 @@
         ]
       },
       "delete": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Delete an FAQ from a country",
         "parameters": [
           {
@@ -878,10 +862,7 @@
                   "example": "1"
                 }
               },
-              "required": [
-                "platform",
-                "id"
-              ]
+              "required": ["platform", "id"]
             }
           }
         ],
@@ -905,9 +886,7 @@
     },
     "/admin/country/sos-centers": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Get all sos centers for a country",
         "parameters": [
           {
@@ -925,9 +904,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Initialise sos centers for a new country",
         "parameters": [
           {
@@ -953,9 +930,7 @@
         ]
       },
       "put": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Add given sos center to a country",
         "parameters": [
           {
@@ -976,9 +951,7 @@
                   "example": "1"
                 }
               },
-              "required": [
-                "id"
-              ]
+              "required": ["id"]
             }
           }
         ],
@@ -997,9 +970,7 @@
         ]
       },
       "delete": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Delete given sos center from a country",
         "parameters": [
           {
@@ -1020,9 +991,7 @@
                   "example": "1"
                 }
               },
-              "required": [
-                "id"
-              ]
+              "required": ["id"]
             }
           }
         ],
@@ -1043,9 +1012,7 @@
     },
     "/admin/country/articles": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Get all articles for a country",
         "parameters": [
           {
@@ -1063,9 +1030,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Initialise articles for a new country",
         "parameters": [
           {
@@ -1091,9 +1056,7 @@
         ]
       },
       "put": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Add given articles to a country",
         "parameters": [
           {
@@ -1114,9 +1077,7 @@
                   "example": "1"
                 }
               },
-              "required": [
-                "id"
-              ]
+              "required": ["id"]
             }
           }
         ],
@@ -1135,9 +1096,7 @@
         ]
       },
       "delete": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Delete given articles for a country",
         "parameters": [
           {
@@ -1158,9 +1117,7 @@
                   "example": "1"
                 }
               },
-              "required": [
-                "id"
-              ]
+              "required": ["id"]
             }
           }
         ],
@@ -1181,9 +1138,7 @@
     },
     "/admin/country/min-max-client-age": {
       "put": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Update the country min and max client age",
         "parameters": [
           {
@@ -1215,10 +1170,7 @@
                   "example": 24
                 }
               },
-              "required": [
-                "minClientAge",
-                "maxClientAge"
-              ]
+              "required": ["minClientAge", "maxClientAge"]
             }
           }
         ],
@@ -1239,9 +1191,7 @@
     },
     "/admin/statistics/global": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Get all global statistics",
         "parameters": [],
         "responses": {
@@ -1261,9 +1211,7 @@
     },
     "/admin/statistics/country": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Get all country statistics",
         "parameters": [
           {
@@ -1291,9 +1239,7 @@
     },
     "/admin/statistics/security-check": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Get security check answers for all consultations that had issues",
         "parameters": [
           {
@@ -1328,9 +1274,7 @@
     },
     "/admin/2fa": {
       "post": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Request Admin 2FA OTP",
         "parameters": [
           {
@@ -1366,11 +1310,7 @@
                   "example": "global"
                 }
               },
-              "required": [
-                "email",
-                "password",
-                "role"
-              ]
+              "required": ["email", "password", "role"]
             }
           }
         ],
@@ -1389,10 +1329,50 @@
     },
     "/admin/statistics/information-portal-suggestions": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Get all information portal suggestions",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "countryId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "ID of the country of the admin"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Information Portal Suggestions Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/statistics/platform-suggestions": {
+      "get": {
+        "tags": ["Admin"],
+        "description": "Get all platform suggestions",
         "parameters": [
           {
             "name": "x-language-alpha-2",
@@ -1433,9 +1413,7 @@
     },
     "/admin/statistics/client-ratings": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Get all information portal suggestions",
         "parameters": [
           {
@@ -1470,9 +1448,7 @@
     },
     "/admin/statistics/contact-forms": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Get all contact forms",
         "parameters": [
           {
@@ -1505,11 +1481,58 @@
         ]
       }
     },
+    "/admin/statistics/mood-tracker-report": {
+      "get": {
+        "tags": ["Admin"],
+        "description": "Get aggregated mood tracker statistics",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Filter results starting from this ISO date (inclusive)"
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Filter results up to this ISO date (inclusive)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mood tracker aggregated statistics"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
     "/admin/statistics/provider-activities": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Get statistics for a specific provider",
         "parameters": [
           {
@@ -1551,9 +1574,7 @@
     },
     "/admin/sponsor": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Get a sponsor by id and the data about his campaigns",
         "parameters": [
           {
@@ -1579,9 +1600,7 @@
         ]
       },
       "post": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Create a sponsor",
         "parameters": [
           {
@@ -1614,10 +1633,7 @@
                   "example": "default"
                 }
               },
-              "required": [
-                "name",
-                "email"
-              ]
+              "required": ["name", "email"]
             }
           }
         ],
@@ -1636,9 +1652,7 @@
         ]
       },
       "put": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Edit a sponsor",
         "parameters": [
           {
@@ -1675,11 +1689,7 @@
                   "example": "default"
                 }
               },
-              "required": [
-                "sponsorId",
-                "name",
-                "email"
-              ]
+              "required": ["sponsorId", "name", "email"]
             }
           }
         ],
@@ -1700,9 +1710,7 @@
     },
     "/admin/sponsor/create-campaign": {
       "post": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Create a campaign for a sponsor",
         "parameters": [
           {
@@ -1779,9 +1787,7 @@
     },
     "/admin/sponsor/update-campaign": {
       "put": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Update a campaign for a sponsor",
         "parameters": [
           {
@@ -1858,9 +1864,7 @@
     },
     "/admin/sponsor/campaign/by-id": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Get the data about a campaign by it",
         "parameters": [
           {
@@ -1888,9 +1892,7 @@
     },
     "/admin/sponsor/coupons-data": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Get the data about all the used coupons in a specific campaign",
         "parameters": [
           {
@@ -1918,9 +1920,7 @@
     },
     "/admin/all-providers": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Get all providers",
         "parameters": [
           {
@@ -1948,9 +1948,7 @@
     },
     "/admin/update-provider-status": {
       "put": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Change the status of a provider",
         "parameters": [
           {
@@ -1978,9 +1976,7 @@
     },
     "/admin/my-qa/archived": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Get all archived questions",
         "parameters": [
           {
@@ -2008,9 +2004,7 @@
     },
     "/admin/my-qa/delete-question": {
       "put": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Delete a question",
         "parameters": [
           {
@@ -2038,9 +2032,7 @@
     },
     "/admin/my-qa/activate-questions": {
       "put": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Activate a question",
         "parameters": [
           {
@@ -2068,9 +2060,7 @@
     },
     "/admin/my-qa/questions": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Get all questions",
         "parameters": [
           {
@@ -2105,9 +2095,7 @@
     },
     "/admin/pskz-db-snapshot-webhook": {
       "post": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Perform s3 bucked upload.",
         "parameters": [
           {
@@ -2125,10 +2113,7 @@
                   "example": "file-name"
                 }
               },
-              "required": [
-                "buket",
-                "key"
-              ]
+              "required": ["buket", "key"]
             }
           }
         ],
@@ -2144,9 +2129,7 @@
     },
     "/admin/logout": {
       "post": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Logout admin by adding his JWT to the blacklist",
         "parameters": [],
         "responses": {
@@ -2166,11 +2149,24 @@
     },
     "/admin/platform-metrics": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Get all platform metrics",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "description": "startDate"
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "description": "endDate"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Platform Metrics Data Object"
@@ -2186,11 +2182,65 @@
         ]
       }
     },
+    "/admin/content-active-status": {
+      "put": {
+        "tags": ["Admin"],
+        "description": "Update content module active status for a country",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "contentType": {
+                  "type": "string",
+                  "example": "videos"
+                },
+                "status": {
+                  "type": "string",
+                  "example": "enabled"
+                }
+              },
+              "required": ["contentType", "status"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Country Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          },
+          "404": {
+            "description": "Country Not Found"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
     "/admin/provider-ratings": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Get all platform ratings",
         "parameters": [],
         "responses": {
@@ -2208,11 +2258,90 @@
         ]
       }
     },
+    "/admin/statistics/sos-center-clicks": {
+      "get": {
+        "tags": ["Admin"],
+        "description": "Get aggregated SOS center click statistics",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "SOS Center Click Statistics Data Object"
+          },
+          "401": {
+            "description": "Admin Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "AnyAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/statistics/providers/availability/report": {
+      "get": {
+        "tags": ["Admin"],
+        "description": "Download provider availability report for the next 30 days as CSV",
+        "produces": [null],
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CSV file download",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Admin Not Authorised"
+          },
+          "403": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
     "/admin/organization/all": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Get all organizations",
         "parameters": [],
         "responses": {
@@ -2232,9 +2361,7 @@
     },
     "/admin/organization/all/details": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Get all organizations",
         "parameters": [],
         "responses": {
@@ -2254,9 +2381,7 @@
     },
     "/admin/organization": {
       "post": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Create a new organization",
         "parameters": [
           {
@@ -2277,9 +2402,7 @@
                   "example": "Organization Name"
                 }
               },
-              "required": [
-                "name"
-              ]
+              "required": ["name"]
             }
           }
         ],
@@ -2301,9 +2424,7 @@
         ]
       },
       "put": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Edit an organization",
         "parameters": [
           {
@@ -2321,10 +2442,7 @@
                   "example": "Organization Name"
                 }
               },
-              "required": [
-                "organizationId",
-                "name"
-              ]
+              "required": ["organizationId", "name"]
             }
           }
         ],
@@ -2348,9 +2466,7 @@
     },
     "/admin/organization-details": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Get all organization details",
         "parameters": [],
         "responses": {
@@ -2366,13 +2482,29 @@
             "GlobalAdminBearer": []
           }
         ]
+      },
+      "delete": {
+        "tags": ["Admin"],
+        "description": "Delete organization",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Organization Deleted Successfully"
+          },
+          "401": {
+            "description": "Admin Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
       }
     },
     "/admin/organization/assign-provider": {
       "post": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Assign a provider to an organization",
         "parameters": [
           {
@@ -2397,10 +2529,7 @@
                   "example": "2dc1092c-a13d-4d55-9b1f-81d3b3e974c1"
                 }
               },
-              "required": [
-                "providerDetailId",
-                "organizationId"
-              ]
+              "required": ["providerDetailId", "organizationId"]
             }
           }
         ],
@@ -2421,9 +2550,7 @@
     },
     "/admin/organization/remove-provider": {
       "put": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Remove a provider from an organization",
         "parameters": [
           {
@@ -2441,10 +2568,7 @@
                   "example": "2dc1092c-a13d-4d55-9b1f-81d3b3e974c1"
                 }
               },
-              "required": [
-                "providerDetailId",
-                "organizationId"
-              ]
+              "required": ["providerDetailId", "organizationId"]
             }
           }
         ],
@@ -2465,9 +2589,7 @@
     },
     "/admin/country/videos": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Get all videos for a country",
         "parameters": [
           {
@@ -2485,9 +2607,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Initialise videos for a new country",
         "parameters": [
           {
@@ -2513,9 +2633,7 @@
         ]
       },
       "put": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Add given video to a country",
         "parameters": [
           {
@@ -2536,9 +2654,7 @@
                   "example": "1"
                 }
               },
-              "required": [
-                "id"
-              ]
+              "required": ["id"]
             }
           }
         ],
@@ -2557,9 +2673,7 @@
         ]
       },
       "delete": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Delete given video from a country",
         "parameters": [
           {
@@ -2580,9 +2694,7 @@
                   "example": "1"
                 }
               },
-              "required": [
-                "id"
-              ]
+              "required": ["id"]
             }
           }
         ],
@@ -2603,9 +2715,7 @@
     },
     "/admin/country/podcasts": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Get all podcasts for a country",
         "parameters": [
           {
@@ -2623,9 +2733,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Initialise podcasts for a new country",
         "parameters": [
           {
@@ -2651,9 +2759,7 @@
         ]
       },
       "put": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Add given podcast to a country",
         "parameters": [
           {
@@ -2674,9 +2780,7 @@
                   "example": "1"
                 }
               },
-              "required": [
-                "id"
-              ]
+              "required": ["id"]
             }
           }
         ],
@@ -2695,9 +2799,7 @@
         ]
       },
       "delete": {
-        "tags": [
-          "Admin"
-        ],
+        "tags": ["Admin"],
         "description": "Delete given podcast from a country",
         "parameters": [
           {
@@ -2718,9 +2820,7 @@
                   "example": "1"
                 }
               },
-              "required": [
-                "id"
-              ]
+              "required": ["id"]
             }
           }
         ],
@@ -2739,11 +2839,229 @@
         ]
       }
     },
+    "/admin/baseline-assessment": {
+      "get": {
+        "tags": ["Admin"],
+        "description": "Get all baseline assessment thresholds",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Baseline Assessment Thresholds"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": ["Admin"],
+        "description": "Create a new baseline assessment threshold",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "factor": {
+                  "type": "string",
+                  "example": "depression"
+                },
+                "below": {
+                  "type": "string",
+                  "example": "Low risk"
+                },
+                "above": {
+                  "type": "string",
+                  "example": "High risk"
+                }
+              },
+              "required": ["factor", "below", "above"]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created Baseline Assessment Threshold"
+          },
+          "400": {
+            "description": "Validation Error"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/baseline-assessment/factor/{factor}": {
+      "get": {
+        "tags": ["Admin"],
+        "description": "Get baseline assessment threshold by factor",
+        "parameters": [
+          {
+            "name": "factor",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The factor to get threshold for (e.g., depression, anxiety)"
+          },
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Baseline Assessment Threshold Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          },
+          "404": {
+            "description": "Factor Not Found"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/baseline-assessment/{id}": {
+      "put": {
+        "tags": ["Admin"],
+        "description": "Update baseline assessment threshold by UUID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "UUID of the baseline assessment threshold"
+          },
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "factor": {
+                  "type": "string",
+                  "example": "depression"
+                },
+                "below": {
+                  "type": "string",
+                  "example": "Low risk"
+                },
+                "above": {
+                  "type": "string",
+                  "example": "High risk"
+                }
+              },
+              "required": ["factor", "below", "above"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Baseline Assessment Threshold"
+          },
+          "400": {
+            "description": "Validation Error"
+          },
+          "401": {
+            "description": "No Permissions"
+          },
+          "404": {
+            "description": "Baseline Assessment Threshold Not Found"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/baseline-assessment/analysis": {
+      "get": {
+        "tags": ["Admin"],
+        "description": "Get analysis of all completed baseline assessments with median calculations",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Analysis of all completed baseline assessments with median calculations"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/statistics/playandheal-visits": {
+      "get": {
+        "tags": ["Admin"],
+        "description": "Get all play and heal visits",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "All play and heal visits"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
+      }
+    },
     "/client": {
       "get": {
-        "tags": [
-          "Client"
-        ],
+        "tags": ["Client"],
         "description": "Get current client data",
         "parameters": [
           {
@@ -2776,9 +3094,7 @@
         ]
       },
       "put": {
-        "tags": [
-          "Client"
-        ],
+        "tags": ["Client"],
         "description": "Update current client data",
         "parameters": [
           {
@@ -2834,9 +3150,7 @@
                   "example": "urban"
                 }
               },
-              "required": [
-                "nickname"
-              ]
+              "required": ["nickname"]
             }
           }
         ],
@@ -2861,9 +3175,7 @@
         ]
       },
       "delete": {
-        "tags": [
-          "Client"
-        ],
+        "tags": ["Client"],
         "description": "Delete current client data",
         "parameters": [
           {
@@ -2891,9 +3203,7 @@
                   "example": "SomePass123"
                 }
               },
-              "required": [
-                "password"
-              ]
+              "required": ["password"]
             }
           }
         ],
@@ -2917,9 +3227,7 @@
     },
     "/client/by-id": {
       "get": {
-        "tags": [
-          "Client"
-        ],
+        "tags": ["Client"],
         "description": "Get client data by id",
         "parameters": [
           {
@@ -2956,9 +3264,7 @@
     },
     "/client/image": {
       "put": {
-        "tags": [
-          "Client"
-        ],
+        "tags": ["Client"],
         "description": "Update the client image",
         "parameters": [
           {
@@ -2994,9 +3300,7 @@
         ]
       },
       "delete": {
-        "tags": [
-          "Client"
-        ],
+        "tags": ["Client"],
         "description": "Delete the client image",
         "parameters": [
           {
@@ -3034,9 +3338,7 @@
     },
     "/client/data-processing-agreement": {
       "put": {
-        "tags": [
-          "Client"
-        ],
+        "tags": ["Client"],
         "description": "Update the client data-processing-agreement",
         "parameters": [
           {
@@ -3064,9 +3366,7 @@
                   "example": true
                 }
               },
-              "required": [
-                "dataProcessing"
-              ]
+              "required": ["dataProcessing"]
             }
           }
         ],
@@ -3090,9 +3390,7 @@
     },
     "/client/consultation/all": {
       "get": {
-        "tags": [
-          "Client"
-        ],
+        "tags": ["Client"],
         "description": "Get all consultations for a client",
         "parameters": [
           {
@@ -3130,9 +3428,7 @@
     },
     "/client/consultation/security-check": {
       "get": {
-        "tags": [
-          "Client"
-        ],
+        "tags": ["Client"],
         "description": "Get security check answers by given consultation id",
         "parameters": [
           {
@@ -3172,9 +3468,7 @@
         ]
       },
       "post": {
-        "tags": [
-          "Client"
-        ],
+        "tags": ["Client"],
         "description": "Update consultation security check answers",
         "parameters": [
           {
@@ -3248,9 +3542,7 @@
         ]
       },
       "put": {
-        "tags": [
-          "Client"
-        ],
+        "tags": ["Client"],
         "description": "Update consultation security check answers",
         "parameters": [
           {
@@ -3324,11 +3616,58 @@
         ]
       }
     },
+    "/client/mood-tracker/report": {
+      "get": {
+        "tags": ["Client"],
+        "description": "Generate mood tracker report",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The start date"
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The end date"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mood Tracker Report Data Object"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
     "/client/mood-tracker/today": {
       "get": {
-        "tags": [
-          "Client"
-        ],
+        "tags": ["Client"],
         "description": "Get a mood tracker entry for the current client for the current day",
         "parameters": [
           {
@@ -3361,11 +3700,44 @@
         ]
       }
     },
+    "/client/mood-tracker/has-completed": {
+      "get": {
+        "tags": ["Client"],
+        "description": "Check if the current client has ever completed the mood tracker",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Has Completed Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
     "/client/mood-tracker/entries": {
       "get": {
-        "tags": [
-          "Client"
-        ],
+        "tags": ["Client"],
         "description": "Get n mood tracker entries for the current client",
         "parameters": [
           {
@@ -3412,11 +3784,44 @@
         ]
       }
     },
+    "/client/mood-tracker/history/delete": {
+      "put": {
+        "tags": ["Client"],
+        "description": "Soft delete mood tracker entry",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
     "/client/mood-tracker": {
       "post": {
-        "tags": [
-          "Client"
-        ],
+        "tags": ["Client"],
         "description": "Add mood tracker entry for the current client for the current day",
         "parameters": [
           {
@@ -3448,9 +3853,7 @@
                   "example": "Additional comment"
                 }
               },
-              "required": [
-                "mood"
-              ]
+              "required": ["mood"]
             }
           }
         ],
@@ -3471,9 +3874,7 @@
     },
     "/client/information-portal-suggestion": {
       "post": {
-        "tags": [
-          "Client"
-        ],
+        "tags": ["Client"],
         "description": "Add a suggestion for the information portal",
         "parameters": [
           {
@@ -3501,9 +3902,7 @@
                   "example": "Add more categories"
                 }
               },
-              "required": [
-                "suggestion"
-              ]
+              "required": ["suggestion"]
             }
           }
         ],
@@ -3524,9 +3923,7 @@
     },
     "/client/add-rating": {
       "post": {
-        "tags": [
-          "Client"
-        ],
+        "tags": ["Client"],
         "description": "Add a client rating",
         "parameters": [
           {
@@ -3558,10 +3955,7 @@
                   "example": "The platform is very helpful"
                 }
               },
-              "required": [
-                "rating",
-                "comment"
-              ]
+              "required": ["rating", "comment"]
             }
           }
         ],
@@ -3582,9 +3976,7 @@
     },
     "/client/*add-push-notification-token": {
       "put": {
-        "tags": [
-          "Client"
-        ],
+        "tags": ["Client"],
         "description": "Add a push notification token for the client",
         "parameters": [
           {
@@ -3612,9 +4004,7 @@
                   "example": "ExponentPushToken[0yOW7cAK4encXa8_CwxEvc]"
                 }
               },
-              "required": [
-                "pushNotificationToken"
-              ]
+              "required": ["pushNotificationToken"]
             }
           }
         ],
@@ -3635,9 +4025,7 @@
     },
     "/client/check-coupon": {
       "get": {
-        "tags": [
-          "Client"
-        ],
+        "tags": ["Client"],
         "description": "Check if a coupon is valid",
         "parameters": [
           {
@@ -3679,9 +4067,7 @@
     },
     "/client/consultation/unblock-slot": {
       "put": {
-        "tags": [
-          "Client"
-        ],
+        "tags": ["Client"],
         "description": "Client to unblock a slot",
         "parameters": [
           {
@@ -3709,9 +4095,7 @@
                   "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
                 }
               },
-              "required": [
-                "consultationId"
-              ]
+              "required": ["consultationId"]
             }
           }
         ],
@@ -3735,9 +4119,7 @@
     },
     "/client/my-qa/answered/all": {
       "get": {
-        "tags": [
-          "Client"
-        ],
+        "tags": ["Client"],
         "description": "Get all anwered questions",
         "parameters": [
           {
@@ -3767,9 +4149,7 @@
     },
     "/client/my-qa/create-question": {
       "post": {
-        "tags": [
-          "Client"
-        ],
+        "tags": ["Client"],
         "description": "Create a question",
         "parameters": [
           {
@@ -3797,9 +4177,7 @@
                   "example": "How to focus better"
                 }
               },
-              "required": [
-                "question"
-              ]
+              "required": ["question"]
             }
           }
         ],
@@ -3820,9 +4198,7 @@
     },
     "/client/my-qa/client-questions": {
       "get": {
-        "tags": [
-          "Client"
-        ],
+        "tags": ["Client"],
         "description": "Get all questions asked by a client",
         "parameters": [
           {
@@ -3857,9 +4233,7 @@
     },
     "/client/my-qa/all-questions": {
       "get": {
-        "tags": [
-          "Client"
-        ],
+        "tags": ["Client"],
         "description": "Get all questions",
         "parameters": [
           {
@@ -3896,9 +4270,7 @@
     },
     "/client/my-qa/vote-answer": {
       "post": {
-        "tags": [
-          "Client"
-        ],
+        "tags": ["Client"],
         "description": "Vote an answer",
         "parameters": [
           {
@@ -3930,10 +4302,7 @@
                   "example": "like"
                 }
               },
-              "required": [
-                "answerId",
-                "vote"
-              ]
+              "required": ["answerId", "vote"]
             }
           }
         ],
@@ -3954,9 +4323,7 @@
     },
     "/client/chat-history": {
       "put": {
-        "tags": [
-          "Client"
-        ],
+        "tags": ["Client"],
         "description": "Delete chat history for a client",
         "parameters": [
           {
@@ -3989,11 +4356,614 @@
         ]
       }
     },
+    "/client/add-category-interaction": {
+      "post": {
+        "tags": ["Client"],
+        "description": "Add category interaction",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "category_id": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                }
+              },
+              "required": ["category_id"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/category-interactions": {
+      "get": {
+        "tags": ["Client"],
+        "description": "Get category interactions",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/organization": {
+      "get": {
+        "tags": ["Client"],
+        "description": "Get all organizations",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/organization/specializations": {
+      "get": {
+        "tags": ["Client"],
+        "description": "Get organization specializations",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of organization specializations"
+          }
+        }
+      }
+    },
+    "/client/organization/personalized": {
+      "get": {
+        "tags": ["Client"],
+        "description": "Get personalized organizations",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/organization/:organizationId": {
+      "get": {
+        "tags": ["Client"],
+        "description": "Get an organization by id",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/add-platform-suggestion": {
+      "post": {
+        "tags": ["Client"],
+        "description": "Add platform suggestion",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "suggestion": {
+                  "type": "string",
+                  "example": "I love the app"
+                }
+              },
+              "required": ["suggestion"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/baseline-assessment/add-answer": {
+      "post": {
+        "tags": ["Client"],
+        "description": "Add baseline_assessment answer",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "question_id": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                },
+                "answer_value": {
+                  "type": "number",
+                  "example": 3
+                },
+                "baseline_assessment_session_id": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                }
+              },
+              "required": ["question_id", "answer_value"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status with baseline_assessment session ID"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          },
+          "404": {
+            "description": "Client Not Found"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/baseline-assessment/questions": {
+      "get": {
+        "tags": ["Client"],
+        "description": "Get all baseline_assessment questions sorted by position",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of baseline_assessment questions sorted by position"
+          }
+        }
+      }
+    },
+    "/client/baseline-assessment/assessments": {
+      "get": {
+        "tags": ["Client"],
+        "description": "Get all baseline_assessment sessions overview for the current client (without detailed answers)",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of baseline_assessment sessions overview with completion stats (without detailed answers)"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/baseline-assessment/answers": {
+      "get": {
+        "tags": ["Client"],
+        "description": "Get baseline_assessment answers for a session",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "sessionId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The ID of the baseline_assessment session"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of baseline_assessment answers"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/baseline-assessment/latest": {
+      "get": {
+        "tags": ["Client"],
+        "description": "Get the latest baseline_assessment",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Object of latest baseline_assessment"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/baseline-assessment/create-assessment": {
+      "post": {
+        "tags": ["Client"],
+        "description": "Create a new baseline_assessment session",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Created baseline_assessment session object"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/has-checked-baseline-assessment": {
+      "patch": {
+        "tags": ["Client"],
+        "description": "Update the client has checked baseline assessment",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "hasCheckedBaselineAssesment": {
+                  "type": "boolean",
+                  "example": true
+                }
+              },
+              "required": ["hasCheckedBaselineAssesment"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/sos-center-click": {
+      "post": {
+        "tags": ["Client"],
+        "description": "Track SOS center click interaction",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "sosCenterId": {
+                  "type": "number",
+                  "example": 123
+                },
+                "isMain": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "platform": {
+                  "type": "string",
+                  "example": "web"
+                }
+              },
+              "required": ["sosCenterId", "isMain", "platform"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
     "/email/admin/": {
       "post": {
-        "tags": [
-          "Email"
-        ],
+        "tags": ["Email"],
         "description": "Send email",
         "parameters": [
           {
@@ -4022,11 +4992,7 @@
                   "example": "Some Long Text Here ..."
                 }
               },
-              "required": [
-                "subject",
-                "title",
-                "text"
-              ]
+              "required": ["subject", "title", "text"]
             }
           }
         ],
@@ -4042,9 +5008,7 @@
     },
     "/email/system/forgot-password": {
       "post": {
-        "tags": [
-          "Email"
-        ],
+        "tags": ["Email"],
         "description": "Send email for forgot password",
         "parameters": [
           {
@@ -4073,10 +5037,7 @@
                   "example": "john.doe@email.com"
                 }
               },
-              "required": [
-                "platform",
-                "forgotPasswordToken"
-              ]
+              "required": ["platform", "forgotPasswordToken"]
             }
           }
         ],
@@ -4092,9 +5053,7 @@
     },
     "/email/system/welcome": {
       "post": {
-        "tags": [
-          "Email"
-        ],
+        "tags": ["Email"],
         "description": "Send welcome email",
         "parameters": [
           {
@@ -4119,9 +5078,7 @@
                   "example": "john.doe@email.com"
                 }
               },
-              "required": [
-                "platform"
-              ]
+              "required": ["platform"]
             }
           }
         ],
@@ -4137,9 +5094,7 @@
     },
     "/client/consultation/confirm/booking": {
       "post": {
-        "tags": [
-          "Email"
-        ],
+        "tags": ["Email"],
         "description": "Send email to client to confirm consultation booking",
         "parameters": [
           {
@@ -4160,9 +5115,7 @@
                   "example": "john.doe@email.com"
                 }
               },
-              "required": [
-                "recipientEmail"
-              ]
+              "required": ["recipientEmail"]
             }
           }
         ],
@@ -4178,9 +5131,7 @@
     },
     "/client/consultation/confirm/reschedule": {
       "post": {
-        "tags": [
-          "Email"
-        ],
+        "tags": ["Email"],
         "description": "Send email to client to confirm consultation reschedule",
         "parameters": [
           {
@@ -4201,9 +5152,7 @@
                   "example": "john.doe@email.com"
                 }
               },
-              "required": [
-                "recipientEmail"
-              ]
+              "required": ["recipientEmail"]
             }
           }
         ],
@@ -4219,9 +5168,7 @@
     },
     "/client/consultation/confirm/cancellation": {
       "post": {
-        "tags": [
-          "Email"
-        ],
+        "tags": ["Email"],
         "description": "Send email to client to confirm consultation cancellation",
         "parameters": [
           {
@@ -4242,9 +5189,7 @@
                   "example": "john.doe@email.com"
                 }
               },
-              "required": [
-                "recipientEmail"
-              ]
+              "required": ["recipientEmail"]
             }
           }
         ],
@@ -4260,9 +5205,7 @@
     },
     "/client/consultation/notify/cancellation": {
       "post": {
-        "tags": [
-          "Email"
-        ],
+        "tags": ["Email"],
         "description": "Send email to client to notify about consultation cancellation",
         "parameters": [
           {
@@ -4283,9 +5226,7 @@
                   "example": "john.doe@email.com"
                 }
               },
-              "required": [
-                "recipientEmail"
-              ]
+              "required": ["recipientEmail"]
             }
           }
         ],
@@ -4301,9 +5242,7 @@
     },
     "/client/consultation/remind/start": {
       "post": {
-        "tags": [
-          "Email"
-        ],
+        "tags": ["Email"],
         "description": "Send email to client to remind about consultation start",
         "parameters": [
           {
@@ -4324,9 +5263,7 @@
                   "example": "john.doe@email.com"
                 }
               },
-              "required": [
-                "recipientEmail"
-              ]
+              "required": ["recipientEmail"]
             }
           }
         ],
@@ -4342,9 +5279,7 @@
     },
     "/client/consultation/notify/suggestion": {
       "post": {
-        "tags": [
-          "Email"
-        ],
+        "tags": ["Email"],
         "description": "Send email to client to notify about consultation suggestion",
         "parameters": [
           {
@@ -4365,9 +5300,7 @@
                   "example": "john.doe@email.com"
                 }
               },
-              "required": [
-                "recipientEmail"
-              ]
+              "required": ["recipientEmail"]
             }
           }
         ],
@@ -4383,9 +5316,7 @@
     },
     "/client/consultation/confirm/suggestion-booking": {
       "post": {
-        "tags": [
-          "Email"
-        ],
+        "tags": ["Email"],
         "description": "Send email to client to confirm consultation suggestion booking",
         "parameters": [
           {
@@ -4406,9 +5337,7 @@
                   "example": "john.doe@email.com"
                 }
               },
-              "required": [
-                "recipientEmail"
-              ]
+              "required": ["recipientEmail"]
             }
           }
         ],
@@ -4424,9 +5353,7 @@
     },
     "/client/consultation/confirm/suggestion-cancellation": {
       "post": {
-        "tags": [
-          "Email"
-        ],
+        "tags": ["Email"],
         "description": "Send email to client to confirm consultation suggestion cancellation",
         "parameters": [
           {
@@ -4447,9 +5374,7 @@
                   "example": "john.doe@email.com"
                 }
               },
-              "required": [
-                "recipientEmail"
-              ]
+              "required": ["recipientEmail"]
             }
           }
         ],
@@ -4465,9 +5390,7 @@
     },
     "/provider/consultation/notify/booking": {
       "post": {
-        "tags": [
-          "Email"
-        ],
+        "tags": ["Email"],
         "description": "Send email to provider to notify about consultation booking",
         "parameters": [
           {
@@ -4488,9 +5411,7 @@
                   "example": "john.doe@email.com"
                 }
               },
-              "required": [
-                "recipientEmail"
-              ]
+              "required": ["recipientEmail"]
             }
           }
         ],
@@ -4506,9 +5427,7 @@
     },
     "/provider/consultation/notify/reschedule": {
       "post": {
-        "tags": [
-          "Email"
-        ],
+        "tags": ["Email"],
         "description": "Send email to provider to notify about consultation reschedule",
         "parameters": [
           {
@@ -4529,9 +5448,7 @@
                   "example": "john.doe@email.com"
                 }
               },
-              "required": [
-                "recipientEmail"
-              ]
+              "required": ["recipientEmail"]
             }
           }
         ],
@@ -4547,9 +5464,7 @@
     },
     "/provider/consultation/notify/cancellation": {
       "post": {
-        "tags": [
-          "Email"
-        ],
+        "tags": ["Email"],
         "description": "Send email to provider to notify about consultation cancellation",
         "parameters": [
           {
@@ -4570,9 +5485,7 @@
                   "example": "john.doe@email.com"
                 }
               },
-              "required": [
-                "recipientEmail"
-              ]
+              "required": ["recipientEmail"]
             }
           }
         ],
@@ -4588,9 +5501,7 @@
     },
     "/provider/consultation/confirm/cancellation": {
       "post": {
-        "tags": [
-          "Email"
-        ],
+        "tags": ["Email"],
         "description": "Send email to provider to confirm consultation cancellation",
         "parameters": [
           {
@@ -4611,9 +5522,7 @@
                   "example": "john.doe@email.com"
                 }
               },
-              "required": [
-                "recipientEmail"
-              ]
+              "required": ["recipientEmail"]
             }
           }
         ],
@@ -4629,9 +5538,7 @@
     },
     "/provider/consultation/remind/start": {
       "post": {
-        "tags": [
-          "Email"
-        ],
+        "tags": ["Email"],
         "description": "Send email to provider to remind about consultation start",
         "parameters": [
           {
@@ -4652,9 +5559,7 @@
                   "example": "john.doe@email.com"
                 }
               },
-              "required": [
-                "recipientEmail"
-              ]
+              "required": ["recipientEmail"]
             }
           }
         ],
@@ -4670,9 +5575,7 @@
     },
     "/provider/consultation/confirm/suggestion": {
       "post": {
-        "tags": [
-          "Email"
-        ],
+        "tags": ["Email"],
         "description": "Send email to provider to confirm consultation suggestion",
         "parameters": [
           {
@@ -4693,9 +5596,7 @@
                   "example": "john.doe@email.com"
                 }
               },
-              "required": [
-                "recipientEmail"
-              ]
+              "required": ["recipientEmail"]
             }
           }
         ],
@@ -4711,9 +5612,7 @@
     },
     "/provider/consultation/notify/suggestion-booking": {
       "post": {
-        "tags": [
-          "Email"
-        ],
+        "tags": ["Email"],
         "description": "Send email to provider to notify about consultation suggestion booking",
         "parameters": [
           {
@@ -4734,9 +5633,7 @@
                   "example": "john.doe@email.com"
                 }
               },
-              "required": [
-                "recipientEmail"
-              ]
+              "required": ["recipientEmail"]
             }
           }
         ],
@@ -4752,9 +5649,7 @@
     },
     "/provider/consultation/notify/suggestion-cancellation": {
       "post": {
-        "tags": [
-          "Email"
-        ],
+        "tags": ["Email"],
         "description": "Send email to provider to notify about consultation suggestion cancellation",
         "parameters": [
           {
@@ -4775,9 +5670,7 @@
                   "example": "john.doe@email.com"
                 }
               },
-              "required": [
-                "recipientEmail"
-              ]
+              "required": ["recipientEmail"]
             }
           }
         ],
@@ -4793,9 +5686,7 @@
     },
     "/provider/availability/remind/add-more-slots": {
       "post": {
-        "tags": [
-          "Email"
-        ],
+        "tags": ["Email"],
         "description": "Send email to provider to remind add more availability slots",
         "parameters": [
           {
@@ -4816,9 +5707,7 @@
                   "example": "john.doe@email.com"
                 }
               },
-              "required": [
-                "recipientEmail"
-              ]
+              "required": ["recipientEmail"]
             }
           }
         ],
@@ -4834,9 +5723,7 @@
     },
     "/provider/report/weekly": {
       "post": {
-        "tags": [
-          "Email"
-        ],
+        "tags": ["Email"],
         "description": "Send email to provider containing weekly report",
         "parameters": [
           {
@@ -4857,9 +5744,7 @@
                   "example": "john.doe@email.com"
                 }
               },
-              "required": [
-                "recipientEmail"
-              ]
+              "required": ["recipientEmail"]
             }
           }
         ],
@@ -4875,9 +5760,7 @@
     },
     "/provider/report/monthly": {
       "post": {
-        "tags": [
-          "Email"
-        ],
+        "tags": ["Email"],
         "description": "Send email to provider containing monthly report",
         "parameters": [
           {
@@ -4898,9 +5781,7 @@
                   "example": "john.doe@email.com"
                 }
               },
-              "required": [
-                "recipientEmail"
-              ]
+              "required": ["recipientEmail"]
             }
           }
         ],
@@ -4916,9 +5797,7 @@
     },
     "/messaging": {
       "get": {
-        "tags": [
-          "Messaging"
-        ],
+        "tags": ["Messaging"],
         "description": "Get a chat by given ID",
         "parameters": [
           {
@@ -4961,9 +5840,7 @@
         ]
       },
       "put": {
-        "tags": [
-          "Messaging"
-        ],
+        "tags": ["Messaging"],
         "description": "Add a message to the given chat",
         "parameters": [
           {
@@ -5006,17 +5883,10 @@
                       "example": "An example message."
                     }
                   },
-                  "required": [
-                    "type",
-                    "time",
-                    "content"
-                  ]
+                  "required": ["type", "time", "content"]
                 }
               },
-              "required": [
-                "chatId",
-                "message"
-              ]
+              "required": ["chatId", "message"]
             }
           }
         ],
@@ -5040,9 +5910,7 @@
     },
     "/messaging/client-socket": {
       "get": {
-        "tags": [
-          "Messaging"
-        ],
+        "tags": ["Messaging"],
         "description": "Get a client socket by given chat ID",
         "parameters": [
           {
@@ -5085,9 +5953,7 @@
         ]
       },
       "put": {
-        "tags": [
-          "Messaging"
-        ],
+        "tags": ["Messaging"],
         "description": "Update the client socket ID for a given chat ID",
         "parameters": [
           {
@@ -5119,10 +5985,7 @@
                   "example": "ySjFsdF9JwVOJvbDAAAJ"
                 }
               },
-              "required": [
-                "chatId",
-                "socketId"
-              ]
+              "required": ["chatId", "socketId"]
             }
           }
         ],
@@ -5146,9 +6009,7 @@
     },
     "/messaging/provider-socket": {
       "get": {
-        "tags": [
-          "Messaging"
-        ],
+        "tags": ["Messaging"],
         "description": "Get a provider socket by given chat ID",
         "parameters": [
           {
@@ -5191,9 +6052,7 @@
         ]
       },
       "put": {
-        "tags": [
-          "Messaging"
-        ],
+        "tags": ["Messaging"],
         "description": "Update the provider socket ID for a given chat ID",
         "parameters": [
           {
@@ -5225,10 +6084,7 @@
                   "example": "ySjFsdF9JwVOJvbDAAAJ"
                 }
               },
-              "required": [
-                "chatId",
-                "socketId"
-              ]
+              "required": ["chatId", "socketId"]
             }
           }
         ],
@@ -5252,9 +6108,7 @@
     },
     "/messaging/all-chat-data": {
       "get": {
-        "tags": [
-          "Messaging"
-        ],
+        "tags": ["Messaging"],
         "description": "Get all chat data by given provider detail ID and client detail ID",
         "parameters": [
           {
@@ -5306,9 +6160,7 @@
     },
     "/notifications/user": {
       "get": {
-        "tags": [
-          "Notifications"
-        ],
+        "tags": ["Notifications"],
         "description": "Get notifications for the current user ID",
         "parameters": [
           {
@@ -5343,9 +6195,7 @@
     },
     "/notifications/user-has-unread": {
       "get": {
-        "tags": [
-          "Notifications"
-        ],
+        "tags": ["Notifications"],
         "description": "Get whether the current user has unread notifications",
         "parameters": [
           {
@@ -5373,9 +6223,7 @@
     },
     "/notifications/is-read": {
       "put": {
-        "tags": [
-          "Notifications"
-        ],
+        "tags": ["Notifications"],
         "description": "Update the read status of given notifications",
         "parameters": [
           {
@@ -5409,9 +6257,7 @@
                   }
                 }
               },
-              "required": [
-                "notificationIds"
-              ]
+              "required": ["notificationIds"]
             }
           }
         ],
@@ -5435,9 +6281,7 @@
     },
     "/notifications/read-all": {
       "put": {
-        "tags": [
-          "Notifications"
-        ],
+        "tags": ["Notifications"],
         "description": "Update the read status of all notifications for the current user",
         "parameters": [
           {
@@ -5475,9 +6319,7 @@
     },
     "/payments/one-time/create-payment-intent": {
       "post": {
-        "tags": [
-          "Payments"
-        ],
+        "tags": ["Payments"],
         "description": "Post create payment intent",
         "parameters": [
           {
@@ -5526,9 +6368,7 @@
         ]
       },
       "put": {
-        "tags": [
-          "Payments"
-        ],
+        "tags": ["Payments"],
         "description": "Cancel a payment intent",
         "parameters": [
           {
@@ -5556,9 +6396,7 @@
                   "example": "pi_9f10c5b6ae7e"
                 }
               },
-              "required": [
-                "paymentIntentId"
-              ]
+              "required": ["paymentIntentId"]
             }
           }
         ],
@@ -5582,9 +6420,7 @@
     },
     "/payments/one-time/webhook": {
       "post": {
-        "tags": [
-          "Payments"
-        ],
+        "tags": ["Payments"],
         "description": "Endpoint to handle Webhooks received from Stripe.",
         "parameters": [
           {
@@ -5622,9 +6458,7 @@
     },
     "/payments/one-time/history": {
       "get": {
-        "tags": [
-          "Payments"
-        ],
+        "tags": ["Payments"],
         "description": "Get Pyments History",
         "parameters": [
           {
@@ -5673,9 +6507,7 @@
     },
     "/payments/one-time/refund": {
       "post": {
-        "tags": [
-          "Payments"
-        ],
+        "tags": ["Payments"],
         "description": "Post refund existent payment.",
         "parameters": [
           {
@@ -5726,9 +6558,7 @@
     },
     "/provider": {
       "get": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Get current provider data",
         "parameters": [
           {
@@ -5761,9 +6591,7 @@
         ]
       },
       "put": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Country admin to update provider data by id",
         "parameters": [
           {
@@ -5816,10 +6644,7 @@
                 },
                 "specializations": {
                   "type": "array",
-                  "example": [
-                    "psychologist",
-                    "coach"
-                  ],
+                  "example": ["psychologist", "coach"],
                   "items": {
                     "type": "string"
                   }
@@ -5838,10 +6663,7 @@
                 },
                 "education": {
                   "type": "array",
-                  "example": [
-                    "Education 1",
-                    "Education 2"
-                  ],
+                  "example": ["Education 1", "Education 2"],
                   "items": {
                     "type": "string"
                   }
@@ -5879,12 +6701,7 @@
                   }
                 }
               },
-              "required": [
-                "providerId",
-                "name",
-                "surname",
-                "email"
-              ]
+              "required": ["providerId", "name", "surname", "email"]
             }
           }
         ],
@@ -5906,9 +6723,7 @@
         ]
       },
       "delete": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Country admin to delete current provider data",
         "parameters": [
           {
@@ -5936,9 +6751,7 @@
                   "example": "2dc1092c-a13d-4d55-9b1f-81d3b3e974c1"
                 }
               },
-              "required": [
-                "providerId"
-              ]
+              "required": ["providerId"]
             }
           }
         ],
@@ -5962,9 +6775,7 @@
     },
     "/provider/by-id": {
       "get": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Get provider data by id, excluding the street, city and postcode data",
         "parameters": [
           {
@@ -6001,9 +6812,7 @@
     },
     "/provider/by-id/admin": {
       "get": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Country admin to get provider data by id",
         "parameters": [
           {
@@ -6055,9 +6864,7 @@
     },
     "/provider/all": {
       "get": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Get all providers for a given country",
         "parameters": [
           {
@@ -6126,9 +6933,7 @@
     },
     "/provider/image": {
       "put": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Update the provider image",
         "parameters": [
           {
@@ -6164,9 +6969,7 @@
         ]
       },
       "delete": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Delete the provider image",
         "parameters": [
           {
@@ -6204,9 +7007,7 @@
     },
     "/provider/image/admin": {
       "put": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Country admin to update the provider image",
         "parameters": [
           {
@@ -6238,9 +7039,7 @@
                   "example": "SomeImageName"
                 }
               },
-              "required": [
-                "providerId"
-              ]
+              "required": ["providerId"]
             }
           }
         ],
@@ -6262,9 +7061,7 @@
         ]
       },
       "delete": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Country admin to delete the provider image",
         "parameters": [
           {
@@ -6292,9 +7089,7 @@
                   "example": "2dc1092c-a13d-4d55-9b1f-81d3b3e974c1"
                 }
               },
-              "required": [
-                "providerId"
-              ]
+              "required": ["providerId"]
             }
           }
         ],
@@ -6318,9 +7113,7 @@
     },
     "/provider/clients": {
       "get": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Get all the clients of the current provider",
         "parameters": [
           {
@@ -6358,9 +7151,7 @@
     },
     "/provider/availability/single-week": {
       "get": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Get current provider availability for a single week",
         "parameters": [
           {
@@ -6393,9 +7184,7 @@
         ]
       },
       "put": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Update the provider availability for a single week",
         "parameters": [
           {
@@ -6427,10 +7216,7 @@
                   "example": "1668416400"
                 }
               },
-              "required": [
-                "startDate",
-                "slot"
-              ]
+              "required": ["startDate", "slot"]
             }
           }
         ],
@@ -6452,9 +7238,7 @@
         ]
       },
       "delete": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Delete the provider availability for a single week",
         "parameters": [
           {
@@ -6479,10 +7263,7 @@
                   "example": "1668416400"
                 }
               },
-              "required": [
-                "startDate",
-                "slot"
-              ]
+              "required": ["startDate", "slot"]
             }
           }
         ],
@@ -6503,9 +7284,7 @@
     },
     "/provider/availability/clear-slot": {
       "delete": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Delete all availability for a particular slot",
         "parameters": [
           {
@@ -6531,19 +7310,13 @@
                 },
                 "campaignIds": {
                   "type": "array",
-                  "example": [
-                    "3489eecc-6d96-40bd-8b2d-1d8568cd8c7b"
-                  ],
+                  "example": ["3489eecc-6d96-40bd-8b2d-1d8568cd8c7b"],
                   "items": {
                     "type": "string"
                   }
                 }
               },
-              "required": [
-                "startDate",
-                "slot",
-                "campaignIds"
-              ]
+              "required": ["startDate", "slot", "campaignIds"]
             }
           }
         ],
@@ -6564,9 +7337,7 @@
     },
     "/provider/availability/template": {
       "put": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Update the provider availability for a template",
         "parameters": [
           {
@@ -6614,9 +7385,7 @@
                   }
                 }
               },
-              "required": [
-                "template"
-              ]
+              "required": ["template"]
             }
           }
         ],
@@ -6640,9 +7409,7 @@
     },
     "/provider/availability/single-day": {
       "get": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Get provider availability for a single day, excluding any slots that are already booked",
         "parameters": [
           {
@@ -6691,9 +7458,7 @@
     },
     "/provider/consultation/single-week": {
       "get": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Get current provider consultations for a single week",
         "parameters": [
           {
@@ -6738,9 +7503,7 @@
     },
     "/provider/consultation/count": {
       "get": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Get the count of all past and future consultations for the current provider",
         "parameters": [
           {
@@ -6768,9 +7531,7 @@
     },
     "/provider/consultation/all/past/by-id": {
       "get": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Get all the past consultations of the current provider for a specific client",
         "parameters": [
           {
@@ -6815,9 +7576,7 @@
     },
     "/provider/consultation/all/past": {
       "get": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Get all the past consultations of the current provider for all clients",
         "parameters": [
           {
@@ -6855,9 +7614,7 @@
     },
     "/provider/consultation/all/upcoming": {
       "get": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Get all the upcoming consultations of the current provider for all clients",
         "parameters": [
           {
@@ -6895,9 +7652,7 @@
     },
     "/provider/consultation/single-day": {
       "get": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Get current provider consultations for a single day",
         "parameters": [
           {
@@ -6942,9 +7697,7 @@
     },
     "/provider/consultation/block": {
       "post": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Block a consultation",
         "parameters": [
           {
@@ -6980,9 +7733,7 @@
                   "example": "1668787200"
                 }
               },
-              "required": [
-                "time"
-              ]
+              "required": ["time"]
             }
           }
         ],
@@ -7006,9 +7757,7 @@
     },
     "/provider/consultation/schedule": {
       "put": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Schedule a consultation",
         "parameters": [
           {
@@ -7036,9 +7785,7 @@
                   "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
                 }
               },
-              "required": [
-                "consultationId"
-              ]
+              "required": ["consultationId"]
             }
           }
         ],
@@ -7062,9 +7809,7 @@
     },
     "/provider/consultation/suggest": {
       "put": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Suggest a consultation",
         "parameters": [
           {
@@ -7092,9 +7837,7 @@
                   "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
                 }
               },
-              "required": [
-                "consultationId"
-              ]
+              "required": ["consultationId"]
             }
           }
         ],
@@ -7118,9 +7861,7 @@
     },
     "/provider/consultation/accept-suggest": {
       "put": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Accept a suggested consultation",
         "parameters": [
           {
@@ -7148,9 +7889,7 @@
                   "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
                 }
               },
-              "required": [
-                "consultationId"
-              ]
+              "required": ["consultationId"]
             }
           }
         ],
@@ -7174,9 +7913,7 @@
     },
     "/provider/consultation/rejected-suggest": {
       "put": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Reject a suggested consultation",
         "parameters": [
           {
@@ -7204,9 +7941,7 @@
                   "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
                 }
               },
-              "required": [
-                "consultationId"
-              ]
+              "required": ["consultationId"]
             }
           }
         ],
@@ -7230,9 +7965,7 @@
     },
     "/provider/consultation/reschedule": {
       "post": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Reschedule a consultation",
         "parameters": [
           {
@@ -7264,10 +7997,7 @@
                   "example": "9366a503-68f0-4a69-8f5e-bb401c05844f"
                 }
               },
-              "required": [
-                "consultationId",
-                "newConsultationId"
-              ]
+              "required": ["consultationId", "newConsultationId"]
             }
           }
         ],
@@ -7291,9 +8021,7 @@
     },
     "/provider/consultation/cancel": {
       "put": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Cancel a consultation",
         "parameters": [
           {
@@ -7325,10 +8053,7 @@
                   "example": "client"
                 }
               },
-              "required": [
-                "consultationId",
-                "canceledBy"
-              ]
+              "required": ["consultationId", "canceledBy"]
             }
           }
         ],
@@ -7352,9 +8077,7 @@
     },
     "/provider/consultation/join": {
       "put": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Client/Provider join a consultation",
         "parameters": [
           {
@@ -7386,10 +8109,7 @@
                   "example": "client"
                 }
               },
-              "required": [
-                "consultationId",
-                "userType"
-              ]
+              "required": ["consultationId", "userType"]
             }
           }
         ],
@@ -7416,9 +8136,7 @@
     },
     "/provider/consultation/leave": {
       "put": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Client/Provider leave a consultation",
         "parameters": [
           {
@@ -7450,10 +8168,7 @@
                   "example": "client"
                 }
               },
-              "required": [
-                "consultationId",
-                "userType"
-              ]
+              "required": ["consultationId", "userType"]
             }
           }
         ],
@@ -7477,9 +8192,7 @@
     },
     "/user/consultation/time": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Get consultation time by id",
         "parameters": [
           {
@@ -7524,9 +8237,7 @@
     },
     "/provicer/services": {
       "get": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Get all services",
         "parameters": [],
         "responses": {
@@ -7546,9 +8257,7 @@
     },
     "/provider/services/add": {
       "post": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Provider to add services after a consultation took place",
         "parameters": [
           {
@@ -7592,10 +8301,7 @@
                   }
                 }
               },
-              "required": [
-                "consultationId",
-                "services"
-              ]
+              "required": ["consultationId", "services"]
             }
           }
         ],
@@ -7622,9 +8328,7 @@
     },
     "/provider/calendar/five-weeks": {
       "get": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Get current provider consultations and availability for five weeks",
         "parameters": [
           {
@@ -7659,9 +8363,7 @@
     },
     "/provider/activities": {
       "get": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Get the activities for the current provider",
         "parameters": [
           {
@@ -7689,9 +8391,7 @@
     },
     "/provider/random-providers": {
       "get": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Get a list of random providers",
         "parameters": [
           {
@@ -7718,9 +8418,7 @@
     },
     "/provider/campaigns": {
       "get": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Get a list of all campaigns",
         "parameters": [
           {
@@ -7747,9 +8445,7 @@
     },
     "/provider/campaigns/enroll": {
       "post": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Enroll a provider to a campaign",
         "parameters": [
           {
@@ -7787,9 +8483,7 @@
     },
     "/provider/campaigns-consultations": {
       "get": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Get a list of all the provider consultations for a specific campaign ",
         "parameters": [
           {
@@ -7824,9 +8518,7 @@
     },
     "/provider/status": {
       "get": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Get the status of the provider",
         "parameters": [
           {
@@ -7861,9 +8553,7 @@
     },
     "/provider/my-qa/create-answer": {
       "post": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Create an answer for a question",
         "parameters": [
           {
@@ -7915,11 +8605,7 @@
                   }
                 }
               },
-              "required": [
-                "questionId",
-                "title",
-                "text"
-              ]
+              "required": ["questionId", "title", "text"]
             }
           }
         ],
@@ -7940,9 +8626,7 @@
     },
     "/provider/my-qa/archive-question": {
       "post": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Archive a question",
         "parameters": [
           {
@@ -7978,10 +8662,7 @@
                   "example": "This question was spam"
                 }
               },
-              "required": [
-                "questionId",
-                "reason"
-              ]
+              "required": ["questionId", "reason"]
             }
           }
         ],
@@ -8002,9 +8683,7 @@
     },
     "/provider/my-qa/questions": {
       "get": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Get questions",
         "parameters": [
           {
@@ -8046,9 +8725,7 @@
     },
     "/provider/my-qa/tags": {
       "get": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Get all tags",
         "parameters": [
           {
@@ -8075,9 +8752,7 @@
     },
     "/provider/add-rating": {
       "post": {
-        "tags": [
-          "Provider"
-        ],
+        "tags": ["Provider"],
         "description": "Add a platform rating from a provider",
         "parameters": [
           {
@@ -8106,11 +8781,7 @@
                   "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
                 }
               },
-              "required": [
-                "rating",
-                "review",
-                "consultationId"
-              ]
+              "required": ["rating", "review", "consultationId"]
             }
           }
         ],
@@ -8131,9 +8802,7 @@
     },
     "/user": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Get Current User",
         "parameters": [
           {
@@ -8171,9 +8840,7 @@
     },
     "/user/languages": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Get all active languages",
         "parameters": [],
         "responses": {
@@ -8185,9 +8852,7 @@
     },
     "/user/languages/all": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Get all languages",
         "parameters": [],
         "responses": {
@@ -8199,9 +8864,7 @@
     },
     "/user/countries": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Get all countries",
         "parameters": [],
         "responses": {
@@ -8213,9 +8876,7 @@
     },
     "/user/countries-with-languages": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Get all countries with their languages",
         "parameters": [],
         "responses": {
@@ -8227,9 +8888,7 @@
     },
     "/user/countries/by-alpha-2-code": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Get a specific country by its alpha-2 code",
         "parameters": [
           {
@@ -8259,9 +8918,7 @@
     },
     "/user/work-with": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Get all work with areas",
         "parameters": [
           {
@@ -8281,9 +8938,7 @@
     },
     "/user/provider/signup": {
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Create provider user account",
         "parameters": [
           {
@@ -8332,10 +8987,7 @@
                 },
                 "specializations": {
                   "type": "array",
-                  "example": [
-                    "psychologist",
-                    "coach"
-                  ],
+                  "example": ["psychologist", "coach"],
                   "items": {
                     "type": "string"
                   }
@@ -8354,10 +9006,7 @@
                 },
                 "education": {
                   "type": "array",
-                  "example": [
-                    "Education 1",
-                    "Education 2"
-                  ],
+                  "example": ["Education 1", "Education 2"],
                   "items": {
                     "type": "string"
                   }
@@ -8399,11 +9048,7 @@
                   "example": "https://video.link"
                 }
               },
-              "required": [
-                "name",
-                "surname",
-                "email"
-              ]
+              "required": ["name", "surname", "email"]
             }
           }
         ],
@@ -8422,9 +9067,7 @@
     },
     "/user/signup": {
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Create new client user account",
         "parameters": [
           {
@@ -8480,9 +9123,7 @@
                   "example": "urban"
                 }
               },
-              "required": [
-                "nickname"
-              ]
+              "required": ["nickname"]
             }
           }
         ],
@@ -8498,9 +9139,7 @@
     },
     "/user/login": {
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Login user with email or user access token",
         "parameters": [
           {
@@ -8548,11 +9187,7 @@
                   "example": false
                 }
               },
-              "required": [
-                "userType",
-                "password",
-                "otp"
-              ]
+              "required": ["userType", "password", "otp"]
             }
           }
         ],
@@ -8568,9 +9203,7 @@
     },
     "/user/tmp-login": {
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Temporrary login a client using JWT token",
         "parameters": [],
         "responses": {
@@ -8582,9 +9215,7 @@
     },
     "/user/user-access-token": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Generate new user access token for signup",
         "parameters": [
           {
@@ -8611,9 +9242,7 @@
     },
     "/user/refresh-token": {
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Refresh JWT access token",
         "parameters": [
           {
@@ -8641,9 +9270,7 @@
                   "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
                 }
               },
-              "required": [
-                "refreshToken"
-              ]
+              "required": ["refreshToken"]
             }
           }
         ],
@@ -8659,9 +9286,7 @@
     },
     "/user/password": {
       "patch": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Change user",
         "parameters": [
           {
@@ -8693,10 +9318,7 @@
                   "example": "NewPass123"
                 }
               },
-              "required": [
-                "oldPassword",
-                "newPassword"
-              ]
+              "required": ["oldPassword", "newPassword"]
             }
           }
         ],
@@ -8720,9 +9342,7 @@
     },
     "/user/rescue/forgot-password-link": {
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Initiate Forgot Password Process (Send email with token)",
         "parameters": [
           {
@@ -8763,9 +9383,7 @@
     },
     "/user/rescue/forgot-password": {
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Change user",
         "parameters": [
           {
@@ -8797,10 +9415,7 @@
                   "example": "NewPass123"
                 }
               },
-              "required": [
-                "token",
-                "password"
-              ]
+              "required": ["token", "password"]
             }
           }
         ],
@@ -8816,13 +9431,9 @@
     },
     "/user/upload-file/": {
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Upload file to AWS S3 bucket",
-        "consumes": [
-          "multipart/form-data"
-        ],
+        "consumes": ["multipart/form-data"],
         "parameters": [
           {
             "name": "x-language-alpha-2",
@@ -8873,9 +9484,7 @@
     },
     "/user/notification-preferences": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Get user",
         "parameters": [
           {
@@ -8908,9 +9517,7 @@
         ]
       },
       "put": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Update user",
         "parameters": [
           {
@@ -8980,9 +9587,7 @@
     },
     "/user/consultation/twilio-token": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Get client/provider twilio token",
         "parameters": [
           {
@@ -9027,9 +9632,7 @@
     },
     "/user/2fa": {
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Request Provider 2FA OTP",
         "parameters": [
           {
@@ -9061,10 +9664,7 @@
                   "example": "SomePass123"
                 }
               },
-              "required": [
-                "email",
-                "password"
-              ]
+              "required": ["email", "password"]
             }
           }
         ],
@@ -9083,9 +9683,7 @@
     },
     "/user/add-contact-form/": {
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "add contact form to the DB",
         "parameters": [
           {
@@ -9125,12 +9723,7 @@
                   "example": "client"
                 }
               },
-              "required": [
-                "email",
-                "subject",
-                "message",
-                "sentFrom"
-              ]
+              "required": ["email", "subject", "message", "sentFrom"]
             }
           }
         ],
@@ -9143,9 +9736,7 @@
     },
     "/user/change-language": {
       "put": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Change user language",
         "parameters": [
           {
@@ -9177,10 +9768,7 @@
                   "example": "client"
                 }
               },
-              "required": [
-                "language",
-                "userType"
-              ]
+              "required": ["language", "userType"]
             }
           }
         ],
@@ -9201,9 +9789,7 @@
     },
     "/user/email-otp": {
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Send code to email for email verification",
         "parameters": [
           {
@@ -9217,9 +9803,7 @@
                   "example": "john.doe@email.com"
                 }
               },
-              "required": [
-                "email"
-              ]
+              "required": ["email"]
             }
           }
         ],
@@ -9235,9 +9819,7 @@
     },
     "/user/validate-captcha": {
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Validate captcha",
         "parameters": [
           {
@@ -9251,9 +9833,7 @@
                   "example": "captcha"
                 }
               },
-              "required": [
-                "captcha"
-              ]
+              "required": ["captcha"]
             }
           }
         ],
@@ -9266,9 +9846,7 @@
     },
     "/user/validate-platform-password": {
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Validate platform password",
         "parameters": [
           {
@@ -9282,9 +9860,7 @@
                   "example": "password"
                 }
               },
-              "required": [
-                "password"
-              ]
+              "required": ["password"]
             }
           }
         ],
@@ -9297,9 +9873,7 @@
     },
     "/user/logout": {
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Logout user by adding his JWT to the blacklist",
         "parameters": [],
         "responses": {
@@ -9326,9 +9900,7 @@
     },
     "/user/content-ratings": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Get content ratings which a user has given",
         "parameters": [
           {
@@ -9360,9 +9932,7 @@
     },
     "/user/rating-for-content": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Get content rating for user",
         "parameters": [
           {
@@ -9394,9 +9964,7 @@
     },
     "/user/content-rating": {
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Rate content",
         "parameters": [
           {
@@ -9432,11 +10000,7 @@
                   "example": true
                 }
               },
-              "required": [
-                "contentId",
-                "contentType",
-                "positive"
-              ]
+              "required": ["contentId", "contentType", "positive"]
             }
           }
         ],
@@ -9454,13 +10018,9 @@
     },
     "/user/generate-pdf": {
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "description": "Generate PDF from content URL",
-        "produces": [
-          "application/pdf"
-        ],
+        "produces": ["application/pdf"],
         "parameters": [
           {
             "name": "x-language-alpha-2",
@@ -9491,10 +10051,7 @@
                   "example": "article"
                 }
               },
-              "required": [
-                "contentUrl",
-                "contentType"
-              ]
+              "required": ["contentUrl", "contentType"]
             }
           }
         ],
@@ -9505,11 +10062,346 @@
         }
       }
     },
+    "/user/country-event": {
+      "post": {
+        "tags": ["User"],
+        "description": "Track country event (registration clicks, consultation actions, etc.)",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "countryId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                },
+                "eventType": {
+                  "type": "string",
+                  "example": "web_email_register_click"
+                },
+                "clientDetailId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                }
+              },
+              "required": ["countryId", "eventType"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          }
+        }
+      }
+    },
+    "/user/organizations-key": {
+      "get": {
+        "tags": ["User"],
+        "description": "Get organization key",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "platform",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Platform name"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Organization Key Data Object"
+          }
+        }
+      }
+    },
+    "/user/mobile-map": {
+      "get": {
+        "tags": ["User"],
+        "description": "Get mobile map HTML page",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "lat",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Latitude"
+          },
+          {
+            "name": "lng",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Longitude"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mobile Map HTML Page"
+          },
+          "401": {
+            "description": "User Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      }
+    },
+    "/user/content-engagement": {
+      "post": {
+        "tags": ["User"],
+        "description": "Track content engagement",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "contentId": {
+                  "type": "number",
+                  "example": 1
+                },
+                "contentType": {
+                  "type": "string",
+                  "example": "article"
+                },
+                "action": {
+                  "type": "string",
+                  "example": "like"
+                }
+              },
+              "required": ["contentId", "contentType", "action"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      },
+      "get": {
+        "tags": ["User"],
+        "description": "Get content engagement",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Content Engagement data object"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["User"],
+        "description": "Delete content engagement",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      }
+    },
+    "/user/content-engagements-by-id": {
+      "get": {
+        "tags": ["User"],
+        "description": "Get content engagements by id and content type",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "contentType",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The type of the content - video, article, podcast"
+          },
+          {
+            "name": "ids",
+            "in": "query",
+            "required": true,
+            "type": "array",
+            "description": "The ids of the content"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Content Engagements data object"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      }
+    },
+    "/user/content-engagements": {
+      "get": {
+        "tags": ["User"],
+        "description": "Get content engagements",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Content Engagements data object"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      }
+    },
+    "/user/country-content-engagements": {
+      "get": {
+        "tags": ["User"],
+        "description": "Get content engagements by country",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Content Engagements data object"
+          }
+        }
+      }
+    },
     "/video/twilio-token": {
       "get": {
-        "tags": [
-          "Video"
-        ],
+        "tags": ["Video"],
         "description": "Get client/provider twilio token",
         "parameters": [
           {
@@ -9554,9 +10446,7 @@
     },
     "/video/join-consultation": {
       "put": {
-        "tags": [
-          "Video"
-        ],
+        "tags": ["Video"],
         "description": "Client/Provider join a consultation",
         "parameters": [
           {
@@ -9588,10 +10478,7 @@
                   "example": "client"
                 }
               },
-              "required": [
-                "consultationId",
-                "userType"
-              ]
+              "required": ["consultationId", "userType"]
             }
           }
         ],
@@ -9615,9 +10502,7 @@
     },
     "/video/leave-consultation": {
       "put": {
-        "tags": [
-          "Video"
-        ],
+        "tags": ["Video"],
         "description": "Client/Provider leave a consultation",
         "parameters": [
           {
@@ -9649,10 +10534,7 @@
                   "example": "client"
                 }
               },
-              "required": [
-                "consultationId",
-                "userType"
-              ]
+              "required": ["consultationId", "userType"]
             }
           }
         ],
