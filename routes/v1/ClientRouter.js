@@ -829,6 +829,71 @@ router.route("/my-qa/answer-vote").post(authenticate, async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/tts/synthesize").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['Client']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/client/tts/synthesize'
+   * #swagger.description = 'Synthesize speech (Azure TTS); key is server-side only'
+   * #swagger.security = [{ "ClientBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $text: '<p>Article HTML</p>', contentFormat: 'html', $voice: 'kk-KZ-AigulNeural', xmlLang: 'kk-KZ', outputFormat: 'audio-16khz-32kbitrate-mono-mp3' } }
+   * #swagger.responses[200] = { description: 'MP3 audio (binary)' }
+   * #swagger.responses[401] = { description: 'Client Not Authorised' }
+   */
+  const serializedBody = JSON.stringify(req.body || {});
+  const payloadSizeBytes = Buffer.byteLength(serializedBody, "utf8");
+  const payloadSizeMb = payloadSizeBytes / (1024 * 1024);
+  console.log(
+    `[tts] request payload size: ${payloadSizeMb.toFixed(
+      4
+    )} MB (${payloadSizeBytes} bytes)`
+  );
+
+  const response = await fetch(`${CLIENT_URL}/client/v1/tts/synthesize`, {
+    method: "POST",
+    headers: {
+      ...req.headers,
+      host: CLIENT_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    body: serializedBody,
+  }).catch(console.log);
+
+  if (!response) {
+    return res.status(502).json({
+      error: {
+        status: 502,
+        name: "BAD GATEWAY",
+        message: "Client service unavailable",
+      },
+    });
+  }
+
+  const upstreamContentType = response.headers.get("content-type") || "";
+
+  if (upstreamContentType.includes("audio/")) {
+    const buffer = Buffer.from(await response.arrayBuffer());
+    res.status(response.status);
+    res.setHeader("Content-Type", upstreamContentType);
+    res.setHeader("Cache-Control", "no-store");
+    return res.send(buffer);
+  }
+
+  let result;
+  try {
+    result = await response.json();
+  } catch {
+    const text = await response.text();
+    return res.status(response.status).send({
+      error: { status: response.status, message: text || "Invalid response" },
+    });
+  }
+
+  return res.status(response.status).send(result);
+});
+
 router.route("/chat-history").put(authenticate, async (req, res) => {
   /**
    * #swagger.tags = ['Client']
