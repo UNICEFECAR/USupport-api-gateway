@@ -246,6 +246,70 @@ router
     return res.status(response.status).send(result);
   });
 
+router
+  .route("/translations")
+  .get(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
+    /**
+     * #swagger.tags = ['Provider']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/provider/translations'
+     * #swagger.description = 'Get all translations for a provider'
+     * #swagger.security = [{ "CountryAdminBearer": [] }]
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['providerId'] = { in: 'query', required: true, type: 'string', description: 'ID of the Provider' }
+     * #swagger.responses[200] = { description: 'Provider translations map keyed by language_id' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     */
+
+    const response = await fetch(
+      `${PROVIDER_URL}/provider/v1/provider/translations?providerId=${req.query.providerId}`,
+      {
+        method: req.method,
+        headers: {
+          ...req.headers,
+          host: PROVIDER_LOCAL_HOST,
+          "x-admin-id": req.admin.admin_id,
+          "Content-type": "application/json",
+          "Cache-control": "no-cache",
+        },
+      }
+    ).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
+
+router.route("/translations/self").get(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/provider/translations/self'
+   * #swagger.description = 'Get all translations for the current provider'
+   * #swagger.security = [{ "ProviderBearer": [] }]
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.responses[200] = { description: 'Provider translations map keyed by language_id' }
+   * #swagger.responses[401] = { description: 'Provider Not Authorised' }
+   */
+  const response = await fetch(
+    `${PROVIDER_URL}/provider/v1/provider/translations/self`,
+    {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: PROVIDER_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }
+  ).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
 router.route("/all").get(async (req, res) => {
   /**
    * #swagger.tags = ['Provider']
