@@ -120,7 +120,6 @@ router.route("/countries/articles/active").get(async (req, res) => {
    * #swagger.description = 'Get article IDs for all active countries'
    * #swagger.responses[200] = { description: 'Active countries articles data object' }
    */
-  console.log("here");
   const response = await fetch(
     `${USER_URL}/user/v1/countries/articles/active`,
     {
@@ -131,7 +130,7 @@ router.route("/countries/articles/active").get(async (req, res) => {
         "Content-Type": "application/json",
         "Cache-control": "no-cache",
       },
-    }
+    },
   ).catch(console.log);
 
   const result = await response.json();
@@ -1001,7 +1000,7 @@ router.get("/mobile-map", authenticate, async (req, res) => {
   const result = await response.text();
   res.setHeader(
     "Content-Security-Policy",
-    "default-src 'self'; script-src 'self' https://maps.googleapis.com https://maps.gstatic.com 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src * data:; connect-src *;"
+    "default-src 'self'; script-src 'self' https://maps.googleapis.com https://maps.gstatic.com 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src * data:; connect-src *;",
   );
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   return res.status(response.status).send(result);
