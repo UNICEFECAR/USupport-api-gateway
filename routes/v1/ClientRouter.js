@@ -1057,6 +1057,40 @@ router
     return res.status(response.status).send(result);
   });
 
+router
+  .route("/organization/:organizationId/report")
+  .post(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Client']
+     * #swagger.method = 'POST'
+     * #swagger.path = '/client/organization/:organizationId/report'
+     * #swagger.description = 'Submit a report about an organization (at most once per hour per organization)'
+     * #swagger.security = [{ "ClientBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $reason: 'Description of the issue' } }
+     * #swagger.responses[200] = { description: 'Report created' }
+     * #swagger.responses[401] = { description: 'Client Not Authorised' }
+     * #swagger.responses[404] = { description: 'Organization not found' }
+     * #swagger.responses[429] = { description: 'Report submitted for this organization within the last hour' }
+     */
+
+    const response = await fetch(`${CLIENT_URL}/client/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: CLIENT_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+        "Cache-Control": "no-cache",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  });
+
 router.route("/organization/:organizationId").get(async (req, res) => {
   /**
    * #swagger.tags = ['Client']
