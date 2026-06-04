@@ -114,7 +114,7 @@ router.post(
 
     const result = await response.json();
     return res.status(response.status).send(result);
-  }
+  },
 );
 
 router
@@ -294,6 +294,91 @@ router.route("/login").post(async (req, res) => {
   const result = await response.json();
   return res.status(response.status).send(result);
 });
+
+router.route("/login/credentials").post(async (req, res) => {
+  const response = await fetch(`${ADMIN_URL}/admin/v1/auth${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: ADMIN_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
+const proxyAdminAuthRequest = async (req, res) => {
+  const headers = { ...req.headers };
+  delete headers["content-length"];
+  delete headers.host;
+  headers.host = ADMIN_LOCAL_HOST;
+  headers["Content-type"] = "application/json";
+
+  const fetchOptions = {
+    method: req.method,
+    headers,
+  };
+
+  if (["POST", "PUT", "PATCH"].includes(req.method)) {
+    fetchOptions.body = JSON.stringify(req.body ?? {});
+  }
+
+  let response;
+  try {
+    response = await fetch(`${ADMIN_URL}/admin/v1/auth${req.url}`, fetchOptions);
+  } catch (error) {
+    console.log(error);
+    return res.status(502).send({
+      error: {
+        status: 502,
+        name: "BAD GATEWAY",
+        message: "Admin service unavailable",
+      },
+    });
+  }
+
+  const text = await response.text();
+  let result = {};
+
+  if (text) {
+    try {
+      result = JSON.parse(text);
+    } catch (error) {
+      console.log(error);
+      return res.status(502).send({
+        error: {
+          status: 502,
+          name: "BAD GATEWAY",
+          message: "Invalid response from admin service",
+        },
+      });
+    }
+  }
+
+  return res.status(response.status).send(result);
+};
+
+router.route("/mfa/settings").get(authenticateAdmin, proxyAdminAuthRequest);
+router.route("/mfa/settings").patch(authenticateAdmin, proxyAdminAuthRequest);
+router.route("/mfa/passkey/options").post(proxyAdminAuthRequest);
+router.route("/mfa/passkey/verify").post(proxyAdminAuthRequest);
+router.route("/mfa/email/request").post(proxyAdminAuthRequest);
+router.route("/mfa/email/verify").post(proxyAdminAuthRequest);
+router
+  .route("/mfa/passkey/register/options")
+  .post(authenticateAdmin, proxyAdminAuthRequest);
+router
+  .route("/mfa/passkey/register/verify")
+  .post(authenticateAdmin, proxyAdminAuthRequest);
+router
+  .route("/mfa/passkey/credentials")
+  .get(authenticateAdmin, proxyAdminAuthRequest);
+router
+  .route("/mfa/passkey/credentials/:id")
+  .delete(authenticateAdmin, proxyAdminAuthRequest);
 
 router.route("/refresh-token").post(async (req, res) => {
   /**
@@ -1776,7 +1861,7 @@ router.get(
     const result = await response.json();
 
     return res.status(response.status).send(result);
-  }
+  },
 );
 
 router.get(
@@ -1808,7 +1893,7 @@ router.get(
     const result = await response.json();
 
     return res.status(response.status).send(result);
-  }
+  },
 );
 
 router.get(
@@ -1847,7 +1932,7 @@ router.get(
       res.setHeader("Content-Disposition", contentDisposition);
 
     response.body.pipe(res);
-  }
+  },
 );
 
 router.get("/organization/all", authenticateAdmin, async (req, res) => {
@@ -2048,7 +2133,7 @@ router.post(
     const result = await response.json();
 
     return res.status(response.status).send(result);
-  }
+  },
 );
 
 router.put(
@@ -2082,7 +2167,7 @@ router.put(
     const result = await response.json();
 
     return res.status(response.status).send(result);
-  }
+  },
 );
 
 router
@@ -2395,7 +2480,7 @@ router.get(
     const result = await response.json();
 
     return res.status(response.status).send(result);
-  }
+  },
 );
 
 router
@@ -2460,7 +2545,7 @@ router.get(
     const result = await response.json();
 
     return res.status(response.status).send(result);
-  }
+  },
 );
 
 router.get(
@@ -2491,7 +2576,7 @@ router.get(
     const result = await response.json();
 
     return res.status(response.status).send(result);
-  }
+  },
 );
 
 export { router };
