@@ -114,7 +114,7 @@ router.post(
 
     const result = await response.json();
     return res.status(response.status).send(result);
-  }
+  },
 );
 
 router
@@ -294,6 +294,91 @@ router.route("/login").post(async (req, res) => {
   const result = await response.json();
   return res.status(response.status).send(result);
 });
+
+router.route("/login/credentials").post(async (req, res) => {
+  const response = await fetch(`${ADMIN_URL}/admin/v1/auth${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: ADMIN_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
+const proxyAdminAuthRequest = async (req, res) => {
+  const headers = { ...req.headers };
+  delete headers["content-length"];
+  delete headers.host;
+  headers.host = ADMIN_LOCAL_HOST;
+  headers["Content-type"] = "application/json";
+
+  const fetchOptions = {
+    method: req.method,
+    headers,
+  };
+
+  if (["POST", "PUT", "PATCH"].includes(req.method)) {
+    fetchOptions.body = JSON.stringify(req.body ?? {});
+  }
+
+  let response;
+  try {
+    response = await fetch(`${ADMIN_URL}/admin/v1/auth${req.url}`, fetchOptions);
+  } catch (error) {
+    console.log(error);
+    return res.status(502).send({
+      error: {
+        status: 502,
+        name: "BAD GATEWAY",
+        message: "Admin service unavailable",
+      },
+    });
+  }
+
+  const text = await response.text();
+  let result = {};
+
+  if (text) {
+    try {
+      result = JSON.parse(text);
+    } catch (error) {
+      console.log(error);
+      return res.status(502).send({
+        error: {
+          status: 502,
+          name: "BAD GATEWAY",
+          message: "Invalid response from admin service",
+        },
+      });
+    }
+  }
+
+  return res.status(response.status).send(result);
+};
+
+router.route("/mfa/settings").get(authenticateAdmin, proxyAdminAuthRequest);
+router.route("/mfa/settings").patch(authenticateAdmin, proxyAdminAuthRequest);
+router.route("/mfa/passkey/options").post(proxyAdminAuthRequest);
+router.route("/mfa/passkey/verify").post(proxyAdminAuthRequest);
+router.route("/mfa/email/request").post(proxyAdminAuthRequest);
+router.route("/mfa/email/verify").post(proxyAdminAuthRequest);
+router
+  .route("/mfa/passkey/register/options")
+  .post(authenticateAdmin, proxyAdminAuthRequest);
+router
+  .route("/mfa/passkey/register/verify")
+  .post(authenticateAdmin, proxyAdminAuthRequest);
+router
+  .route("/mfa/passkey/credentials")
+  .get(authenticateAdmin, proxyAdminAuthRequest);
+router
+  .route("/mfa/passkey/credentials/:id")
+  .delete(authenticateAdmin, proxyAdminAuthRequest);
 
 router.route("/refresh-token").post(async (req, res) => {
   /**
@@ -740,6 +825,89 @@ router
   });
 
 router
+  .route("/country/pinned-articles")
+  .get(async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/admin/country/pinned-articles'
+     * #swagger.description = 'Get pinned article ids for a country'
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.responses[200] = { description: 'Array of pinned article IDs' }
+     */
+
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  })
+  .put(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'PUT'
+     * #swagger.path = '/admin/country/pinned-articles'
+     * #swagger.description = 'Pin an article for a country'
+     * #swagger.security = [{ "CountryAdminBearer": [] }]
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $id: '1' } }
+     * #swagger.responses[200] = { description: 'Updated array of pinned article IDs' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     */
+
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  })
+  .delete(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'DELETE'
+     * #swagger.path = '/admin/country/pinned-articles'
+     * #swagger.description = 'Unpin an article for a country'
+     * #swagger.security = [{ "CountryAdminBearer": [] }]
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $id: '1' } }
+     * #swagger.responses[200] = { description: 'Updated array of pinned article IDs' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     */
+
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
+
+router
   .route("/country/min-max-client-age")
   .put(authenticateAdmin, authorizeAdmin("global"), async (req, res) => {
     /**
@@ -989,6 +1157,37 @@ router
      * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
      * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
      * #swagger.responses[200] = { description: 'Contact Forms Data Object' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     */
+
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
+
+router
+  .route("/statistics/organization-reports")
+  .get(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/admin/statistics/organization-reports'
+     * #swagger.description = 'Get all organization reports from clients'
+     * #swagger.security = [{ "CountryAdminBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.responses[200] = { description: 'Organization reports list' }
      * #swagger.responses[401] = { description: 'Admin Not Authorised' }
      * #swagger.responses[401] = { description: 'No Permissions' }
      */
@@ -1662,7 +1861,7 @@ router.get(
     const result = await response.json();
 
     return res.status(response.status).send(result);
-  }
+  },
 );
 
 router.get(
@@ -1694,7 +1893,7 @@ router.get(
     const result = await response.json();
 
     return res.status(response.status).send(result);
-  }
+  },
 );
 
 router.get(
@@ -1733,7 +1932,7 @@ router.get(
       res.setHeader("Content-Disposition", contentDisposition);
 
     response.body.pipe(res);
-  }
+  },
 );
 
 router.get("/organization/all", authenticateAdmin, async (req, res) => {
@@ -1934,7 +2133,7 @@ router.post(
     const result = await response.json();
 
     return res.status(response.status).send(result);
-  }
+  },
 );
 
 router.put(
@@ -1968,7 +2167,7 @@ router.put(
     const result = await response.json();
 
     return res.status(response.status).send(result);
-  }
+  },
 );
 
 router
@@ -2281,7 +2480,7 @@ router.get(
     const result = await response.json();
 
     return res.status(response.status).send(result);
-  }
+  },
 );
 
 router
@@ -2346,7 +2545,7 @@ router.get(
     const result = await response.json();
 
     return res.status(response.status).send(result);
-  }
+  },
 );
 
 router.get(
@@ -2377,7 +2576,7 @@ router.get(
     const result = await response.json();
 
     return res.status(response.status).send(result);
-  }
+  },
 );
 
 export { router };

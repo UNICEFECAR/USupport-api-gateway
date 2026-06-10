@@ -39,7 +39,7 @@ router
           "Content-type": "application/json",
           "Cache-control": "no-cache",
         },
-      }
+      },
     ).catch(console.log);
 
     const result = await response.json();
@@ -71,7 +71,7 @@ router
           "Content-type": "application/json",
         },
         ...(req.body && { body: JSON.stringify(req.body) }),
-      }
+      },
     ).catch(console.log);
 
     const result = await response.json();
@@ -104,7 +104,7 @@ router
           "Content-type": "application/json",
         },
         ...(req.body && { body: JSON.stringify(req.body) }),
-      }
+      },
     ).catch(console.log);
 
     const result = await response.json();
@@ -135,7 +135,7 @@ router.route("/by-id").get(async (req, res) => {
         "Content-type": "application/json",
         "Cache-control": "no-cache",
       },
-    }
+    },
   ).catch(console.log);
 
   const result = await response.json();
@@ -173,7 +173,7 @@ router
           "Content-type": "application/json",
           "Cache-control": "no-cache",
         },
-      }
+      },
     ).catch(console.log);
 
     const result = await response.json();
@@ -205,7 +205,7 @@ router
           "Content-type": "application/json",
         },
         ...(req.body && { body: JSON.stringify(req.body) }),
-      }
+      },
     ).catch(console.log);
 
     const result = await response.json();
@@ -238,7 +238,7 @@ router
           "Content-type": "application/json",
         },
         ...(req.body && { body: JSON.stringify(req.body) }),
-      }
+      },
     ).catch(console.log);
 
     const result = await response.json();
@@ -273,7 +273,7 @@ router
           "Content-type": "application/json",
           "Cache-control": "no-cache",
         },
-      }
+      },
     ).catch(console.log);
 
     const result = await response.json();
@@ -303,7 +303,7 @@ router.route("/translations/self").get(authenticate, async (req, res) => {
         "Content-type": "application/json",
         "Cache-control": "no-cache",
       },
-    }
+    },
   ).catch(console.log);
 
   const result = await response.json();
@@ -337,7 +337,7 @@ router.route("/all").get(async (req, res) => {
         "Content-type": "application/json",
         "Cache-control": "no-cache",
       },
-    }
+    },
   ).catch(console.log);
 
   const result = await response.json();
@@ -371,7 +371,7 @@ router
           "Content-type": "application/json",
         },
         ...(req.body && { body: JSON.stringify(req.body) }),
-      }
+      },
     ).catch(console.log);
 
     const result = await response.json();
@@ -402,7 +402,7 @@ router
           "Content-type": "application/json",
         },
         ...(req.body && { body: JSON.stringify(req.body) }),
-      }
+      },
     ).catch(console.log);
 
     const result = await response.json();
@@ -438,7 +438,7 @@ router
           "x-admin-id": req.admin.admin_id,
         },
         ...(req.body && { body: JSON.stringify(req.body) }),
-      }
+      },
     ).catch(console.log);
 
     const result = await response.json();
@@ -471,7 +471,7 @@ router
           "x-admin-id": req.admin.admin_id,
         },
         ...(req.body && { body: JSON.stringify(req.body) }),
-      }
+      },
     ).catch(console.log);
 
     const result = await response.json();
@@ -503,8 +503,38 @@ router.route("/clients").get(authenticate, async (req, res) => {
         "Content-type": "application/json",
         "Cache-control": "no-cache",
       },
-    }
+    },
   ).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
+router.route("/availability").get(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/provider/availability'
+   * #swagger.description = 'Get provider availability for a calendar period (day, week, or month)'
+   * #swagger.security = [{ "ProviderBearer": [] }]
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['startDate'] = { in: 'query', required: true, type: 'string', description: 'Period anchor date (unix timestamp at 00:00 UTC)' }
+   * #swagger.parameters['period'] = { in: 'query', required: true, type: 'string', enum: ['day', 'week', 'month'], description: 'Calendar view period' }
+   * #swagger.responses[200] = { description: 'Providers Availability Object' }
+   * #swagger.responses[401] = { description: 'Provider Not Authorised' }
+   */
+
+  const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: PROVIDER_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
 
   const result = await response.json();
 
@@ -1322,7 +1352,7 @@ router.route("/activities").get(authenticate, async (req, res) => {
         "Content-type": "application/json",
         "Cache-control": "no-cache",
       },
-    }
+    },
   ).catch(console.log);
 
   const result = await response.json();
@@ -1351,7 +1381,7 @@ router.route("/random-providers").get(async (req, res) => {
         "Content-type": "application/json",
         "Cache-control": "no-cache",
       },
-    }
+    },
   ).catch(console.log);
 
   const result = await response.json();
@@ -1381,7 +1411,7 @@ router.route("/campaigns").get(authenticate, async (req, res) => {
         "Content-type": "application/json",
         "Cache-control": "no-cache",
       },
-    }
+    },
   ).catch(console.log);
 
   const result = await response.json();
@@ -1413,7 +1443,7 @@ router.route("/campaigns/enroll").post(authenticate, async (req, res) => {
         "Content-type": "application/json",
       },
       ...(req.body && { body: JSON.stringify(req.body) }),
-    }
+    },
   ).catch(console.log);
 
   const result = await response.json();
@@ -1445,7 +1475,7 @@ router.route("/campaigns/consultations").get(authenticate, async (req, res) => {
         "Content-type": "application/json",
         "Cache-control": "no-cache",
       },
-    }
+    },
   ).catch(console.log);
 
   const result = await response.json();
@@ -1477,7 +1507,7 @@ router.route("/status").get(authenticate, async (req, res) => {
         "Content-type": "application/json",
         "Cache-control": "no-cache",
       },
-    }
+    },
   ).catch(console.log);
 
   const result = await response.json();
@@ -1627,7 +1657,7 @@ router.post("/add-rating", authenticate, async (req, res) => {
         "Content-type": "application/json",
       },
       ...(req.body && { body: JSON.stringify(req.body) }),
-    }
+    },
   ).catch(console.log);
 
   const result = await response.json();
