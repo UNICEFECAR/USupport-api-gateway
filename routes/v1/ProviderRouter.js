@@ -1582,6 +1582,7 @@ router.route("/my-qa/tags").get(async (req, res) => {
    * #swagger.method = 'GET'
    * #swagger.path = '/provider/my-qa/tags'
    * #swagger.description = 'Get all tags'
+   * #swagger.parameters['languageId'] = { in: 'query', required: true, type: 'string', description: 'Language ID' }
    * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
    * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
    * #swagger.responses[200] = { description: 'Array Of Tag Data Objects' }
