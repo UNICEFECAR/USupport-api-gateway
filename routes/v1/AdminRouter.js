@@ -361,24 +361,167 @@ const proxyAdminAuthRequest = async (req, res) => {
   return res.status(response.status).send(result);
 };
 
-router.route("/mfa/settings").get(authenticateAdmin, proxyAdminAuthRequest);
-router.route("/mfa/settings").patch(authenticateAdmin, proxyAdminAuthRequest);
-router.route("/mfa/passkey/options").post(proxyAdminAuthRequest);
-router.route("/mfa/passkey/verify").post(proxyAdminAuthRequest);
-router.route("/mfa/email/request").post(proxyAdminAuthRequest);
-router.route("/mfa/email/verify").post(proxyAdminAuthRequest);
+router.route("/mfa/settings").get(authenticateAdmin, async (req, res) => {
+  /**
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/admin/mfa/settings'
+   * #swagger.description = 'Get MFA settings for the currently authenticated admin (enabled state and available methods)'
+   * #swagger.security = [{ "AnyAdminBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.responses[200] = { description: 'MFA settings object for the current admin' }
+   * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+   */
+  return proxyAdminAuthRequest(req, res);
+});
+
+router.route("/mfa/settings").patch(authenticateAdmin, async (req, res) => {
+  /**
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'PATCH'
+   * #swagger.path = '/admin/mfa/settings'
+   * #swagger.description = 'Enable or disable MFA for the currently authenticated admin. Requires the current account password for re-authentication.'
+   * #swagger.security = [{ "AnyAdminBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $enabled: true, $password: 'SomePass123' } }
+   * #swagger.responses[200] = { description: 'Updated MFA settings object' }
+   * #swagger.responses[400] = { description: 'Validation Error' }
+   * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+   * #swagger.responses[401] = { description: 'Incorrect Password' }
+   */
+  return proxyAdminAuthRequest(req, res);
+});
+
+router.route("/mfa/passkey/options").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/admin/mfa/passkey/options'
+   * #swagger.description = 'Generate WebAuthn authentication options (challenge) for completing a passkey-based MFA step during login. Tied to an active MFA session.'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $mfaSessionId: '22e3b2f6-5c95-4044-b444-592b5d41338a' } }
+   * #swagger.responses[200] = { description: 'WebAuthn PublicKeyCredentialRequestOptions for the client' }
+   * #swagger.responses[400] = { description: 'Validation Error' }
+   * #swagger.responses[404] = { description: 'MFA Session Not Found or Expired' }
+   */
+  return proxyAdminAuthRequest(req, res);
+});
+
+router.route("/mfa/passkey/verify").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/admin/mfa/passkey/verify'
+   * #swagger.description = 'Verify a WebAuthn assertion produced by the client to complete passkey-based MFA. On success, returns the admin access and refresh tokens.'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $mfaSessionId: '22e3b2f6-5c95-4044-b444-592b5d41338a', $id: 'credentialId', $rawId: 'base64url-raw-id', $type: 'public-key', $response: { clientDataJSON: 'base64url', authenticatorData: 'base64url', signature: 'base64url', userHandle: 'base64url' } } }
+   * #swagger.responses[200] = { description: 'Admin Access and Refresh Tokens' }
+   * #swagger.responses[400] = { description: 'Validation Error' }
+   * #swagger.responses[401] = { description: 'Passkey Assertion Invalid' }
+   * #swagger.responses[404] = { description: 'MFA Session Not Found or Expired' }
+   */
+  return proxyAdminAuthRequest(req, res);
+});
+
+router.route("/mfa/email/request").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/admin/mfa/email/request'
+   * #swagger.description = 'Send a one-time password to the admin email for completing email-based MFA during login. Tied to an active MFA session.'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $mfaSessionId: '22e3b2f6-5c95-4044-b444-592b5d41338a' } }
+   * #swagger.responses[200] = { description: 'OTP dispatched successfully' }
+   * #swagger.responses[400] = { description: 'Validation Error' }
+   * #swagger.responses[404] = { description: 'MFA Session Not Found or Expired' }
+   */
+  return proxyAdminAuthRequest(req, res);
+});
+
+router.route("/mfa/email/verify").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/admin/mfa/email/verify'
+   * #swagger.description = 'Verify the email OTP to complete email-based MFA. On success, returns the admin access and refresh tokens.'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $mfaSessionId: '22e3b2f6-5c95-4044-b444-592b5d41338a', $otp: '1234' } }
+   * #swagger.responses[200] = { description: 'Admin Access and Refresh Tokens' }
+   * #swagger.responses[400] = { description: 'Validation Error' }
+   * #swagger.responses[401] = { description: 'Invalid or Expired OTP' }
+   * #swagger.responses[404] = { description: 'MFA Session Not Found or Expired' }
+   */
+  return proxyAdminAuthRequest(req, res);
+});
+
 router
   .route("/mfa/passkey/register/options")
-  .post(authenticateAdmin, proxyAdminAuthRequest);
+  .post(authenticateAdmin, async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'POST'
+     * #swagger.path = '/admin/mfa/passkey/register/options'
+     * #swagger.description = 'Generate WebAuthn registration options (challenge) so the currently authenticated admin can enroll a new passkey.'
+     * #swagger.security = [{ "AnyAdminBearer": [] }]
+     * #swagger.parameters['obj'] = { in: 'body', schema: { name: 'My YubiKey' } }
+     * #swagger.responses[200] = { description: 'WebAuthn PublicKeyCredentialCreationOptions for the client' }
+     * #swagger.responses[400] = { description: 'Validation Error' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     */
+    return proxyAdminAuthRequest(req, res);
+  });
+
 router
   .route("/mfa/passkey/register/verify")
-  .post(authenticateAdmin, proxyAdminAuthRequest);
+  .post(authenticateAdmin, async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'POST'
+     * #swagger.path = '/admin/mfa/passkey/register/verify'
+     * #swagger.description = 'Verify a WebAuthn attestation produced during passkey enrollment and persist the new credential for the currently authenticated admin.'
+     * #swagger.security = [{ "AnyAdminBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { name: 'My YubiKey', $id: 'credentialId', $rawId: 'base64url-raw-id', $type: 'public-key', $response: { clientDataJSON: 'base64url', attestationObject: 'base64url' } } }
+     * #swagger.responses[200] = { description: 'Newly registered passkey credential' }
+     * #swagger.responses[400] = { description: 'Validation Error' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'Passkey Attestation Invalid' }
+     */
+    return proxyAdminAuthRequest(req, res);
+  });
+
 router
   .route("/mfa/passkey/credentials")
-  .get(authenticateAdmin, proxyAdminAuthRequest);
+  .get(authenticateAdmin, async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/admin/mfa/passkey/credentials'
+     * #swagger.description = 'List all passkey credentials registered by the currently authenticated admin.'
+     * #swagger.security = [{ "AnyAdminBearer": [] }]
+     * #swagger.responses[200] = { description: 'Array of passkey credential metadata' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     */
+    return proxyAdminAuthRequest(req, res);
+  });
+
 router
   .route("/mfa/passkey/credentials/:id")
-  .delete(authenticateAdmin, proxyAdminAuthRequest);
+  .delete(authenticateAdmin, async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'DELETE'
+     * #swagger.path = '/admin/mfa/passkey/credentials/{id}'
+     * #swagger.description = 'Delete a specific passkey credential owned by the currently authenticated admin.'
+     * #swagger.security = [{ "AnyAdminBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['id'] = { in: 'path', required: true, type: 'string', description: 'Identifier of the passkey credential to delete' }
+     * #swagger.responses[200] = { description: 'Passkey deleted successfully' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[404] = { description: 'Passkey Not Found' }
+     */
+    return proxyAdminAuthRequest(req, res);
+  });
 
 router.route("/refresh-token").post(async (req, res) => {
   /**
