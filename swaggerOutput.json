@@ -574,11 +574,68 @@
         }
       }
     },
-    "/login/credentials": {
+    "/admin/login/credentials": {
       "post": {
-        "description": "",
-        "parameters": [],
-        "responses": {}
+        "tags": [
+          "Admin"
+        ],
+        "description": "Validate admin email and password. For country admins with MFA enabled, returns an MFA session and available methods instead of tokens. Otherwise returns admin data and access/refresh tokens.",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country (required for country admin login)"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "john.doe@email.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "SomePass123"
+                },
+                "role": {
+                  "type": "string",
+                  "example": "country"
+                }
+              },
+              "required": [
+                "email",
+                "password",
+                "role"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login succeeded — either admin tokens (mfaRequired: false) or MFA session details (mfaRequired: true)"
+          },
+          "400": {
+            "description": "Validation Error"
+          },
+          "401": {
+            "description": "Incorrect Credentials"
+          },
+          "403": {
+            "description": "Account Deactivated"
+          }
+        }
       }
     },
     "/admin/mfa/settings": {
@@ -11639,11 +11696,46 @@
         ]
       }
     },
-    "/access-platform": {
+    "/user/access-platform": {
       "get": {
-        "description": "",
-        "parameters": [],
-        "responses": {}
+        "tags": [
+          "User"
+        ],
+        "description": "Record a platform access event for analytics. Authentication is optional for the website platform and when no Authorization header is sent; if a bearer token is provided for client or provider platforms, it must be valid and the authenticated user id is forwarded automatically.",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "x-visitor-id",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "UUID identifying an anonymous visitor (used when no authenticated user is present)"
+          },
+          {
+            "name": "platform",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Platform being accessed (e.g. website, client, provider)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Platform access recorded successfully"
+          },
+          "400": {
+            "description": "Validation Error"
+          },
+          "401": {
+            "description": "User Not Authorised (when a bearer token is provided for a non-website platform)"
+          }
+        }
       }
     },
     "/user/content-ratings": {
