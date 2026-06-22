@@ -296,6 +296,19 @@ router.route("/login").post(async (req, res) => {
 });
 
 router.route("/login/credentials").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/admin/login/credentials'
+   * #swagger.description = 'Validate admin email and password. For country admins with MFA enabled, returns an MFA session and available methods instead of tokens. Otherwise returns admin data and access/refresh tokens.'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country (required for country admin login)' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $email: 'john.doe@email.com', $password: 'SomePass123', $role: 'country' } }
+   * #swagger.responses[200] = { description: 'Login succeeded — either admin tokens (mfaRequired: false) or MFA session details (mfaRequired: true)' }
+   * #swagger.responses[400] = { description: 'Validation Error' }
+   * #swagger.responses[401] = { description: 'Incorrect Credentials' }
+   * #swagger.responses[403] = { description: 'Account Deactivated' }
+   */
   const response = await fetch(`${ADMIN_URL}/admin/v1/auth${req.url}`, {
     method: req.method,
     headers: {
