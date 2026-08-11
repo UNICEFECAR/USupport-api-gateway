@@ -786,6 +786,18 @@ router.route("/logout").post(async (req, res) => {
 });
 
 router.get("/access-platform", authenticateIfBearer, async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/user/access-platform'
+   * #swagger.description = 'Record a platform access event for analytics. Authentication is optional for the website platform and when no Authorization header is sent; if a bearer token is provided for client or provider platforms, it must be valid and the authenticated user id is forwarded automatically.'
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['x-visitor-id'] = { in: 'header', required: false, type: 'string', description: 'UUID identifying an anonymous visitor (used when no authenticated user is present)' }
+   * #swagger.parameters['platform'] = { in: 'query', required: true, type: 'string', description: 'Platform being accessed (e.g. website, client, provider)' }
+   * #swagger.responses[200] = { description: 'Platform access recorded successfully' }
+   * #swagger.responses[400] = { description: 'Validation Error' }
+   * #swagger.responses[401] = { description: 'User Not Authorised (when a bearer token is provided for a non-website platform)' }
+   */
   const headers = {
     ...req.headers,
     host: USER_LOCAL_HOST,
