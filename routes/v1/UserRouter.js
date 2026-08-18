@@ -1027,6 +1027,7 @@ router.post("/content-engagement", authenticateByPlatform, async (req, res) => {
    * #swagger.security = [{ "AnyUserBearer": [] }]
    * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
    * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['x-visitor-id'] = { in: 'header', required: false, type: 'string', description: 'UUID identifying an anonymous visitor (used when no authenticated user is present)' }
    * #swagger.parameters['obj'] = { in: 'body', schema: { $contentId: 1, $contentType: 'article', $action: 'like' } }
    * #swagger.responses[200] = { description: 'Success Status' }
    */
