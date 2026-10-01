@@ -23,6 +23,10 @@ export const MessagingSocket = (io) => {
   const lostRooms = new Map();
   // Chat rooms whose participant reported a poor connection
   const poorRooms = new Set();
+  // Chat rooms whose participant has the consultation open (a dropped connection still counts as present,
+  // that is reported separately as lost). Unlike the video room, this is not affected by the
+  // participant's other devices or leftover sessions
+  const presentRooms = new Set();
 
   const isRoomEmpty = (room) => !io.sockets.adapter.rooms.get(room)?.size;
 
@@ -33,6 +37,7 @@ export const MessagingSocket = (io) => {
       setTimeout(() => {
         lostRooms.delete(room);
         poorRooms.delete(room);
+        presentRooms.delete(room);
       }, PEER_LOST_STATE_TTL)
     );
   };
@@ -77,6 +82,17 @@ export const MessagingSocket = (io) => {
       if (poorRooms.has(otherRoom)) {
         socket.emit("peer quality", "poor");
       }
+
+      if (!presentRooms.has(room)) {
+        presentRooms.add(room);
+        socket.to(otherRoom).emit("peer presence", "present");
+      }
+
+      // Whether the other participant has the consultation open
+      socket.emit(
+        "peer presence",
+        presentRooms.has(otherRoom) ? "present" : "absent"
+      );
     });
 
     socket.on("disconnect", (reason) => {
@@ -87,7 +103,14 @@ export const MessagingSocket = (io) => {
 
       // Disconnected on purpose (left the consultation or closed the page)
       if (reason === "client namespace disconnect") {
-        if (isRoomEmpty(room)) poorRooms.delete(room);
+        if (isRoomEmpty(room)) {
+          poorRooms.delete(room);
+          presentRooms.delete(room);
+          io.to(getChatRoom(chat.chatId, getOtherUserType(chat.userType))).emit(
+            "peer presence",
+            "absent"
+          );
+        }
         return;
       }
 
