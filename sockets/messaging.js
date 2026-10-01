@@ -21,6 +21,8 @@ export const MessagingSocket = (io) => {
   const pendingPeerLost = new Map();
   // Chat rooms whose participant was reported as lost to the other side: room -> cleanup timeout
   const lostRooms = new Map();
+  // Chat rooms whose participant reported a poor connection
+  const poorRooms = new Set();
 
   const isRoomEmpty = (room) => !io.sockets.adapter.rooms.get(room)?.size;
 
@@ -28,7 +30,10 @@ export const MessagingSocket = (io) => {
     clearTimeout(lostRooms.get(room));
     lostRooms.set(
       room,
-      setTimeout(() => lostRooms.delete(room), PEER_LOST_STATE_TTL)
+      setTimeout(() => {
+        lostRooms.delete(room);
+        poorRooms.delete(room);
+      }, PEER_LOST_STATE_TTL)
     );
   };
 
@@ -62,16 +67,30 @@ export const MessagingSocket = (io) => {
       if (lostRooms.has(otherRoom)) {
         socket.emit("peer connection", "lost");
       }
+
+      // A new connection starts with an unknown quality and reports it again if it is still poor
+      if (poorRooms.delete(room)) {
+        socket.to(otherRoom).emit("peer quality", "good");
+      }
+
+      // The other participant currently has a poor connection
+      if (poorRooms.has(otherRoom)) {
+        socket.emit("peer quality", "poor");
+      }
     });
 
     socket.on("disconnect", (reason) => {
       const { chat } = socket.data;
       if (!chat) return;
 
-      // Disconnected on purpose (left the consultation or closed the page)
-      if (reason === "client namespace disconnect") return;
-
       const room = getChatRoom(chat.chatId, chat.userType);
+
+      // Disconnected on purpose (left the consultation or closed the page)
+      if (reason === "client namespace disconnect") {
+        if (isRoomEmpty(room)) poorRooms.delete(room);
+        return;
+      }
+
       if (!isRoomEmpty(room) || pendingPeerLost.has(room)) return;
 
       pendingPeerLost.set(
@@ -87,6 +106,26 @@ export const MessagingSocket = (io) => {
           );
         }, PEER_LOST_DELAY)
       );
+    });
+
+    // Each participant reports the quality of its own connection, which is passed on to the other side.
+    // The chat is sent along because this may arrive before "join chat" after a reconnect
+    socket.on("connection quality", (payload) => {
+      const { chatId, userType, quality } = payload || {};
+      if (!isValidTarget(chatId, userType)) return;
+      if (quality !== "poor" && quality !== "good") return;
+
+      const room = getChatRoom(chatId, userType);
+      const hasChanged =
+        quality === "poor"
+          ? !poorRooms.has(room) && !!poorRooms.add(room)
+          : poorRooms.delete(room);
+
+      if (hasChanged) {
+        socket
+          .to(getChatRoom(chatId, getOtherUserType(userType)))
+          .emit("peer quality", quality);
+      }
     });
 
     // Lets the client measure the round trip time of its connection
