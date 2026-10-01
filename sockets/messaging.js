@@ -1,99 +1,33 @@
-import fetch from "node-fetch";
+const USER_TYPES = ["client", "provider"];
+
+// Every socket of a chat participant joins the room for its side of the chat,
+// so messages reach all of that participant's current sockets (reconnects, multiple tabs/devices)
+const getChatRoom = (chatId, userType) => `chat:${chatId}:${userType}`;
+
+const isValidTarget = (chatId, userType) =>
+  !!chatId && USER_TYPES.includes(userType);
 
 export const MessagingSocket = (io) => {
-  const MESSAGING_LOCAL_HOST = "http://localhost:3006";
-
-  const MESSAGING_URL = process.env.MESSAGING_URL;
-
-  const getClientSocketId = async (language, country, chatId) => {
-    const response = await fetch(
-      `${MESSAGING_URL}/messaging/v1/client-socket?chatId=${chatId}`,
-      {
-        method: "GET",
-        headers: {
-          host: MESSAGING_LOCAL_HOST,
-          "Content-type": "application/json",
-          "x-language-alpha-2": language,
-          "x-country-alpha-2": country,
-        },
-      }
-    ).catch(console.log);
-
-    if (response) {
-      const { client_socket_id: socketId } = await response.json();
-
-      return socketId;
-    }
-  };
-
-  const getProviderSocketId = async (language, country, chatId) => {
-    const response = await fetch(
-      `${MESSAGING_URL}/messaging/v1/provider-socket?chatId=${chatId}`,
-      {
-        method: "GET",
-        headers: {
-          host: MESSAGING_LOCAL_HOST,
-          "Content-type": "application/json",
-          "x-language-alpha-2": language,
-          "x-country-alpha-2": country,
-        },
-      }
-    ).catch(console.log);
-
-    if (response) {
-      const { provider_socket_id: socketId } = await response.json();
-
-      return socketId;
-    }
-  };
-
   io.on("connection", (socket) => {
-    socket.on("join chat", async (payload) => {
-      const { language, country, chatId, userType } = payload;
+    socket.on("join chat", (payload) => {
+      const { chatId, userType } = payload || {};
+      if (!isValidTarget(chatId, userType)) return;
 
-      if (userType === "client") {
-        await fetch(`${MESSAGING_URL}/messaging/v1/client-socket`, {
-          method: "PUT",
-          headers: {
-            host: MESSAGING_LOCAL_HOST,
-            "Content-type": "application/json",
-            "x-language-alpha-2": language,
-            "x-country-alpha-2": country,
-          },
-          body: JSON.stringify({ chatId, socketId: socket.id }),
-        }).catch(console.log);
-      } else if (userType === "provider") {
-        await fetch(`${MESSAGING_URL}/messaging/v1/provider-socket`, {
-          method: "PUT",
-          headers: {
-            host: MESSAGING_LOCAL_HOST,
-            "Content-type": "application/json",
-            "x-language-alpha-2": language,
-            "x-country-alpha-2": country,
-          },
-          body: JSON.stringify({ chatId, socketId: socket.id }),
-        }).catch(console.log);
-      }
+      socket.join(getChatRoom(chatId, userType));
     });
 
-    socket.on("typing", async (payload) => {
-      const { language, country, chatId, to, type } = payload;
-      const socketId =
-        to === "provider"
-          ? await getProviderSocketId(language, country, chatId)
-          : await getClientSocketId(language, country, chatId);
-      io.to(socketId).emit("typing", type);
+    socket.on("typing", (payload) => {
+      const { chatId, to, type } = payload || {};
+      if (!isValidTarget(chatId, to)) return;
+
+      socket.to(getChatRoom(chatId, to)).emit("typing", type);
     });
 
-    socket.on("send message", async (payload) => {
-      const { language, country, chatId, to, message } = payload;
+    socket.on("send message", (payload) => {
+      const { chatId, to, message } = payload || {};
+      if (!isValidTarget(chatId, to)) return;
 
-      const socketId =
-        to === "provider"
-          ? await getProviderSocketId(language, country, chatId)
-          : await getClientSocketId(language, country, chatId);
-
-      io.to(socketId).emit("receive message", message);
+      socket.to(getChatRoom(chatId, to)).emit("receive message", message);
     });
   });
 };
