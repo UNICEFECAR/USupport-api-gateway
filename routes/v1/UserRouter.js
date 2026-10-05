@@ -186,6 +186,32 @@ router.route("/countries/by-alpha-2-code").get(async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/app-version").get(async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/user/app-version'
+   * #swagger.description = 'Check if the mobile app needs an optional or forced update'
+   * #swagger.parameters['platform'] = { in: 'query', required: true, type: 'string', description: 'ios or android' }
+   * #swagger.parameters['version'] = { in: 'query', required: true, type: 'string', description: 'Installed app version, e.g. 1.0.35' }
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.responses[200] = { description: 'App Version Status Object' }
+   */
+
+  const response = await fetch(`${USER_URL}/user/v1${req.url}`, {
+    method: "GET",
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-Type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
 router.route("/work-with").get(async (req, res) => {
   /**
    * #swagger.tags = ['User']
