@@ -658,6 +658,67 @@ router
     return res.status(response.status).send(result);
   });
 
+router
+  .route("/availability/slot-duration")
+  .put(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Provider']
+     * #swagger.method = 'PUT'
+     * #swagger.path = '/provider/availability/slot-duration'
+     * #swagger.description = 'Change how long an already-open availability slot is'
+     * #swagger.security = [{ "ProviderBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $startDate: '1668384000', $slot: '1668384000', $durationMinutes: 30 } }
+     * #swagger.responses[200] = { description: 'Success Status' }
+     * #swagger.responses[400] = { description: 'Invalid Duration, Overlapping Slot or Booked Consultation' }
+     * #swagger.responses[401] = { description: 'Provider Not Authorised' }
+     */
+    const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: PROVIDER_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
+
+router.route("/availability/day").delete(authenticate, async (req, res) => {
+  /**
+   * #swagger.tags = ['Provider']
+   * #swagger.method = 'DELETE'
+   * #swagger.path = '/provider/availability/day'
+   * #swagger.description = 'Clear many availability slots at once, across all pools'
+   * #swagger.security = [{ "ProviderBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $startDate: '1668384000', $slots: ['1668384000', '1668385800'] } }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   * #swagger.responses[401] = { description: 'Provider Not Authorised' }
+   */
+  const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: PROVIDER_LOCAL_HOST,
+      "x-user-id": req.user.user_id,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 router.route("/availability/template").put(authenticate, async (req, res) => {
   /**
    * #swagger.tags = ['Provider']
@@ -948,7 +1009,7 @@ router.route("/consultation/block").post(authenticate, async (req, res) => {
    * #swagger.security = [{ "AnyUserBearer": [] }]
    * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
    * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
-   * #swagger.parameters['obj'] = { in: 'body', schema: { clientId: '22e3b2f6-5c95-4044-b444-592b5d41338a', providerId: '3ac854bd-fa11-4d00-acea-ce9c78ca6007', $time: '1668787200' } }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { clientId: '22e3b2f6-5c95-4044-b444-592b5d41338a', providerId: '3ac854bd-fa11-4d00-acea-ce9c78ca6007', $time: '1668787200', durationMinutes: 30 } }
    * #swagger.responses[200] = { description: 'Consultation ID Object' }
    * #swagger.responses[401] = { description: 'User Not Authorised' }
    * #swagger.responses[404] = { description: 'Consultation Not Found' }
@@ -1165,6 +1226,7 @@ router.route("/consultation/join").put(authenticate, async (req, res) => {
    * #swagger.responses[400] = { description: 'Consultation Not Scheduled' }
    * #swagger.responses[401] = { description: 'User Not Authorised' }
    * #swagger.responses[404] = { description: 'Consultation Not Found' }
+   * #swagger.responses[502] = { description: 'Provider Service Unavailable' }
    */
   const response = await fetch(`${PROVIDER_URL}/provider/v1${req.url}`, {
     method: req.method,
@@ -1176,6 +1238,11 @@ router.route("/consultation/join").put(authenticate, async (req, res) => {
     },
     ...(req.body && { body: JSON.stringify(req.body) }),
   }).catch(console.log);
+
+  // Without a response the request would never be answered and the join would hang
+  if (!response) {
+    return res.status(502).send({ message: "Provider service unavailable" });
+  }
 
   const result = await response.json();
 
