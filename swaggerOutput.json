@@ -184,6 +184,68 @@
         ]
       }
     },
+    "/admin/organization/metadata": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all organization metadata",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Array of Organization Metadata"
+          }
+        }
+      }
+    },
+    "/admin/translate": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Translate text",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "example": "Hello, how are you?"
+                },
+                "sourceLanguage": {
+                  "type": "string",
+                  "example": "en"
+                },
+                "targetLanguage": {
+                  "type": "string",
+                  "example": "uk"
+                }
+              },
+              "required": [
+                "text",
+                "sourceLanguage",
+                "targetLanguage"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Translated Text"
+          }
+        }
+      }
+    },
     "/admin/by-id": {
       "get": {
         "tags": [
@@ -1431,6 +1493,50 @@
         ]
       }
     },
+    "/admin/statistics/platform-suggestions": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all platform suggestions",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "countryId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "ID of the country of the admin"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Information Portal Suggestions Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
     "/admin/statistics/client-ratings": {
       "get": {
         "tags": [
@@ -1493,6 +1599,57 @@
         "responses": {
           "200": {
             "description": "Contact Forms Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/statistics/mood-tracker-report": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get aggregated mood tracker statistics",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Filter results starting from this ISO date (inclusive)"
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Filter results up to this ISO date (inclusive)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mood tracker aggregated statistics"
           },
           "401": {
             "description": "No Permissions"
@@ -2170,7 +2327,22 @@
           "Admin"
         ],
         "description": "Get all platform metrics",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "description": "startDate"
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "description": "endDate"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Platform Metrics Data Object"
@@ -2182,6 +2354,67 @@
         "security": [
           {
             "GlobalAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/content-active-status": {
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Update content module active status for a country",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "contentType": {
+                  "type": "string",
+                  "example": "videos"
+                },
+                "status": {
+                  "type": "string",
+                  "example": "enabled"
+                }
+              },
+              "required": [
+                "contentType",
+                "status"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Country Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          },
+          "404": {
+            "description": "Country Not Found"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
           }
         ]
       }
@@ -2204,6 +2437,93 @@
         "security": [
           {
             "GlobalAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/statistics/sos-center-clicks": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get aggregated SOS center click statistics",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "SOS Center Click Statistics Data Object"
+          },
+          "401": {
+            "description": "Admin Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "AnyAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/statistics/providers/availability/report": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Download provider availability report for the next 30 days as CSV",
+        "produces": [
+          null
+        ],
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CSV file download",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Admin Not Authorised"
+          },
+          "403": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
           }
         ]
       }
@@ -2366,6 +2686,26 @@
             "GlobalAdminBearer": []
           }
         ]
+      },
+      "delete": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Delete organization",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Organization Deleted Successfully"
+          },
+          "401": {
+            "description": "Admin Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
       }
     },
     "/admin/organization/assign-provider": {
@@ -2459,6 +2799,522 @@
         "security": [
           {
             "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/country/videos": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all videos for a country",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Videos IDs"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Initialise videos for a new country",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Videos IDs"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Add given video to a country",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "1"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Array of Videos IDs"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Delete given video from a country",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "1"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Array of Videos IDs"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/country/podcasts": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all podcasts for a country",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Podcast IDs"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Initialise podcasts for a new country",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Podcast IDs"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Add given podcast to a country",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "1"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Array of Podcast IDs"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Delete given podcast from a country",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "1"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Array of Podcast IDs"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "CountryAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/baseline-assessment": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all baseline assessment thresholds",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Baseline Assessment Thresholds"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Create a new baseline assessment threshold",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "factor": {
+                  "type": "string",
+                  "example": "depression"
+                },
+                "below": {
+                  "type": "string",
+                  "example": "Low risk"
+                },
+                "above": {
+                  "type": "string",
+                  "example": "High risk"
+                }
+              },
+              "required": [
+                "factor",
+                "below",
+                "above"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created Baseline Assessment Threshold"
+          },
+          "400": {
+            "description": "Validation Error"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/baseline-assessment/factor/{factor}": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get baseline assessment threshold by factor",
+        "parameters": [
+          {
+            "name": "factor",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The factor to get threshold for (e.g., depression, anxiety)"
+          },
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Baseline Assessment Threshold Data Object"
+          },
+          "401": {
+            "description": "No Permissions"
+          },
+          "404": {
+            "description": "Factor Not Found"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/baseline-assessment/{id}": {
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Update baseline assessment threshold by UUID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "UUID of the baseline assessment threshold"
+          },
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "factor": {
+                  "type": "string",
+                  "example": "depression"
+                },
+                "below": {
+                  "type": "string",
+                  "example": "Low risk"
+                },
+                "above": {
+                  "type": "string",
+                  "example": "High risk"
+                }
+              },
+              "required": [
+                "factor",
+                "below",
+                "above"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Baseline Assessment Threshold"
+          },
+          "400": {
+            "description": "Validation Error"
+          },
+          "401": {
+            "description": "No Permissions"
+          },
+          "404": {
+            "description": "Baseline Assessment Threshold Not Found"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/baseline-assessment/analysis": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get analysis of all completed baseline assessments with median calculations",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Analysis of all completed baseline assessments with median calculations"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
+          }
+        ]
+      }
+    },
+    "/admin/statistics/playandheal-visits": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Get all play and heal visits",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "All play and heal visits"
+          },
+          "401": {
+            "description": "No Permissions"
+          }
+        },
+        "security": [
+          {
+            "GlobalAdminBearer": []
           }
         ]
       }
@@ -3048,6 +3904,57 @@
         ]
       }
     },
+    "/client/mood-tracker/report": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Generate mood tracker report",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The start date"
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The end date"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mood Tracker Report Data Object"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
     "/client/mood-tracker/today": {
       "get": {
         "tags": [
@@ -3073,6 +3980,43 @@
         "responses": {
           "200": {
             "description": "Mood Track Data Object"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/mood-tracker/has-completed": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Check if the current client has ever completed the mood tracker",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Has Completed Status"
           },
           "401": {
             "description": "Client Not Authorised"
@@ -3124,6 +4068,43 @@
         "responses": {
           "200": {
             "description": "Mood Track Data Object"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/mood-tracker/history/delete": {
+      "put": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Soft delete mood tracker entry",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
           },
           "401": {
             "description": "Client Not Authorised"
@@ -3696,6 +4677,654 @@
             "required": true,
             "type": "string",
             "description": "Alpha 2 code"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/add-category-interaction": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Add category interaction",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "category_id": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                }
+              },
+              "required": [
+                "category_id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/category-interactions": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Get category interactions",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/organization": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Get all organizations",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/organization/specializations": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Get organization specializations",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of organization specializations"
+          }
+        }
+      }
+    },
+    "/client/organization/personalized": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Get personalized organizations",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/organization/:organizationId": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Get an organization by id",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/add-platform-suggestion": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Add platform suggestion",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "suggestion": {
+                  "type": "string",
+                  "example": "I love the app"
+                }
+              },
+              "required": [
+                "suggestion"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/baseline-assessment/add-answer": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Add baseline_assessment answer",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "question_id": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                },
+                "answer_value": {
+                  "type": "number",
+                  "example": 3
+                },
+                "baseline_assessment_session_id": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                }
+              },
+              "required": [
+                "question_id",
+                "answer_value"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status with baseline_assessment session ID"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          },
+          "404": {
+            "description": "Client Not Found"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/baseline-assessment/questions": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Get all baseline_assessment questions sorted by position",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of baseline_assessment questions sorted by position"
+          }
+        }
+      }
+    },
+    "/client/baseline-assessment/assessments": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Get all baseline_assessment sessions overview for the current client (without detailed answers)",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of baseline_assessment sessions overview with completion stats (without detailed answers)"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/baseline-assessment/answers": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Get baseline_assessment answers for a session",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "sessionId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The ID of the baseline_assessment session"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of baseline_assessment answers"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/baseline-assessment/latest": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Get the latest baseline_assessment",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Object of latest baseline_assessment"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/baseline-assessment/create-assessment": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Create a new baseline_assessment session",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Created baseline_assessment session object"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/has-checked-baseline-assessment": {
+      "patch": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Update the client has checked baseline assessment",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "hasCheckedBaselineAssesment": {
+                  "type": "boolean",
+                  "example": true
+                }
+              },
+              "required": [
+                "hasCheckedBaselineAssesment"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          },
+          "401": {
+            "description": "Client Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "ClientBearer": []
+          }
+        ]
+      }
+    },
+    "/client/sos-center-click": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "description": "Track SOS center click interaction",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "sosCenterId": {
+                  "type": "number",
+                  "example": 123
+                },
+                "isMain": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "platform": {
+                  "type": "string",
+                  "example": "web"
+                }
+              },
+              "required": [
+                "sosCenterId",
+                "isMain",
+                "platform"
+              ]
+            }
           }
         ],
         "responses": {
@@ -9174,6 +10803,421 @@
             "AnyUserBearer": []
           }
         ]
+      }
+    },
+    "/user/generate-pdf": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Generate PDF from content URL",
+        "produces": [
+          "application/pdf"
+        ],
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "contentUrl": {
+                  "type": "string",
+                  "example": "https://cms-url.com/api/content/123"
+                },
+                "contentType": {
+                  "type": "string",
+                  "example": "article"
+                }
+              },
+              "required": [
+                "contentUrl",
+                "contentType"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PDF file"
+          }
+        }
+      }
+    },
+    "/user/country-event": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Track country event (registration clicks, consultation actions, etc.)",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "countryId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                },
+                "eventType": {
+                  "type": "string",
+                  "example": "web_email_register_click"
+                },
+                "clientDetailId": {
+                  "type": "string",
+                  "example": "22e3b2f6-5c95-4044-b444-592b5d41338a"
+                }
+              },
+              "required": [
+                "countryId",
+                "eventType"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          }
+        }
+      }
+    },
+    "/user/organizations-key": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Get organization key",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "platform",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Platform name"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Organization Key Data Object"
+          }
+        }
+      }
+    },
+    "/user/mobile-map": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Get mobile map HTML page",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "lat",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Latitude"
+          },
+          {
+            "name": "lng",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Longitude"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mobile Map HTML Page"
+          },
+          "401": {
+            "description": "User Not Authorised"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      }
+    },
+    "/user/content-engagement": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Track content engagement",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "contentId": {
+                  "type": "number",
+                  "example": 1
+                },
+                "contentType": {
+                  "type": "string",
+                  "example": "article"
+                },
+                "action": {
+                  "type": "string",
+                  "example": "like"
+                }
+              },
+              "required": [
+                "contentId",
+                "contentType",
+                "action"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Get content engagement",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Content Engagement data object"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "description": "Delete content engagement",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Status"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      }
+    },
+    "/user/content-engagements-by-id": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Get content engagements by id and content type",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "contentType",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "The type of the content - video, article, podcast"
+          },
+          {
+            "name": "ids",
+            "in": "query",
+            "required": true,
+            "type": "array",
+            "description": "The ids of the content"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Content Engagements data object"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      }
+    },
+    "/user/content-engagements": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Get content engagements",
+        "parameters": [
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          },
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Content Engagements data object"
+          }
+        },
+        "security": [
+          {
+            "AnyUserBearer": []
+          }
+        ]
+      }
+    },
+    "/user/country-content-engagements": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Get content engagements by country",
+        "parameters": [
+          {
+            "name": "x-country-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the country"
+          },
+          {
+            "name": "x-language-alpha-2",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Alpha 2 code of the language"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Content Engagements data object"
+          }
+        }
       }
     },
     "/video/twilio-token": {

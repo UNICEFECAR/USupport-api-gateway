@@ -87,6 +87,36 @@ router.get("/organization/metadata", async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.post(
+  "/organization/translate",
+  authenticateAdmin,
+  authorizeAdmin("country"),
+  async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'POST'
+     * #swagger.path = '/admin/translate'
+     * #swagger.description = 'Translate text'
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $text: 'Hello, how are you?', $sourceLanguage: 'en', $targetLanguage: 'uk' } }
+     * #swagger.responses[200] = { description: 'Translated Text' }
+     */
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  },
+);
+
 router
   .route("/by-id")
   .get(authenticateAdmin, authorizeAdmin("global"), async (req, res) => {
@@ -264,6 +294,247 @@ router.route("/login").post(async (req, res) => {
   const result = await response.json();
   return res.status(response.status).send(result);
 });
+
+router.route("/login/credentials").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/admin/login/credentials'
+   * #swagger.description = 'Validate admin email and password. For country admins with MFA enabled, returns an MFA session and available methods instead of tokens. Otherwise returns admin data and access/refresh tokens.'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country (required for country admin login)' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $email: 'john.doe@email.com', $password: 'SomePass123', $role: 'country' } }
+   * #swagger.responses[200] = { description: 'Login succeeded — either admin tokens (mfaRequired: false) or MFA session details (mfaRequired: true)' }
+   * #swagger.responses[400] = { description: 'Validation Error' }
+   * #swagger.responses[401] = { description: 'Incorrect Credentials' }
+   * #swagger.responses[403] = { description: 'Account Deactivated' }
+   */
+  const response = await fetch(`${ADMIN_URL}/admin/v1/auth${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: ADMIN_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
+const proxyAdminAuthRequest = async (req, res) => {
+  const headers = { ...req.headers };
+  delete headers["content-length"];
+  delete headers.host;
+  headers.host = ADMIN_LOCAL_HOST;
+  headers["Content-type"] = "application/json";
+
+  const fetchOptions = {
+    method: req.method,
+    headers,
+  };
+
+  if (["POST", "PUT", "PATCH"].includes(req.method)) {
+    fetchOptions.body = JSON.stringify(req.body ?? {});
+  }
+
+  let response;
+  try {
+    response = await fetch(`${ADMIN_URL}/admin/v1/auth${req.url}`, fetchOptions);
+  } catch (error) {
+    console.log(error);
+    return res.status(502).send({
+      error: {
+        status: 502,
+        name: "BAD GATEWAY",
+        message: "Admin service unavailable",
+      },
+    });
+  }
+
+  const text = await response.text();
+  let result = {};
+
+  if (text) {
+    try {
+      result = JSON.parse(text);
+    } catch (error) {
+      console.log(error);
+      return res.status(502).send({
+        error: {
+          status: 502,
+          name: "BAD GATEWAY",
+          message: "Invalid response from admin service",
+        },
+      });
+    }
+  }
+
+  return res.status(response.status).send(result);
+};
+
+router.route("/mfa/settings").get(authenticateAdmin, async (req, res) => {
+  /**
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/admin/mfa/settings'
+   * #swagger.description = 'Get MFA settings for the currently authenticated admin (enabled state and available methods)'
+   * #swagger.security = [{ "AnyAdminBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.responses[200] = { description: 'MFA settings object for the current admin' }
+   * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+   */
+  return proxyAdminAuthRequest(req, res);
+});
+
+router.route("/mfa/settings").patch(authenticateAdmin, async (req, res) => {
+  /**
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'PATCH'
+   * #swagger.path = '/admin/mfa/settings'
+   * #swagger.description = 'Enable or disable MFA for the currently authenticated admin. Requires the current account password for re-authentication.'
+   * #swagger.security = [{ "AnyAdminBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $enabled: true, $password: 'SomePass123' } }
+   * #swagger.responses[200] = { description: 'Updated MFA settings object' }
+   * #swagger.responses[400] = { description: 'Validation Error' }
+   * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+   * #swagger.responses[401] = { description: 'Incorrect Password' }
+   */
+  return proxyAdminAuthRequest(req, res);
+});
+
+router.route("/mfa/passkey/options").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/admin/mfa/passkey/options'
+   * #swagger.description = 'Generate WebAuthn authentication options (challenge) for completing a passkey-based MFA step during login. Tied to an active MFA session.'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $mfaSessionId: '22e3b2f6-5c95-4044-b444-592b5d41338a' } }
+   * #swagger.responses[200] = { description: 'WebAuthn PublicKeyCredentialRequestOptions for the client' }
+   * #swagger.responses[400] = { description: 'Validation Error' }
+   * #swagger.responses[404] = { description: 'MFA Session Not Found or Expired' }
+   */
+  return proxyAdminAuthRequest(req, res);
+});
+
+router.route("/mfa/passkey/verify").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/admin/mfa/passkey/verify'
+   * #swagger.description = 'Verify a WebAuthn assertion produced by the client to complete passkey-based MFA. On success, returns the admin access and refresh tokens.'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $mfaSessionId: '22e3b2f6-5c95-4044-b444-592b5d41338a', $id: 'credentialId', $rawId: 'base64url-raw-id', $type: 'public-key', $response: { clientDataJSON: 'base64url', authenticatorData: 'base64url', signature: 'base64url', userHandle: 'base64url' } } }
+   * #swagger.responses[200] = { description: 'Admin Access and Refresh Tokens' }
+   * #swagger.responses[400] = { description: 'Validation Error' }
+   * #swagger.responses[401] = { description: 'Passkey Assertion Invalid' }
+   * #swagger.responses[404] = { description: 'MFA Session Not Found or Expired' }
+   */
+  return proxyAdminAuthRequest(req, res);
+});
+
+router.route("/mfa/email/request").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/admin/mfa/email/request'
+   * #swagger.description = 'Send a one-time password to the admin email for completing email-based MFA during login. Tied to an active MFA session.'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $mfaSessionId: '22e3b2f6-5c95-4044-b444-592b5d41338a' } }
+   * #swagger.responses[200] = { description: 'OTP dispatched successfully' }
+   * #swagger.responses[400] = { description: 'Validation Error' }
+   * #swagger.responses[404] = { description: 'MFA Session Not Found or Expired' }
+   */
+  return proxyAdminAuthRequest(req, res);
+});
+
+router.route("/mfa/email/verify").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['Admin']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/admin/mfa/email/verify'
+   * #swagger.description = 'Verify the email OTP to complete email-based MFA. On success, returns the admin access and refresh tokens.'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $mfaSessionId: '22e3b2f6-5c95-4044-b444-592b5d41338a', $otp: '1234' } }
+   * #swagger.responses[200] = { description: 'Admin Access and Refresh Tokens' }
+   * #swagger.responses[400] = { description: 'Validation Error' }
+   * #swagger.responses[401] = { description: 'Invalid or Expired OTP' }
+   * #swagger.responses[404] = { description: 'MFA Session Not Found or Expired' }
+   */
+  return proxyAdminAuthRequest(req, res);
+});
+
+router
+  .route("/mfa/passkey/register/options")
+  .post(authenticateAdmin, async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'POST'
+     * #swagger.path = '/admin/mfa/passkey/register/options'
+     * #swagger.description = 'Generate WebAuthn registration options (challenge) so the currently authenticated admin can enroll a new passkey.'
+     * #swagger.security = [{ "AnyAdminBearer": [] }]
+     * #swagger.parameters['obj'] = { in: 'body', schema: { name: 'My YubiKey' } }
+     * #swagger.responses[200] = { description: 'WebAuthn PublicKeyCredentialCreationOptions for the client' }
+     * #swagger.responses[400] = { description: 'Validation Error' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     */
+    return proxyAdminAuthRequest(req, res);
+  });
+
+router
+  .route("/mfa/passkey/register/verify")
+  .post(authenticateAdmin, async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'POST'
+     * #swagger.path = '/admin/mfa/passkey/register/verify'
+     * #swagger.description = 'Verify a WebAuthn attestation produced during passkey enrollment and persist the new credential for the currently authenticated admin.'
+     * #swagger.security = [{ "AnyAdminBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { name: 'My YubiKey', $id: 'credentialId', $rawId: 'base64url-raw-id', $type: 'public-key', $response: { clientDataJSON: 'base64url', attestationObject: 'base64url' } } }
+     * #swagger.responses[200] = { description: 'Newly registered passkey credential' }
+     * #swagger.responses[400] = { description: 'Validation Error' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'Passkey Attestation Invalid' }
+     */
+    return proxyAdminAuthRequest(req, res);
+  });
+
+router
+  .route("/mfa/passkey/credentials")
+  .get(authenticateAdmin, async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/admin/mfa/passkey/credentials'
+     * #swagger.description = 'List all passkey credentials registered by the currently authenticated admin.'
+     * #swagger.security = [{ "AnyAdminBearer": [] }]
+     * #swagger.responses[200] = { description: 'Array of passkey credential metadata' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     */
+    return proxyAdminAuthRequest(req, res);
+  });
+
+router
+  .route("/mfa/passkey/credentials/:id")
+  .delete(authenticateAdmin, async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'DELETE'
+     * #swagger.path = '/admin/mfa/passkey/credentials/{id}'
+     * #swagger.description = 'Delete a specific passkey credential owned by the currently authenticated admin.'
+     * #swagger.security = [{ "AnyAdminBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['id'] = { in: 'path', required: true, type: 'string', description: 'Identifier of the passkey credential to delete' }
+     * #swagger.responses[200] = { description: 'Passkey deleted successfully' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[404] = { description: 'Passkey Not Found' }
+     */
+    return proxyAdminAuthRequest(req, res);
+  });
 
 router.route("/refresh-token").post(async (req, res) => {
   /**
@@ -710,6 +981,89 @@ router
   });
 
 router
+  .route("/country/pinned-articles")
+  .get(async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/admin/country/pinned-articles'
+     * #swagger.description = 'Get pinned article ids for a country'
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.responses[200] = { description: 'Array of pinned article IDs' }
+     */
+
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  })
+  .put(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'PUT'
+     * #swagger.path = '/admin/country/pinned-articles'
+     * #swagger.description = 'Pin an article for a country'
+     * #swagger.security = [{ "CountryAdminBearer": [] }]
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $id: '1' } }
+     * #swagger.responses[200] = { description: 'Updated array of pinned article IDs' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     */
+
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  })
+  .delete(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'DELETE'
+     * #swagger.path = '/admin/country/pinned-articles'
+     * #swagger.description = 'Unpin an article for a country'
+     * #swagger.security = [{ "CountryAdminBearer": [] }]
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $id: '1' } }
+     * #swagger.responses[200] = { description: 'Updated array of pinned article IDs' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     */
+
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
+
+router
   .route("/country/min-max-client-age")
   .put(authenticateAdmin, authorizeAdmin("global"), async (req, res) => {
     /**
@@ -959,6 +1313,37 @@ router
      * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
      * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
      * #swagger.responses[200] = { description: 'Contact Forms Data Object' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     * #swagger.responses[401] = { description: 'No Permissions' }
+     */
+
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  });
+
+router
+  .route("/statistics/organization-reports")
+  .get(authenticateAdmin, authorizeAdmin("country"), async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/admin/statistics/organization-reports'
+     * #swagger.description = 'Get all organization reports from clients'
+     * #swagger.security = [{ "CountryAdminBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.responses[200] = { description: 'Organization reports list' }
      * #swagger.responses[401] = { description: 'Admin Not Authorised' }
      * #swagger.responses[401] = { description: 'No Permissions' }
      */
@@ -1632,7 +2017,7 @@ router.get(
     const result = await response.json();
 
     return res.status(response.status).send(result);
-  }
+  },
 );
 
 router.get(
@@ -1664,7 +2049,7 @@ router.get(
     const result = await response.json();
 
     return res.status(response.status).send(result);
-  }
+  },
 );
 
 router.get(
@@ -1703,7 +2088,7 @@ router.get(
       res.setHeader("Content-Disposition", contentDisposition);
 
     response.body.pipe(res);
-  }
+  },
 );
 
 router.get("/organization/all", authenticateAdmin, async (req, res) => {
@@ -1904,7 +2289,7 @@ router.post(
     const result = await response.json();
 
     return res.status(response.status).send(result);
-  }
+  },
 );
 
 router.put(
@@ -1938,7 +2323,7 @@ router.put(
     const result = await response.json();
 
     return res.status(response.status).send(result);
-  }
+  },
 );
 
 router
@@ -2251,7 +2636,7 @@ router.get(
     const result = await response.json();
 
     return res.status(response.status).send(result);
-  }
+  },
 );
 
 router
@@ -2316,7 +2701,7 @@ router.get(
     const result = await response.json();
 
     return res.status(response.status).send(result);
-  }
+  },
 );
 
 router.get(
@@ -2347,7 +2732,7 @@ router.get(
     const result = await response.json();
 
     return res.status(response.status).send(result);
-  }
+  },
 );
 
 export { router };

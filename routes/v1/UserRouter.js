@@ -112,6 +112,31 @@ router.route("/countries").get(async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/countries/articles/active").get(async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/user/countries/articles/active'
+   * #swagger.description = 'Get article IDs for all active countries'
+   * #swagger.responses[200] = { description: 'Active countries articles data object' }
+   */
+  const response = await fetch(
+    `${USER_URL}/user/v1/countries/articles/active`,
+    {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: USER_LOCAL_HOST,
+        "Content-Type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    },
+  ).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
 router.route("/countries-with-languages").get(async (req, res) => {
   /**
    * #swagger.tags = ['User']
@@ -149,6 +174,32 @@ router.route("/countries/by-alpha-2-code").get(async (req, res) => {
 
   const response = await fetch(`${USER_URL}/user/v1${req.url}`, {
     method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-Type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+  return res.status(response.status).send(result);
+});
+
+router.route("/app-version").get(async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/user/app-version'
+   * #swagger.description = 'Check if the mobile app needs an optional or forced update'
+   * #swagger.parameters['platform'] = { in: 'query', required: true, type: 'string', description: 'ios or android' }
+   * #swagger.parameters['version'] = { in: 'query', required: true, type: 'string', description: 'Installed app version, e.g. 1.0.35' }
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.responses[200] = { description: 'App Version Status Object' }
+   */
+
+  const response = await fetch(`${USER_URL}/user/v1${req.url}`, {
+    method: "GET",
     headers: {
       ...req.headers,
       host: USER_LOCAL_HOST,
@@ -761,6 +812,18 @@ router.route("/logout").post(async (req, res) => {
 });
 
 router.get("/access-platform", authenticateIfBearer, async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/user/access-platform'
+   * #swagger.description = 'Record a platform access event for analytics. Authentication is optional for the website platform and when no Authorization header is sent; if a bearer token is provided for client or provider platforms, it must be valid and the authenticated user id is forwarded automatically.'
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['x-visitor-id'] = { in: 'header', required: false, type: 'string', description: 'UUID identifying an anonymous visitor (used when no authenticated user is present)' }
+   * #swagger.parameters['platform'] = { in: 'query', required: true, type: 'string', description: 'Platform being accessed (e.g. website, client, provider)' }
+   * #swagger.responses[200] = { description: 'Platform access recorded successfully' }
+   * #swagger.responses[400] = { description: 'Validation Error' }
+   * #swagger.responses[401] = { description: 'User Not Authorised (when a bearer token is provided for a non-website platform)' }
+   */
   const headers = {
     ...req.headers,
     host: USER_LOCAL_HOST,
@@ -975,7 +1038,7 @@ router.get("/mobile-map", authenticate, async (req, res) => {
   const result = await response.text();
   res.setHeader(
     "Content-Security-Policy",
-    "default-src 'self'; script-src 'self' https://maps.googleapis.com https://maps.gstatic.com 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src * data:; connect-src *;"
+    "default-src 'self'; script-src 'self' https://maps.googleapis.com https://maps.gstatic.com 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src * data:; connect-src *;",
   );
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   return res.status(response.status).send(result);
@@ -990,6 +1053,7 @@ router.post("/content-engagement", authenticateByPlatform, async (req, res) => {
    * #swagger.security = [{ "AnyUserBearer": [] }]
    * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
    * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['x-visitor-id'] = { in: 'header', required: false, type: 'string', description: 'UUID identifying an anonymous visitor (used when no authenticated user is present)' }
    * #swagger.parameters['obj'] = { in: 'body', schema: { $contentId: 1, $contentType: 'article', $action: 'like' } }
    * #swagger.responses[200] = { description: 'Success Status' }
    */

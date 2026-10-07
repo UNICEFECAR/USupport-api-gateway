@@ -633,6 +633,31 @@ router.route("/check-coupon").get(authenticate, async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/check-active-campaign").get(async (req, res) => {
+  /**
+   * #swagger.tags = ['Client']
+   * #swagger.method = 'GET'
+   * #swagger.path = '/client/check-active-campaign'
+   * #swagger.description = 'Check if there is an active campaign for today'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.responses[200] = { description: 'Active campaign status object' }
+   */
+  const response = await fetch(`${CLIENT_URL}/client/v1/client${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: CLIENT_LOCAL_HOST,
+      "Content-type": "application/json",
+      "Cache-control": "no-cache",
+    },
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 router
   .route("/consultation/unblock-slot")
   .put(authenticate, async (req, res) => {
@@ -804,6 +829,71 @@ router.route("/my-qa/answer-vote").post(authenticate, async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/tts/synthesize").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['Client']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/client/tts/synthesize'
+   * #swagger.description = 'Synthesize speech (Azure TTS); key is server-side only'
+   * #swagger.security = [{ "ClientBearer": [] }]
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $text: '<p>Article HTML</p>', contentFormat: 'html', $voice: 'kk-KZ-AigulNeural', xmlLang: 'kk-KZ', outputFormat: 'audio-16khz-32kbitrate-mono-mp3' } }
+   * #swagger.responses[200] = { description: 'MP3 audio (binary)' }
+   * #swagger.responses[401] = { description: 'Client Not Authorised' }
+   */
+  const serializedBody = JSON.stringify(req.body || {});
+  const payloadSizeBytes = Buffer.byteLength(serializedBody, "utf8");
+  const payloadSizeMb = payloadSizeBytes / (1024 * 1024);
+  console.log(
+    `[tts] request payload size: ${payloadSizeMb.toFixed(
+      4
+    )} MB (${payloadSizeBytes} bytes)`
+  );
+
+  const response = await fetch(`${CLIENT_URL}/client/v1/tts/synthesize`, {
+    method: "POST",
+    headers: {
+      ...req.headers,
+      host: CLIENT_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    body: serializedBody,
+  }).catch(console.log);
+
+  if (!response) {
+    return res.status(502).json({
+      error: {
+        status: 502,
+        name: "BAD GATEWAY",
+        message: "Client service unavailable",
+      },
+    });
+  }
+
+  const upstreamContentType = response.headers.get("content-type") || "";
+
+  if (upstreamContentType.includes("audio/")) {
+    const buffer = Buffer.from(await response.arrayBuffer());
+    res.status(response.status);
+    res.setHeader("Content-Type", upstreamContentType);
+    res.setHeader("Cache-Control", "no-store");
+    return res.send(buffer);
+  }
+
+  let result;
+  try {
+    result = await response.json();
+  } catch {
+    const text = await response.text();
+    return res.status(response.status).send({
+      error: { status: response.status, message: text || "Invalid response" },
+    });
+  }
+
+  return res.status(response.status).send(result);
+});
+
 router.route("/chat-history").put(authenticate, async (req, res) => {
   /**
    * #swagger.tags = ['Client']
@@ -961,6 +1051,40 @@ router
         "x-user-id": req.user.user_id,
         "Cache-Control": "no-cache",
       },
+    }).catch(console.log);
+
+    const result = await response.json();
+    return res.status(response.status).send(result);
+  });
+
+router
+  .route("/organization/:organizationId/report")
+  .post(authenticate, async (req, res) => {
+    /**
+     * #swagger.tags = ['Client']
+     * #swagger.method = 'POST'
+     * #swagger.path = '/client/organization/:organizationId/report'
+     * #swagger.description = 'Submit a report about an organization (at most once per hour per organization)'
+     * #swagger.security = [{ "ClientBearer": [] }]
+     * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+     * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+     * #swagger.parameters['obj'] = { in: 'body', schema: { $reason: 'Description of the issue' } }
+     * #swagger.responses[200] = { description: 'Report created' }
+     * #swagger.responses[401] = { description: 'Client Not Authorised' }
+     * #swagger.responses[404] = { description: 'Organization not found' }
+     * #swagger.responses[429] = { description: 'Report submitted for this organization within the last hour' }
+     */
+
+    const response = await fetch(`${CLIENT_URL}/client/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: CLIENT_LOCAL_HOST,
+        "x-user-id": req.user.user_id,
+        "Content-type": "application/json",
+        "Cache-Control": "no-cache",
+      },
+      ...(req.body && { body: JSON.stringify(req.body) }),
     }).catch(console.log);
 
     const result = await response.json();

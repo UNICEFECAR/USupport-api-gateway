@@ -97,6 +97,10 @@ app.use(middleware.errorMiddleware.errorHandler);
 const server = createServer(app);
 const io = new Server(server, {
   path: "/api/v1/ws",
+  // Detect dead connections within ~20s instead of the default ~45s,
+  // so a participant who lost connection is reported to the other side sooner
+  pingInterval: 10000,
+  pingTimeout: 10000,
 });
 
 MessagingSocket(io);
