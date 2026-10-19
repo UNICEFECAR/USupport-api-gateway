@@ -2705,14 +2705,15 @@ router.get(
 );
 
 router.get(
-  "/statistics/playandheal-visits",
+  // Visits to the programme websites; the admin service has a route for each
+  ["/statistics/playandheal-visits", "/statistics/hosnelhal-visits"],
   authenticateAdmin,
   async (req, res) => {
     /**
      * #swagger.tags = ['Admin']
      * #swagger.method = 'GET'
      * #swagger.path = '/admin/statistics/playandheal-visits'
-     * #swagger.description = 'Get all play and heal visits'
+     * #swagger.description = 'Get all play and heal visits (and Hosn El Hal visits at /admin/statistics/hosnelhal-visits)'
      * #swagger.security = [{ "GlobalAdminBearer": [] }]
      * #swagger.responses[200] = { description: 'All play and heal visits' }
      * #swagger.responses[401] = { description: 'Admin Not Authorised' }
