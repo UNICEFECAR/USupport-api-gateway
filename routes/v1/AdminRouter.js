@@ -2736,4 +2736,34 @@ router.get(
   },
 );
 
+router.get(
+  "/statistics/hosnelhal-engagements",
+  authenticateAdmin,
+  async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/admin/statistics/hosnelhal-engagements'
+     * #swagger.description = 'Get Hosn El Hal resource view engagement events'
+     * #swagger.security = [{ "GlobalAdminBearer": [] }]
+     * #swagger.responses[200] = { description: 'Hosn El Hal resource views' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
+     */
+
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  },
+);
+
 export { router };
