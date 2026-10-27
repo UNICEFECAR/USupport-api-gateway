@@ -4,6 +4,26 @@ import fetch from "node-fetch";
 import { authenticateAdmin, authorizeAdmin } from "#middlewares/auth";
 
 const router = express.Router();
+router.get(
+  ["/consultation-problem-reports", "/consultation-problem-reports/:id"],
+  authenticateAdmin,
+  authorizeAdmin("country"),
+  async (req, res, next) => {
+    try {
+      const response = await fetch(`${process.env.ADMIN_URL}/admin/v1${req.url}`, {
+        headers: {
+          Authorization: req.headers.authorization,
+          "x-country-alpha-2": req.header("x-country-alpha-2"),
+          "x-language-alpha-2": req.header("x-language-alpha-2") || "en",
+          "Cache-Control": "no-store",
+        },
+      });
+      res.set("Cache-Control", "no-store").status(response.status).json(await response.json());
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 const ADMIN_LOCAL_HOST = "http://localhost:3007";
 
