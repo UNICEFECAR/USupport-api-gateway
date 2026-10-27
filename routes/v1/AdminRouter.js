@@ -5,13 +5,13 @@ import { authenticateAdmin, authorizeAdmin } from "#middlewares/auth";
 
 const router = express.Router();
 router.get(
-  ["/consultation-problem-reports", "/consultation-problem-reports/:id"],
+  ["/statistics/consultation-problem-reports", "/statistics/consultation-problem-reports/:id"],
   authenticateAdmin,
   authorizeAdmin("country"),
   async (req, res, next) => {
     try {
       const response = await fetch(
-        `${process.env.ADMIN_URL}/admin/v1/statistics${req.url}`,
+        `${process.env.ADMIN_URL}/admin/v1${req.url}`,
         {
           headers: {
             Authorization: req.headers.authorization,
