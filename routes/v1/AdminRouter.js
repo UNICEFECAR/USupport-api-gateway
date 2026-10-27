@@ -10,15 +10,21 @@ router.get(
   authorizeAdmin("country"),
   async (req, res, next) => {
     try {
-      const response = await fetch(`${process.env.ADMIN_URL}/admin/v1${req.url}`, {
-        headers: {
-          Authorization: req.headers.authorization,
-          "x-country-alpha-2": req.header("x-country-alpha-2"),
-          "x-language-alpha-2": req.header("x-language-alpha-2") || "en",
-          "Cache-Control": "no-store",
-        },
-      });
-      res.set("Cache-Control", "no-store").status(response.status).json(await response.json());
+      const response = await fetch(
+        `${process.env.ADMIN_URL}/admin/v1/statistics${req.url}`,
+        {
+          headers: {
+            Authorization: req.headers.authorization,
+            "x-country-alpha-2": req.header("x-country-alpha-2"),
+            "x-language-alpha-2": req.header("x-language-alpha-2") || "en",
+            "Cache-Control": "no-store",
+          },
+        }
+      );
+      res
+        .set("Cache-Control", "no-store")
+        .status(response.status)
+        .json(await response.json());
     } catch (error) {
       next(error);
     }
@@ -361,7 +367,10 @@ const proxyAdminAuthRequest = async (req, res) => {
 
   let response;
   try {
-    response = await fetch(`${ADMIN_URL}/admin/v1/auth${req.url}`, fetchOptions);
+    response = await fetch(
+      `${ADMIN_URL}/admin/v1/auth${req.url}`,
+      fetchOptions
+    );
   } catch (error) {
     console.log(error);
     return res.status(502).send({
