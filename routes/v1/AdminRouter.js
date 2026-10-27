@@ -4,6 +4,32 @@ import fetch from "node-fetch";
 import { authenticateAdmin, authorizeAdmin } from "#middlewares/auth";
 
 const router = express.Router();
+router.get(
+  ["/statistics/consultation-problem-reports", "/statistics/consultation-problem-reports/:id"],
+  authenticateAdmin,
+  authorizeAdmin("country"),
+  async (req, res, next) => {
+    try {
+      const response = await fetch(
+        `${process.env.ADMIN_URL}/admin/v1${req.url}`,
+        {
+          headers: {
+            Authorization: req.headers.authorization,
+            "x-country-alpha-2": req.header("x-country-alpha-2"),
+            "x-language-alpha-2": req.header("x-language-alpha-2") || "en",
+            "Cache-Control": "no-store",
+          },
+        }
+      );
+      res
+        .set("Cache-Control", "no-store")
+        .status(response.status)
+        .json(await response.json());
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 const ADMIN_LOCAL_HOST = "http://localhost:3007";
 
@@ -341,7 +367,10 @@ const proxyAdminAuthRequest = async (req, res) => {
 
   let response;
   try {
-    response = await fetch(`${ADMIN_URL}/admin/v1/auth${req.url}`, fetchOptions);
+    response = await fetch(
+      `${ADMIN_URL}/admin/v1/auth${req.url}`,
+      fetchOptions
+    );
   } catch (error) {
     console.log(error);
     return res.status(502).send({
@@ -2718,6 +2747,36 @@ router.get(
      * #swagger.responses[200] = { description: 'All play and heal visits' }
      * #swagger.responses[401] = { description: 'Admin Not Authorised' }
      * #swagger.responses[401] = { description: 'No Permissions' }
+     */
+
+    const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {
+      method: req.method,
+      headers: {
+        ...req.headers,
+        host: ADMIN_LOCAL_HOST,
+        "Content-type": "application/json",
+        "Cache-control": "no-cache",
+      },
+    }).catch(console.log);
+
+    const result = await response.json();
+
+    return res.status(response.status).send(result);
+  },
+);
+
+router.get(
+  "/statistics/hosnelhal-engagements",
+  authenticateAdmin,
+  async (req, res) => {
+    /**
+     * #swagger.tags = ['Admin']
+     * #swagger.method = 'GET'
+     * #swagger.path = '/admin/statistics/hosnelhal-engagements'
+     * #swagger.description = 'Get Hosn El Hal resource view engagement events'
+     * #swagger.security = [{ "GlobalAdminBearer": [] }]
+     * #swagger.responses[200] = { description: 'Hosn El Hal resource views' }
+     * #swagger.responses[401] = { description: 'Admin Not Authorised' }
      */
 
     const response = await fetch(`${ADMIN_URL}/admin/v1${req.url}`, {

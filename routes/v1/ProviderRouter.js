@@ -8,6 +8,31 @@ import {
 } from "#middlewares/auth";
 
 const router = express.Router();
+// Both participant roles use the same consultation-report submission endpoint.
+router.post(
+  "/consultation/problem-reports",
+  authenticate,
+  async (req, res, next) => {
+    try {
+      const response = await fetch(
+        `${process.env.PROVIDER_URL}/provider/v1/consultation/problem-reports`,
+        {
+          method: "POST",
+          headers: {
+            "x-user-id": req.user.user_id,
+            "x-country-alpha-2": req.header("x-country-alpha-2"),
+            "x-language-alpha-2": req.header("x-language-alpha-2") || "en",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(req.body),
+        }
+      );
+      res.status(response.status).json(await response.json());
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 const PROVIDER_LOCAL_HOST = "http://localhost:3002";
 
