@@ -2734,8 +2734,13 @@ router.get(
 );
 
 router.get(
-  // Visits to the programme websites; the admin service has a route for each
-  ["/statistics/playandheal-visits", "/statistics/hosnelhal-visits"],
+  // Visits to the programme websites, and Hosn El Hal feedback card votes;
+  // the admin service has a route for each
+  [
+    "/statistics/playandheal-visits",
+    "/statistics/hosnelhal-visits",
+    "/statistics/hosnelhal-feedback",
+  ],
   authenticateAdmin,
   async (req, res) => {
     /**
