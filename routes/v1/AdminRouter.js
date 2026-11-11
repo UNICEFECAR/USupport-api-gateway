@@ -2734,10 +2734,11 @@ router.get(
 );
 
 router.get(
-  // Visits to the programme websites, and Hosn El Hal feedback card votes;
-  // the admin service has a route for each
+  // Visits to the programme websites, the Play and Heal waiting list,
+  // and Hosn El Hal feedback card votes; the admin service has a route for each
   [
     "/statistics/playandheal-visits",
+    "/statistics/playandheal-waitlist",
     "/statistics/hosnelhal-visits",
     "/statistics/hosnelhal-feedback",
   ],
@@ -2747,7 +2748,7 @@ router.get(
      * #swagger.tags = ['Admin']
      * #swagger.method = 'GET'
      * #swagger.path = '/admin/statistics/playandheal-visits'
-     * #swagger.description = 'Get all play and heal visits (and Hosn El Hal visits at /admin/statistics/hosnelhal-visits)'
+     * #swagger.description = 'Get all play and heal visits (waitlist at /admin/statistics/playandheal-waitlist, Hosn El Hal visits at /admin/statistics/hosnelhal-visits)'
      * #swagger.security = [{ "GlobalAdminBearer": [] }]
      * #swagger.responses[200] = { description: 'All play and heal visits' }
      * #swagger.responses[401] = { description: 'Admin Not Authorised' }
