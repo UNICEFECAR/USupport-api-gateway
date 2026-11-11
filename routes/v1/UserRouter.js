@@ -685,6 +685,33 @@ router.route("/add-contact-form").post(async (req, res) => {
   return res.status(response.status).send(result);
 });
 
+router.route("/playandheal-waitlist").post(async (req, res) => {
+  /**
+   * #swagger.tags = ['User']
+   * #swagger.method = 'POST'
+   * #swagger.path = '/user/playandheal-waitlist/'
+   * #swagger.description = 'Add a Play and Heal facilitators-network waiting-list signup'
+   * #swagger.parameters['x-language-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the language' }
+   * #swagger.parameters['x-country-alpha-2'] = { in: 'header', required: true, type: 'string', description: 'Alpha 2 code of the country' }
+   * #swagger.parameters['obj'] = { in: 'body', schema: { $fullName: 'Jane Doe', $email: 'jane@example.com', location: 'City', language: 'en' } }
+   * #swagger.responses[200] = { description: 'Success Status' }
+   * #swagger.responses[400] = { description: 'Validation Error' }
+   */
+  const response = await fetch(`${USER_URL}/user/v1/user${req.url}`, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: USER_LOCAL_HOST,
+      "Content-type": "application/json",
+    },
+    ...(req.body && { body: JSON.stringify(req.body) }),
+  }).catch(console.log);
+
+  const result = await response.json();
+
+  return res.status(response.status).send(result);
+});
+
 router.route("/change-language").put(authenticate, async (req, res) => {
   /**
    * #swagger.tags = ['User']
