@@ -1325,6 +1325,24 @@ router
     return res.status(response.status).send(result);
   });
 
+router.patch("/initial-guide-seen", authenticate, async (req, res, next) => {
+  try {
+    const response = await fetch(`${CLIENT_URL}/client/v1/client/initial-guide-seen`, {
+      method: "PATCH",
+      headers: {
+        host: CLIENT_LOCAL_HOST,
+        "x-country-alpha-2": req.header("x-country-alpha-2"),
+        "x-language-alpha-2": req.header("x-language-alpha-2"),
+        "x-user-id": req.user.user_id,
+      },
+    });
+
+    return res.status(response.status).send(await response.json());
+  } catch (error) {
+    return next(error);
+  }
+});
+
 router
   .route("/has-checked-baseline-assessment")
   .patch(authenticate, async (req, res) => {
